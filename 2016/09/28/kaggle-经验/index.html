@@ -90,7 +90,7 @@
 <meta property="og:url" content="/2016/09/28/kaggle-经验/index.html">
 <meta property="og:site_name" content="modkzs">
 <meta property="og:description" content="kaggle 经验">
-<meta property="og:updated_time" content="2016-09-28T05:04:06.000Z">
+<meta property="og:updated_time" content="2016-09-28T12:46:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kaggle 经验">
 <meta name="twitter:description" content="kaggle 经验">
@@ -325,16 +325,18 @@
         <p>kaggle 经验<br><a id="more"></a></p>
 <ol>
 <li>CV 注意数据独立性</li>
-<li>对于类别feature， 可以如果类别太多，可以将所有只有1个样本的类别归为一类</li>
-<li>稀疏性（one-hot）可能提高性能</li>
+<li>对于类别 feature ， 可以如果类别太多，可以将所有只有1个样本的类别归为一类</li>
+<li>稀疏性（ one-hot ）可能提高性能</li>
 <li>卡方检验可以有效判断feature的重要性</li>
-<li>rule 来自重要的feature， 可能产生途径： 平均，topK；可能按照其他feature做聚类(如时间)</li>
-<li>model 也可以参考 K-means, 对feature进行聚类</li>
+<li>rule 来自重要的feature， 可能产生途径： 平均， topK ；可能按照其他 feature 做聚类(如时间)</li>
+<li>model 也可以参考 K-means, 对 feature 进行聚类</li>
 <li>stacking 很重要</li>
 <li>类别信息可以加以组合，得到新的 feature</li>
 <li>空值的处理可以简单粗暴</li>
 <li>类别feature太多，可以不考虑 one-hot</li>
 <li>xgboost 可以得到预测的叶节点</li>
+<li>单模型的stacking：不同随机数种子、不同feature、不同参数、不同样本(有意进行划分)</li>
+<li>可能的模型：xgboost(包括 sklearn 中的 tree base model), libfm, libffm,</li>
 </ol>
 
       
