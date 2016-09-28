@@ -1,0 +1,675 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Go," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="很久之前就开始关注Go了,最近才开始着手去学.本篇日志的目的不在于详述Go的语法(都能写本书了好么),也不会对Go做出评价(妈蛋连学都没学完评价个鸡毛啊),仅仅记录一些其和现有主流编程语言的区别之处.一来做个回顾,二来以后忘记了就不用看书了.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go 碎碎念">
+<meta property="og:url" content="/2015/02/01/Go-碎碎念/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="很久之前就开始关注Go了,最近才开始着手去学.本篇日志的目的不在于详述Go的语法(都能写本书了好么),也不会对Go做出评价(妈蛋连学都没学完评价个鸡毛啊),仅仅记录一些其和现有主流编程语言的区别之处.一来做个回顾,二来以后忘记了就不用看书了.">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go 碎碎念">
+<meta name="twitter:description" content="很久之前就开始关注Go了,最近才开始着手去学.本篇日志的目的不在于详述Go的语法(都能写本书了好么),也不会对Go做出评价(妈蛋连学都没学完评价个鸡毛啊),仅仅记录一些其和现有主流编程语言的区别之处.一来做个回顾,二来以后忘记了就不用看书了.">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2015/02/01/Go-碎碎念/"/>
+
+  <title> Go 碎碎念 | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Go 碎碎念
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-02-01T18:56:17+08:00" content="Feb 1 2015">
+              Feb 1 2015
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/language/" itemprop="url" rel="index">
+                    <span itemprop="name">language</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/01/Go-碎碎念/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/01/Go-碎碎念/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>很久之前就开始关注Go了,最近才开始着手去学.本篇日志的目的不在于详述Go的语法(都能写本书了好么),也不会对Go做出评价(妈蛋连学都没学完评价个鸡毛啊),仅仅记录一些其和现有主流编程语言的区别之处.一来做个回顾,二来以后忘记了就不用看书了.<br><a id="more"></a></p>
+<p>##IDE<br>工欲善其事,必先利其器.就目前来说,Go貌似没有什么特别优秀的编译器.liteIDE的UI实在是没法直视w(ﾟДﾟ)w,连用都没用直接放弃……用sublime的话问题在于构建大型的工程的时候感觉会挺复杂,但是作为学习来说够了.以后写东西可能会考虑用eclipse配一个goclipse吧</p>
+<p>##变量<br>主要是变量的定义啊,类型啊等等之类的东西</p>
+<p>###定义<br>使用了<code>var name type</code>的定义方式,说是为了避免c里面<code>int* a, b</code>的问题,也提供了:=的方法(如<code>a:=5</code>)直接定义.不过话说最近c好像多了<code>auto</code>关键字,可以智能判断变量类型了啊</p>
+<p>###类型<br>类型仍然是基本的几样,int,long,array和slice啊之类的.<strong>Go里默认为reference(所有的变量都是pointer)的变共有3种:slice, map, channel</strong>这里说一下slice.</p>
+<p>####slice<br>感觉是看过的比较奇怪的一种数据类型了(貌似python里也有这种类型,不知道用法是不是一样),类似于java里的list或者c++里的vector但是又有很大不同.</p>
+<p>slice有capacity和length两个属性.capacity表示slice现有的element个数,length表示slice所能拥有的element数量.就像slice的名字意义一样,slice本身是array的切片.其定义方式为<code>var slice []type = arr1[begin:end]</code>,如<code>var s []int = a[1:5]</code>,begin或者end都可以省略,省略则从0开始/直到结束.也可以用make来做.</p>
+<p>因为Go当中如果函数使用array,必须指定element的个数(= =),slice在这种情况下有很多的利用场景</p>
+<p>###package<br>特别为package加一节,当初为了引用package的问题忙了整整一个多小时!!!(╯‵□′)╯︵┻━┻<br>Go里有package关键字,用惯java的下意识以为是用这个唯一标识一个pack并且import的.但是Go的package只能用于标识,不能用于引用o(` · ~ · ′。)o 坑爹啊!!!!!<br>举例说明下Go的pack import吧.文件结构如下</p>
+<ul>
+<li>try<br>  try.go<ul>
+<li>pack<br>  pack.go</li>
+</ul>
+</li>
+</ul>
+<p>try.go是mian pack的go文件,如果其想使用pack.go,需要<code>import &quot;try/pack&quot;</code></p>
+<p>####可见性<br>额,其实Go的可见性很简单.每个pack里以大写字母开头的对其他pack是可见的,其他都是不可见的= =</p>
+<p>###OO<br>其实我也不知道GO到底是不是一个OO的语言.Go不支持多态,struct也没有初始化函数.<br>不过你可以通过可见性强迫类无法被new.在pack里面将类的首字母小写使其对其他pack不可见,然后写一个函数初始化该类并返回,保证该函数对其他pack的可见性即可</p>
+<p>####Anonymous fields,embedded structs<br>Go在struct定义时的一种特殊情况,可以只声明变量的type而没有name.如</p>
+<pre><code>type A struct{a int}
+type B struct{A}
+</code></pre><p>中,可以直接用b.a访问a(如果b是B的实例)</p>
+<p>#####命名冲突<br>在这种情况下的命名冲突分为2种,同级和不同级.如上例中A和B就是不同级.如果改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">type B struct&#123;</div><div class="line">	A</div><div class="line">    C</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>则A,C同级.<br>对于不同级的冲突,外层会覆盖内层.如B中有一个float32的a,则b.a为float32,即会覆盖a.a.不过你可以用b.A.a来访问(φ(◎ロ◎;)φ)<br>对于同级的冲突,必须通过b.A.a访问,直接通过b.a访问会报错</p>
+<p>#####method定义<br>比较奇怪,在这里记录一下<br><code>func (recv receiver_type) methodName(parameter_list) (return_value_list) { … }</code><br>receiver_type和method必须在同一pack中,但是不用在同一个文件中<br>method可以改变recv的值如果receiver_type为指针!!!!如果receiver_type为指针,recv不是指针,仍可以调用(即receiver_type的类型只决定的传值方法,不对调用对象产生限制)</p>
+<h2 id="interface和reflection"><a href="#interface和reflection" class="headerlink" title="interface和reflection"></a>interface和reflection</h2><p>###interface<br>并不是传统OO语言中的interface.Go的interface真的只是一系列方法的集合,不能有任何的变量.关键是这货tm可以实例化(官方说是可以实例化,但是个人感觉和java里的差不多)!!<br>任意的type可以继承任意的interface(即多对多的关系).<strong>implement不需要特别声明.只要实现了相应方法的都可以认为是implement</strong><br>Go支持多态<br>==在用interface调用时需要注意一点,函数声明中receiver的类型为指针时,必须与interface的类型一致.==以下面的代码为例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">type T interface&#123;</div><div class="line">	get() int</div><div class="line">    set(a int)</div><div class="line">&#125;</div><div class="line"></div><div class="line">type str struct&#123;x int&#125;</div><div class="line"></div><div class="line">func (s Str) get() int&#123;</div><div class="line">	return s.x</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (s *Str) set(int x) &#123;</div><div class="line">	s.x = x</div><div class="line">&#125;</div><div class="line"></div><div class="line">func main()&#123;</div><div class="line">	var s str</div><div class="line">    var t T = str</div><div class="line">    var tp T = &amp;str</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在上述代码中,t和tp都可以调用get,但是只有tp可以调用set.因为t实际上不是指针类型,在这种情况下Go做的自动转化无效</p>
+<p>interface内部可以有interface,感觉就像继承一样</p>
+<p>###interface的动态强制类型转化<br>v,b := interface.(structName)<br>v显示转化结果,成功后为interface类型;b显示转化是否成功<br>i.(type)会显示该实例的类型,任何变量都可以使用这种方法,即i不需要是interface的实例,可以是任何类型的变量</p>
+<p>###interface slice<br>interface的slice无法直接被赋值.如以下代码无法被正确执行:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var i []int = make([]int, 10);</div><div class="line">var iSlice []interface&#123;&#125; = i</div></pre></td></tr></table></figure></p>
+<p>因为interface slice的存储结构和普通slice不同.interface slice需要存储2个信息:变量的类型和值.因此需要2 word(我也不知道word是什么╮(￣▽￣”)╭ ),而普通的slice只需要1 word,即值即可.必须逐个对slice里的每个元素赋值</p>
+<p>###reflection</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/31/getting-start/" rel="next" title="getting start">
+                <i class="fa fa-chevron-left"></i> getting start
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/11/关于自由和梦想/" rel="prev" title="关于自由和梦想的代价">
+                关于自由和梦想的代价 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/02/01/Go-碎碎念/"
+           data-title="Go 碎碎念" data-url="/2015/02/01/Go-碎碎念/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#interface和reflection"><span class="nav-number">1.</span> <span class="nav-text">interface和reflection</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

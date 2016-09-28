@@ -1,0 +1,761 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="stochastic process," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="markov process是markov chain的泛化版本。它描绘了markov chain中访问的每个state以及interval">
+<meta property="og:type" content="article">
+<meta property="og:title" content="markov process">
+<meta property="og:url" content="/2016/03/14/markov-process/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="markov process是markov chain的泛化版本。它描绘了markov chain中访问的每个state以及interval">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451gw1f1wiuhqzpmj20ow03m757.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f225sib74ij20r806igm9.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/9dec4451jw1f225tfdwulj20na04gwey.jpg">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="markov process">
+<meta name="twitter:description" content="markov process是markov chain的泛化版本。它描绘了markov chain中访问的每个state以及interval">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/9dec4451gw1f1wiuhqzpmj20ow03m757.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/03/14/markov-process/"/>
+
+  <title> markov process | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                markov process
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-14T12:00:28+08:00" content="Mar 14 2016">
+              Mar 14 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/14/markov-process/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/14/markov-process/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>markov process是markov chain的泛化版本。它描绘了markov chain中访问的每个state以及interval<br><a id="more"></a></p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>和前面说的一样，markov过程由 <span>$X_0, X_1, .. X_{n-1}$</span><!-- Has MathJax --> 和 <span>$U_1, U_2,...U_n$</span><!-- Has MathJax --> 组成， <span>$X_n$</span><!-- Has MathJax --> 表示访问的state, <span>$U_n$</span><!-- Has MathJax --> 表示holding time，即经过 <span>$U_n$</span><!-- Has MathJax --> 时间后，系统由state <span>$X_{n-1}$</span><!-- Has MathJax --> 进入state <span>$X_n$</span><!-- Has MathJax --> 。由于 <span>$X_n$</span><!-- Has MathJax --> 就是一个markov chain的sample path，所以也被叫做embedded Markov chain。 <span>$U_n$</span><!-- Has MathJax --> 服从参数为 <span>$v_l$</span><!-- Has MathJax -->的指数分布，即<br><span>$Pr\left\{U_n\le u| X_{n-1} = l\right\} = 1-exp(-v_l u)$</span><!-- Has MathJax --></p>
+<p>若令 <span>$S_n = \sum_{m=1}^n U_m$</span><!-- Has MathJax --> ，则markov process 可以表示为：<br><span>$X(t) = X_n\text{ for } S_n\le t&lt;S_{n+1}\\$</span><!-- Has MathJax --></p>
+<p>在这里我们假设 <span>$P_{ii} = 0$</span><!-- Has MathJax --> ，即不存在self transition。因为在当前的场景下，self transition难以被检测到</p>
+<p>由于指数分布memoryless的特性，会有<br><span>$Pr\left\{X(t) = j | X(\tau) = i,\left\{X(s)=x(s);s&lt;\tau \right\}\right\} = Pr\left\{X(t-\tau) = j | X(0)\right\}$</span><!-- Has MathJax --></p>
+<p>例如一个 M/M/1 queue 可以用下图表示：<br><img src="http://ww1.sinaimg.cn/large/9dec4451gw1f1wiuhqzpmj20ow03m757.jpg" alt=""><br><span>$\lambda + \mu$</span><!-- Has MathJax --> 可以看做2个poisson过程(arrive and departure)的合并, <span>$\lambda/(\lambda + \mu)$</span><!-- Has MathJax --> 可以看做两个过程合并后的分裂。</p>
+<p>显而易见这就是一个birth-death chain。所以我们可以直接计算 steady-state 的概率：<br><span>$$\pi_0 = \dfrac{1-\rho}{2}\
+\pi_n = \dfrac{1-\rho^n}{2}\rho^{n-1}\ \rho = \lambda/\mu$$</span><!-- Has MathJax --></p>
+<p>所以我们可以从三个角度去看一个markov process：</p>
+<ul>
+<li>第一个视角也就是我们上面的视角；</li>
+<li>可以将这个过程看成是poisson process，rate为 <span>$v_i$</span><!-- Has MathJax --> ，poisson的arrival就是markov的transition</li>
+<li>将每个transition视为 <span>$n-1$</span><!-- Has MathJax --> 个poisson process的复合， <span>$n$</span><!-- Has MathJax --> 为状态数量。在state i到state j的rate为<span>$v_iP_{ij}$</span><!-- Has MathJax --> 。这些poisson process中，最先达到的即为下一个transition</li>
+</ul>
+<h2 id="sample-time-近似"><a href="#sample-time-近似" class="headerlink" title="sample-time 近似"></a>sample-time 近似</h2><p>我们可以将holding time分割成多个时间单元，每个时间单元为 <span>$\delta$</span><!-- Has MathJax --> 。如果我们假设每次转移只发生在 <span>$\delta$</span><!-- Has MathJax --> 的整数倍时间，那么这个过程就可以被视为markov chain，其中<br><span>$P_{ij} = q_{ij}\delta\\ P_{ii} = 1-\sum_{j\neq i} P_{ij} = 1- v_i\delta$</span><!-- Has MathJax --><br>当然，<span>$\delta$</span><!-- Has MathJax --> 必须满足 <span>$1- v_i\delta \ge 0$</span><!-- Has MathJax --></p>
+<h1 id="irreducible-Markov-processes"><a href="#irreducible-Markov-processes" class="headerlink" title="irreducible Markov processes"></a>irreducible Markov processes</h1><p>我们将embedded Markov chain为irreducible的MP称为 irreducible MP。</p>
+<p>下面我们将证明，对于markov process来说，其steady-state概率 <span>$p_j = \dfrac{\pi_j/v_j}{\sum_k\pi_k/v_k}$</span><!-- Has MathJax --></p>
+<p>首先我们证明一条引理：对于一个开始于state i 的markov process，有 <span>$\lim_{t\to\infty}M_i(t)=\infty$</span><!-- Has MathJax --> 。<br><span>$$\begin{aligned}
+Pr\left\{U_n &gt; u\right\} &amp;= \lim_{k\to\infty} \sum_{j=1}^k P_{ij}^{n-1}\exp(-v_j u)\\
+&amp; \le \sum_{j=1}^k P_{ij}^{n-1}\exp(-v_j u) + \sum_{j=k+1}^\infty P_{ij}^{n+1} \quad \text{for every }k
+\end{aligned}$$</span><!-- Has MathJax --><br>易知：当 <span>$k$</span><!-- Has MathJax --> 增加或 <span>$u\to\infty$</span><!-- Has MathJax --> ， <span>$Pr\left\{U_n &gt; u\right\} \to 0$</span><!-- Has MathJax --> 。所以 <span>$U_n$</span><!-- Has MathJax --> 为rv。故 <span>$S_n$</span><!-- Has MathJax --> 必然也是rv。则 <span>$\lim_{t\to\infty} Pr\left\{S_n \le t\right\} = 1$</span><!-- Has MathJax --> 。而 <span>$\left\{S_n\le t\right\}=\left\{M_i(t)\ge n\right\}$</span><!-- Has MathJax --> 。故 对于任意 <span>$n$</span><!-- Has MathJax --> 都有 <span>$\lim_{t\to\infty} Pr\left\{M_i(t)\ge n\right\} = 1$</span><!-- Has MathJax --> 。所以 <span>$\lim_{t\to\infty}M_i(t,w) = \infty\ \text{WP1}$</span><!-- Has MathJax --></p>
+<p>令 <span>$M_{ij}(t)$</span><!-- Has MathJax --> 表示 <span>$X_0 = i$</span><!-- Has MathJax --> 时，在（0, t]内到达state j的次数。下面证明 <span>$M_{ij}(t)$</span><!-- Has MathJax --> 为delay renewal process(i = j时则是renewal process)。</p>
+<p>令 <span>$N_{ij}(n)$</span><!-- Has MathJax --> 表示对于embedded markov chain来说，从i出发进入state j的次数。 我们在<a href="http://modkzs.github.io/2016/03/12/countable-state-markov-chain/" target="_blank" rel="external">countable-state markov chain</a> 说明了 <span>$N_{ij}(n)$</span><!-- Has MathJax --> 为delay renewal process。 易知 <span>$M_{ij}(t) = N_{ij}(M_i(t))$</span><!-- Has MathJax --> 故<br><span>$\lim_{t\to\infty}M_{ij}(t) = \lim_{t\to\infty} N_{ij}(M_i(t)) = \lim_{n\to\infty} N_{ij}(n) = 0 \quad WP1$</span><!-- Has MathJax --><br>所以从state i 出发，经过一段时间后我们必然可以第一次访问state j；再过一段时间(记为 <span>$W_1$</span><!-- Has MathJax --> )，必然可以第二次访问state j。后面访问 state j的interval和 <span>$W_1$</span><!-- Has MathJax --> 分布相同。故 <span>$M_{ij}(t)$</span><!-- Has MathJax --> 为delay renewal process 。我们将访问state j的interval的期望记为 <span>$\bar{W}(j)$</span><!-- Has MathJax --></p>
+<p>根据我们前面的假设，<span>$U_n$</span><!-- Has MathJax --> 满足指数分布，故 <span>$E[U_n|X_{n-1}=j] = 1/v_j$</span><!-- Has MathJax --> 。我们为 <span>$M_ij(t)$</span><!-- Has MathJax --> 定义一个reward <span>$R_{ij}(t) = \mathbb{I}_{X(t)=j}$</span><!-- Has MathJax --> (如下图所示)</p>
+<p><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f225sib74ij20r806igm9.jpg" alt=""></p>
+<p>我们令 <span>$p_j$</span><!-- Has MathJax --> 表示停留在state j的时间比例。则根据renewal process的性质，可得：<br><span>$p_j(i) = \lim_{t\to\infty}\dfrac{\int_0^t R_{ij}(\tau)d\tau}{t} = \dfrac{\bar{U}(j)}{\bar{W}(j)} = \dfrac{1}{v_j\bar{W}(j)}$</span><!-- Has MathJax --></p>
+<p>现假设embedded chain为positive recurrent， steady-state概率为 <span>$\pi_j$</span><!-- Has MathJax --> 且 <span>$X_0 = i$</span><!-- Has MathJax --> 。根据renewal process的性质，我们有：<br><span>$$\lim_{t\to\infty} \dfrac{M_{ij}(t)}{t} = 1/\bar{W}(j)\quad \text{WP1}\\
+
+\lim_{t\to\infty} \dfrac{M_{ij}(t)}{M_i(t)} = \lim_{t\to\infty} \dfrac{N_{ij}(M_i(t))}{M_i(t)} = \lim_{n\to\infty} \dfrac{N_{ij}(n)}{n} = \pi_j\quad \text{WP1}\\
+
+\Rightarrow \dfrac{1}{\bar{W}(j)} = \lim_{t\to\infty} \dfrac{M_{ij}(t)}{t} = \lim_{t\to\infty} \dfrac{M_{ij}(t)}{M_i(t)}\dfrac{M_i(t)}{t} = \pi_j \lim_{t\to\infty}\dfrac{M_{i}(t)}{t}$$</span><!-- Has MathJax --></p>
+<p>下面我们证明 <span>$\lim_{l\to\infty}\sum_{k=1}^l p_k(i)=1$</span><!-- Has MathJax --></p>
+<p>我们令 <span>$R^l_{ij}(t)=\mathbb{I}_{X(t)\le l}$</span><!-- Has MathJax --> 。则有：<br><span>$\lim_{t\to\infty}\dfrac{\int_0^t R^t_{ij}(\tau)d\tau}{t} = \sum_{k=1}^l p_k(i) = \dfrac{E[R^l_j]}{\bar{U}_j}$</span><!-- Has MathJax --><br>则易知：<span>$\sum_{k=1}^l p_k(i)$</span><!-- Has MathJax --> 随 <span>$k$</span><!-- Has MathJax --> 的增加而增加且必须小于等于1。故 <span>$\lim_{l\to\infty}\sum_{k=1}^l p_k(i)=1$</span><!-- Has MathJax --> 。</p>
+<p>结合上面 <span>$p_j(i)$</span><!-- Has MathJax --> 的式子，我们可以发现 <span>$p_j(i)$</span><!-- Has MathJax --> 和 <span>$\dfrac{\pi_j}{v_j}$</span><!-- Has MathJax --> 成正比。故 <span>$p_j(i) = \dfrac{\pi_j/v_j}{\sum_k \pi_k/v_k}$</span><!-- Has MathJax --></p>
+<p>根据上式以及 <span>$\pi_j = \sum_i \pi_i P_{ij}$</span><!-- Has MathJax --> 可得：<br><span>$p_jv_j = \sum_i p_i q_{ij}\quad \sum_ip_i = 1$</span><!-- Has MathJax --><br>对于一个 irreducible markov process来说，假设 <span>$p_i$</span><!-- Has MathJax --> 为上式的解，如果 <span>$\sum_i p_iv_i &lt; \infty$</span><!-- Has MathJax -->，则该解唯一、大于0且可得到embedded chain的steady-state 概率 <span>$\pi_j$</span><!-- Has MathJax --> ；对于embedded chain来说，若为positive recurrent，则也可以计算出满足上式的 <span>$p_i$</span><!-- Has MathJax --> 。</p>
+<p>当然了，在embedded chain 为 positive recurrent时，仍然存在markov process没有steady-state的情况(下图即为例子)<br><img src="http://ww4.sinaimg.cn/large/9dec4451jw1f225tfdwulj20na04gwey.jpg" alt=""></p>
+<p>对于 <span>$\sum_i p_i = 1$</span><!-- Has MathJax --> 来说，也有 <span>$\sum_i p_iv_i = \infty$</span><!-- Has MathJax --> 的情况出现这种例子很好构造，就不举例子了。</p>
+<h1 id="Kolmogorov-differential-equations"><a href="#Kolmogorov-differential-equations" class="headerlink" title="Kolmogorov differential equations"></a>Kolmogorov differential equations</h1><p>令 <span>$P_{ij}(t) = P\left\{X_t = j | X_0 = i\right\}$</span><!-- Has MathJax --> 的概率，则 <span>$\lim_{t\to\infty} P_{ij}(t)=p_j$</span><!-- Has MathJax --> 。我们可以将 <span>$P_{ij}(t)$</span><!-- Has MathJax --> 重写为：<br><span>$$\begin{aligned}
+P_{ij}(t) &amp;= \sum_k Pr\left\{X(t) = j, X(s) = k | X(0) = i\right\}\\
+&amp;=\sum_k Pr\left\{X(s) = k | X(0) = i\right\}Pr\left\{X(t) = j | X(s) = k\right\}
+&amp;= \sum_k P_{ik}(s)P_{kj}(t-s)
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>如果令 <span>$t-s$</span><!-- Has MathJax --> 大于0单足够小， <span>$P_{kj}(t-s)$</span><!-- Has MathJax --> 可以被表示为 <span>$(t-s)q_{kj}+o(t-s)\ \text{for}k\neq j$</span><!-- Has MathJax --> ； <span>$P_{jj}(t-s)$</span><!-- Has MathJax --> 可以被表示为 <span>$1-(t-s)v_j + o(s)$</span><!-- Has MathJax --> 。因此<br><span>$$P_{ij}(t) = \sum_{k\neq  j} [P_{ik}(s)(t-s)q_{kj}] + P_{ij}(s)[1-(t-s)v_j] + o(t-s)\\
+\Rightarrow \dfrac{P_{ij}(t) - P_{ij}(s)}{t-s} = \sum_{k\neq j}(P_{ik}(s)q_{kj}) - P_{ij}(s)v_j + o(s)/s\\
+\Rightarrow \dfrac{dP_{ij}(t)}{dt} = \sum_{k\neq j}(P_{ik}(s)q_{kj}) - P_{ij}(s)v_j$$</span><!-- Has MathJax --><br>最后的式子被称为Kolmogorov forward equations</p>
+<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>考虑一个最简单的M/M/1 queue。<br>则有：<br><span>$$\dfrac{dP_{01}(t)}{dt} = P_{00}(t)q_{01} - P_{01}(t)v_1 = P_{00}\lambda - P_{01}(t)\mu = \lambda - P_{01}(t)(\mu + \lambda)\\
+\Rightarrow P_{01}(t) = \dfrac{\lambda}{\mu + \lambda}[1-e^{-(\mu + \lambda)t}]$$</span><!-- Has MathJax --><br>令 <span>$[P(t)]$</span><!-- Has MathJax --> 为M<em>M维的矩阵， 第i行j列元素为<span>$P_{ij}$</span><!-- Has MathJax -->；<span>$[Q]$</span><!-- Has MathJax --> 也为M</em>M维的矩阵， 第i行j列元素为<span>$q_{ij} \text{ if } i \neq j$</span><!-- Has MathJax --> 或 <span>$-v_j \text{ if } i = j$</span><!-- Has MathJax --> ，则Kolmogorov forward equations可以写成：<br><span>$\dfrac{d[P(t)]}{dt} = [P(t)][Q]$</span><!-- Has MathJax --></p>
+<p>对于Q来说，必然存在唯一一个全部元素均大于0的左特征向量。</p>
+<span>$$\begin{aligned}
+P_{ij}(t) &amp;= \sum_k P_{ik}(s)P_{kj}(t-s)\\
+&amp;= \sum_{k\neq i}sq_{ik}P_{kj}(t-s) + (1-sv_i)P_{ij}(t-s) + o(s)
+\end{aligned}$$</span><!-- Has MathJax -->
+<span>$$\Rightarrow \dfrac{P_{ij}(t) - P_{ij}(t-s)}{s} = \sum_{k\neq i}q_{ik}P_{kj}(t-s) + v_iP_{ij}(t-s) + o(s)/s\\
+\Rightarrow \dfrac{dP_{ij}(t)}{dt} = \sum_{k\neq i}q_{ik}P_{kj}(t-s) + v_iP_{ij}(t-s)\\
+\Rightarrow \dfrac{d[P(t)]}{dt} = [Q][P(t)]$$</span><!-- Has MathJax -->
+<p>这被称为Komogorov backward equation</p>
+<h1 id="birth-death-process"><a href="#birth-death-process" class="headerlink" title="birth-death process"></a>birth-death process</h1><p>其实和birth-death chain差不多。</p>
+<p>为了保证steady state的存在，有 <span>$p_i \lambda_i=p_{i+1}\mu_{i+1}$</span><!-- Has MathJax --> 。令 <span>$\rho_i = \dfrac{\lambda_i}{\mu_{i+1}}$</span><!-- Has MathJax --> ， 则<br><span>$$p_i = p_0 \prod_{j=0}^{i-1}\rho_j
+\Rightarrow p_0 = \dfrac{1}{1+\sum_{i=1}^\infty \prod_{j=0}^{i-1}\rho_j}$$</span><!-- Has MathJax --><br>对于 M/M/1 queue来说，可以简化为 <span>$p_i = (1-\rho)\rho^i$</span><!-- Has MathJax --></p>
+<p>t时刻队伍中顾客数量的期望 <span>$E[X(t)] = \sum_{i=1}^\infty Pr\left\{X(t)\ge i\right\} = \dfrac{\rho}{1-\rho}$</span><!-- Has MathJax --></p>
+<p>根据Little’s formula，顾客在队伍中花费的平均时间 <span>$E[system time] = \dfrac{E[X(t)]}{\lambda} = \dfrac{\rho}{\lambda(1-\rho)} = \dfrac{1}{\mu - \lambda}$</span><!-- Has MathJax --></p>
+<p>顾客在队伍中花费的平均等待时间 <span>$E[Queueing time] = \dfrac{1}{\mu - \lambda} - \dfrac{1}{\mu} = \dfrac{\rho}{\mu - \lambda}$</span><!-- Has MathJax --></p>
+<p>还可以用Little’s formula计算出队列中顾客数量的期望<span>$E[Number in queue] = \dfrac{\lambda\rho}{\mu - \lambda}$</span><!-- Has MathJax --></p>
+<p>birth-death process可以建模大多数的queue，不过可能比 M/M/1要复杂很多。</p>
+<h1 id="Reversibility"><a href="#Reversibility" class="headerlink" title="Reversibility"></a>Reversibility</h1><p>在markov process中，对于backward transition来说，其概率 <span>$P_{ij}^*$</span><!-- Has MathJax --> 满足 <span>$\pi_iP_{ij}^* = \pi_jP_{ji}$</span><!-- Has MathJax --> 。对于markov process来说，该结论同样成立。而且显而易见backward transition本身也是markov process。我们同样定义 <span>$q_{ij}^*$</span><!-- Has MathJax --> ，则 <span>$q_{ij}^* = v_jP_{ij}^* = \dfrac{v_i\pi_jP_{ji}}{\pi_i} = \dfrac{v_i\pi_jq_{ji}}{\pi_iv_j} = p_jq_{ji}/p_i$</span><!-- Has MathJax --> 。所以我们可以得到相似的结论：<br><span>$p_iq_{ij}^* = p_jq_{ji}$</span><!-- Has MathJax --></p>
+<p>所以当<span>$q_{ij}^* = q_{ij}$</span><!-- Has MathJax --> 时，markov process 就是 reversible。对于markov process与embedded chain在reversibility上的关系如下：</p>
+<p>对于 steady state 存在的irreducible markov process，若embedded chain为reversible，则markov process也是reversible</p>
+<h2 id="一些性质"><a href="#一些性质" class="headerlink" title="一些性质"></a>一些性质</h2><p>对于irreducible markov process，如果 <span>$p_i$</span><!-- Has MathJax --> 大于0、和为1、满足 <span>$\sum_ip_iv_i &lt; \infty$</span><!-- Has MathJax -->  以及 <span>$p_iq_{ij} = p_jq_{ji} \text{ for all}i, j$</span><!-- Has MathJax --> ，则 <span>$p_i$</span><!-- Has MathJax --> 是对应的markov process的steady-state 概率(所以肯定大于0喽)，process是reversible，embedded chain是positive recurrent。</p>
+<p>证明：对 <span>$p_iq_{ij} = p_jq_{ji}$</span><!-- Has MathJax --> 同时取和，得：<br><span>$\sum_i p_iq_{ij} = p_jv_j \text{ for all j}$</span><!-- Has MathJax --><br>上面的方程加上 <span>$\sum_i p_i = 1$</span><!-- Has MathJax --> 可以解出process的steady-state概率。结合<span>$p_iq_{ij}^* = p_jq_{ji}$</span><!-- Has MathJax --> ，就可以证明了。</p>
+<p>对于irreducible markov process， 如果有 <span>$p_i$</span><!-- Has MathJax --> 满足 <span>$\sum_i p_i = 1, \sum_i p_iv_i &lt; \infty$</span><!-- Has MathJax --> ，还有一组 <span>$q_{ij}^*$</span><!-- Has MathJax --> 恰好满足<br><span>$$\sum_j q_{ij} = \sum_j q_{ij}^* \\
+p_iq_{ij} = p_jq_{ji}^*$$</span><!-- Has MathJax --><br>那么 <span>$p_i$</span><!-- Has MathJax --> 就是steady-state概率，embedded chain为positive recurrent， <span>$q_{ij}^* {}$</span><!-- Has MathJax --> 为backward transition的概率。<br>证明和上面的思路基本一样，就不证了</p>
+<p>对于birth-death process来说，如果 <span>$p_i\lambda_i = p_{i+1}\mu_{i+1}$</span><!-- Has MathJax --> 有解且满足 <span>$\sum_i p_i = 1， \sum_i p_iv_i&lt;\infty$</span><!-- Has MathJax --> 则process为irreducible且embedded chain为positive recurrent, reversible</p>
+<p>对于 M/M/1 queue( <span>$\lambda &lt; \mu$</span><!-- Has MathJax --> )来说，有：</p>
+<ol>
+<li>departure process也是poisson，rate为 <span>$\lambda$</span><!-- Has MathJax --> (我觉得这是backward)</li>
+<li>state <span>$X(t)$</span><!-- Has MathJax --> 和t之前的departure无关</li>
+<li>对于FCFS来说，假设有顾客在t时间离开，则该顾客的到达时间和t之间的departure没有关系<br>这是Burke’s theorem的MP版</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/stochastic-process/" rel="tag">#stochastic process</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/12/countable-state-markov-chain/" rel="next" title="countable-state markov chain">
+                <i class="fa fa-chevron-left"></i> countable-state markov chain
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/20/random-walk/" rel="prev" title="random walk">
+                random walk <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/14/markov-process/"
+           data-title="markov process" data-url="/2016/03/14/markov-process/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-time-近似"><span class="nav-number">1.1.</span> <span class="nav-text">sample-time 近似</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#irreducible-Markov-processes"><span class="nav-number">2.</span> <span class="nav-text">irreducible Markov processes</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kolmogorov-differential-equations"><span class="nav-number">3.</span> <span class="nav-text">Kolmogorov differential equations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一个例子"><span class="nav-number">3.1.</span> <span class="nav-text">一个例子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#birth-death-process"><span class="nav-number">4.</span> <span class="nav-text">birth-death process</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reversibility"><span class="nav-number">5.</span> <span class="nav-text">Reversibility</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些性质"><span class="nav-number">5.1.</span> <span class="nav-text">一些性质</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

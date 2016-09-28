@@ -1,0 +1,702 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="好吧，在Go还没看完的时候又开始看python了。因为4月份要准备实习面试，所以其他的东西先放一边，专心python好了。教程为python tutorial.与Go相同,对于和c,c++,java中相同的东西不会介绍.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python印象(一)">
+<meta property="og:url" content="/2015/03/10/python印象/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="好吧，在Go还没看完的时候又开始看python了。因为4月份要准备实习面试，所以其他的东西先放一边，专心python好了。教程为python tutorial.与Go相同,对于和c,c++,java中相同的东西不会介绍.">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python印象(一)">
+<meta name="twitter:description" content="好吧，在Go还没看完的时候又开始看python了。因为4月份要准备实习面试，所以其他的东西先放一边，专心python好了。教程为python tutorial.与Go相同,对于和c,c++,java中相同的东西不会介绍.">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2015/03/10/python印象/"/>
+
+  <title> python印象(一) | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                python印象(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-03-10T20:26:19+08:00" content="Mar 10 2015">
+              Mar 10 2015
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/language/" itemprop="url" rel="index">
+                    <span itemprop="name">language</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/03/10/python印象/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/10/python印象/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>好吧，在Go还没看完的时候又开始看python了。因为4月份要准备实习面试，所以其他的东西先放一边，专心python好了。教程为<a href="https://docs.python.org/3/tutorial/introduction.html" target="_blank" rel="external">python tutorial</a>.与Go相同,对于和c,c++,java中相同的东西不会介绍.<br><a id="more"></a></p>
+<p>#Informal Introduction<br>python中可以用a, b = 0, 1的方式为2个以上的变量赋值<br>python中**表示阶乘</p>
+<p>##String<br>python中表示字符串的一共有3中方式：单引号,双引号和三引号（=。=这是什么鬼）单引号和双引号其实并没有什么区别.</p>
+<p>引入单引号和双引号的主要目的是可以避免使用转义字符(/).如print(“he’s good”)会输出he’s good,而如果使用单引号,则必须写成print(‘he\’s good’).该点对单引号也成立.</p>
+<p>三引号会直接输出”,’和句子中的换行,但是转义字符仍然有用.另外,三引号是三个单引号,不是一个双引号和一个单引号(= =|| 一开始是这么以为的…..)</p>
+<p>另外,在句子外加个r会无视转义字符,该点对三种引号都适用.如print(r”he\’s good”)会输出he\’s good.</p>
+<p>python中的String都是类似list,可以选择单个字符或slice</p>
+<p>##list<br>使用[]表示,2个list可以使用+进行连接]<br><strong>list中的元素不需要是同一类型,如int和string可以在同一个list中</strong><br>顺便说下list的顺序问题.python中list的选择有2种表示方式</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-5</td>
+<td>-4</td>
+<td>-3</td>
+<td>-2</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+<p>如上表,list[0]和list[-5]是表示一个值如果list中有5个元素的话.<br>可以使用list[begin:end]进行切片,begin和end都可以省略,会自动变成0/len(list)</p>
+<p>#Control Flow</p>
+<p>##if<br>没有括号,用:表示结束<br>用and, or, not 表示&amp;&amp;, ||, !</p>
+<p>##for<br>for w in words 类似java中的for(w : words)<br>for i in range(begin, end) 类似java中的for(int i = begin; i &lt; end; i++), begin可以省略,默认从0开始<br>不过range输出的并不是list,想print的话需要list(range(5))<br>else 在循环正常退出时进入(即非break中断循环)</p>
+<p>###for当中为循环变量赋值没有意义!</p>
+<blockquote>
+<p>The for-loop makes assignments to the variables(s) in the target list. This overwrites all previous assignments to those variables including those made in the suite of the for-loop:</p>
+</blockquote>
+<p>如下例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for i in range(10):</div><div class="line">    print(i)</div><div class="line">    i = 5</div></pre></td></tr></table></figure></p>
+<p>输出依然是0-9,而不是0之后无限5</p>
+<p>###for循环中改变list内容<br>for循环中python会记录当前item的index,每次加一.这意味着如果删除list中的一个元素(如第5个)则下一个元素会是原list中第7个元素,第6个会被跳过.如果添加元素的话,当前元素会被再处理一次</p>
+<blockquote>
+<p>An internal counter is used to keep track of which item is used next, and this is incremented on each iteration. When this counter has reached the length of the sequence the loop terminates. This means that if the suite deletes the current (or a previous) item from the sequence, the next item will be skipped (since it gets the index of the current item which has already been treated). Likewise, if the suite inserts an item in the sequence before the current item, the current item will be treated again the next time through the loop.</p>
+</blockquote>
+<p>##pass<br>无用.不知道怎么描述作用,直接引用原文好了:</p>
+<blockquote>
+<p>It can be used when a statement is required syntactically but the program requires no action.</p>
+</blockquote>
+<p>##function<br>用def定义,如def fib(n):<br>function body的第一行可以是string(可选),称为docstring</p>
+<p>###变量寻找过程<br>the local symbol table-&gt;the local symbol tables of enclosing functions-&gt;the global symbol table-&gt;the table of built-in names.</p>
+<p>###传值和传址的问题<br>c和c++中的老问题.python的类型与变量的概念和c或者c++,java都不相同.<br>==python中类型是属于对象的，而不是变量。==<br>如:<br>a = 1 #一个指向int数据类型的a<br>b = [1] #一个指向list类型的b,list中包含1<br>现将a = 2<br>由于python中strings, tuples, 和numbers不可变更(unmutable),所以内存中新建一个int变量,大小为2,将a指向该变量<br>将 b = [2]<br>由于list可变,list中的第一变量和上面相似,指向一个新变量,而list本身没有改变</p>
+<p>所以从本质来说,我觉得可以将python中的所有变量都看做void*指针,对于不可变更的类型,赋值会malloc新的,其他变量则直接改变.<br>所以在传递变量的时候,当传递不可变更类型时,类似于传值,函数中的变更不会影响函数外变量的值;可变更类型则类似传址,函数中的变更会影响函数变量的值</p>
+<p>###default argument values<br>python支持参数缺省值,但是<strong>所有的参数缺省值只会被执行一次!!!!</strong>所以对于可变类型,可能会出现如下问题:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">def f(a, L=[]):</div><div class="line">    L.append(a)</div><div class="line">    return L</div><div class="line"></div><div class="line">print(f(1))</div><div class="line">print(f(2))</div><div class="line">print(f(3))</div></pre></td></tr></table></figure></p>
+<p>上面代码的输出为<br>[1]<br>[1, 2]<br>[1, 2, 3]<br>避免上述情况可以使用如下方法:<br>def f(a, L=None):<br>    if L is None:<br>        L = []<br>    L.append(a)<br>    return L</p>
+<p>print(f(1))<br>print(f(2))<br>print(f(3))</p>
+<p>###Keyword Arguments<br>形参中有**name之类的参数时,需要传入dictionary.此时keyword argument用法如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">def cheeseshop(kind, *arguments, **keywords):</div><div class="line">    print(&quot;-- Do you have any&quot;, kind, &quot;?&quot;)</div><div class="line">    print(&quot;-- I&apos;m sorry, we&apos;re all out of&quot;, kind)</div><div class="line">    for arg in arguments:</div><div class="line">        print(arg)</div><div class="line">    print(&quot;-&quot; * 40)</div><div class="line">    keys = sorted(keywords.keys())</div><div class="line">    for kw in keys:</div><div class="line">        print(kw, &quot;:&quot;, keywords[kw])</div><div class="line"></div><div class="line">cheeseshop(&quot;Limburger&quot;, &quot;It&apos;s very runny, sir.&quot;,</div><div class="line">           &quot;It&apos;s really very, VERY runny, sir.&quot;,</div><div class="line">           shopkeeper=&quot;Michael Palin&quot;,</div><div class="line">           client=&quot;John Cleese&quot;,</div><div class="line">           sketch=&quot;Cheese Shop Sketch&quot;)</div></pre></td></tr></table></figure></p>
+<p>会输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">-- Do you have any Limburger ?</div><div class="line">-- I&apos;m sorry, we&apos;re all out of Limburger</div><div class="line">It&apos;s very runny, sir.</div><div class="line">It&apos;s really very, VERY runny, sir.</div><div class="line">----------------------------------------</div><div class="line">client : John Cleese</div><div class="line">shopkeeper : Michael Palin</div><div class="line">sketch : Cheese Shop Sketch</div></pre></td></tr></table></figure></p>
+<h3 id="Arbitrary-Argument-Lists"><a href="#Arbitrary-Argument-Lists" class="headerlink" title="Arbitrary Argument Lists"></a>Arbitrary Argument Lists</h3><p>用tuple实现可变参数列表.如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def concat(*args, sep=&quot;/&quot;):</div><div class="line">    return sep.join(args)</div></pre></td></tr></table></figure></p>
+<p>###lambda<br>类似java中的匿名函数,貌似java8也支持lambda表达式</p>
+<p>###docstring和annotation<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">def my_function()-&gt; &quot;this is annotation&quot;: </div><div class="line">     &quot;&quot;&quot;this is docstring</div><div class="line">     &quot;&quot;&quot;</div><div class="line">     pass</div></pre></td></tr></table></figure></p>
+<p>可以使用<strong>annotations</strong>和<strong>doc</strong>访问annotation和lambda</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag">#python</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/11/关于自由和梦想/" rel="next" title="关于自由和梦想的代价">
+                <i class="fa fa-chevron-left"></i> 关于自由和梦想的代价
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/14/python印象-二/" rel="prev" title="python印象(二)">
+                python印象(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/03/10/python印象/"
+           data-title="python印象(一)" data-url="/2015/03/10/python印象/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Arbitrary-Argument-Lists"><span class="nav-number">1.</span> <span class="nav-text">Arbitrary Argument Lists</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

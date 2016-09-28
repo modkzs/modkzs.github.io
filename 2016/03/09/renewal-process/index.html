@@ -1,0 +1,808 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="stochastic process," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="renewal process，poisson process的泛化版本。并不知道有什么用=。=但是在markov process中大量结论的获得都需要借助renewal process，所以课上给了一定篇幅介绍。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="renewal process">
+<meta property="og:url" content="/2016/03/09/renewal-process/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="renewal process，poisson process的泛化版本。并不知道有什么用=。=但是在markov process中大量结论的获得都需要借助renewal process，所以课上给了一定篇幅介绍。">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451gw1f1qw6rxjivj20lc07g3zk.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f1rutm9k3kj20oi0a2aaz.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451gw1f1s3705sssj20o6082mxq.jpg">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="renewal process">
+<meta name="twitter:description" content="renewal process，poisson process的泛化版本。并不知道有什么用=。=但是在markov process中大量结论的获得都需要借助renewal process，所以课上给了一定篇幅介绍。">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/9dec4451gw1f1qw6rxjivj20lc07g3zk.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/03/09/renewal-process/"/>
+
+  <title> renewal process | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                renewal process
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-09T16:04:40+08:00" content="Mar 9 2016">
+              Mar 9 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/09/renewal-process/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/09/renewal-process/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>renewal process，poisson process的泛化版本。并不知道有什么用=。=但是在markov process中大量结论的获得都需要借助renewal process，所以课上给了一定篇幅介绍。<br><a id="more"></a></p>
+<h1 id="再来看看大数定律"><a href="#再来看看大数定律" class="headerlink" title="再来看看大数定律"></a>再来看看大数定律</h1><h2 id="WP1"><a href="#WP1" class="headerlink" title="WP1"></a>WP1</h2><p>前面说到过WP1的定义：<br><span>$Pr\left\{w\in\Omega:\lim_{n\to\infty}Z_n(w)=Z(w)\right\}$</span><!-- Has MathJax --><br>如果我们令 <span>$Y_n(w)=Z_n(w)-Z(w)$</span><!-- Has MathJax -->，则根据上面的定义可知，<span>$Y_n(w)$</span><!-- Has MathJax --> 会收敛于0。可以证明，只要 <span>$Y_n(w)$</span><!-- Has MathJax --> 期望finite，且 <span>$\sum_{n=1}^\infty E[|Y_n|]&lt;\infty$</span><!-- Has MathJax --> ， <span>$Y_n(w)$</span><!-- Has MathJax --> 均收敛于0。</p>
+<p>证明过程如下：<br>由markov inequality知：<br><span>$Pr\left\{\sum_{n=1}^m|Y_n|&gt;\alpha\right\}\le \dfrac{E[\sum_{n=1}^m|Y_n|]}{\alpha} = \dfrac{\sum_{n=1}^mE[|Y_n|]}{\alpha}\le\dfrac{\sum_{n=1}^\infty E[|Y_n|]}{\alpha}$</span><!-- Has MathJax --><br>令 <span>$A_m=\left\{w:\sum^m_{n=1}|Y_n(w)|&gt;\alpha\right\}$</span><!-- Has MathJax --> ，则 <span>$lim_{m\to\infty}Pr\left\{\sum_{n=1}^m|Y_n|&gt;\alpha\right\} = Pr\left\{\bigcup_{m=1}^\infty A_m\right\}=Pr\left\{w:\sum_{n=1}^\infty |Y_n(w)|&gt;\alpha\right\}$</span><!-- Has MathJax --><br>所以有<br><span>$$Pr\left\{w:\sum_{n=1}^\infty |Y_n(w)|&gt;\alpha\right\} \le \dfrac{\sum_{n=1}^\infty E[|Y_n|]}{\alpha}\\
+\Rightarrow Pr\left\{w:\sum_{n=1}^\infty |Y_n(w)|\le\alpha\right\} \ge 1-\dfrac{\sum_{n=1}^\infty E[|Y_n|]}{\alpha}\\
+\Rightarrow Pr\left\{\lim_{n\to\infty} |Y_n(w)|=0\right\} \ge 1-\dfrac{\sum_{n=1}^\infty E[|Y_n|]}{\alpha}$$</span><!-- Has MathJax --><br>由于上述结论对任意 <span>$\alpha$</span><!-- Has MathJax --> 均成立，故 <span>$Pr\left\{\lim_{n\to\infty} |Y_n(w)|=0\right\}=1$</span><!-- Has MathJax --></p>
+<p>下面我们证明大数定律，即：<br><span>$Pr\left\{w:\lim_{n\to\infty}\dfrac{S_n(w)}{n}\right\} \quad \text{Xs are IID and }E[|X|]&lt;\infty$</span><!-- Has MathJax --><br>=。=不过只证明 <span>$\bar{X}=0,E[X^4]&lt;\infty$</span><!-- Has MathJax --> 。令 <span>$E[X^4] = \gamma$</span><!-- Has MathJax --><br><span>$$\begin{aligned}
+E[S_n^4]&amp;=E[(X_1+...+X_n)(X_1+...+X_n)(X_1+...+X_n)]\\
+&amp;=\sum_{i=1}^n\sum_{j=1}^n\sum_{k=1}^n\sum_{l=1}^n E[X_iX_jX_kX_l]\\
+&amp;= n\gamma +3n(n-1)\sigma^4
+\end{aligned}$$</span><!-- Has MathJax --><br>故可得：<br><span>$$\sum_{n=1}^\infty E\bigg[\bigg|\dfrac{S_n^4}{n^4}\bigg|\bigg]= \sum_{n=1}^\infty \dfrac{n\gamma +3n(n-1)\sigma^4}{n^4}&lt;\infty\\
+\Rightarrow\lim_{n\to\infty}|S_n/n| = 0$$</span><!-- Has MathJax --></p>
+<p>当然了，对于期望不为0的变量(只要是finite)，可以直接减掉期望就行了</p>
+<h2 id="SLLN-for-Renewal-Process"><a href="#SLLN-for-Renewal-Process" class="headerlink" title="SLLN for Renewal Process"></a>SLLN for Renewal Process</h2><span>$\lim_{t\to\infty} N(t)/t = 1/\bar{X}$</span><!-- Has MathJax -->
+<p>首先证明 <span>$\lim_{t\to\infty}N(t)=\infty\quad WP1$</span><!-- Has MathJax --> 。由  <span>$\lim_{t\to\infty}Pr\left\{N(t)&lt;n\right\}=\lim_{t\to\infty}Pr\left\{S_n&gt;t\right\}=1-\lim_{t\to\infty}Pr\left\{S_n\ge t\right\}$</span><!-- Has MathJax --> 且<span>$S_n$</span><!-- Has MathJax --> 为defective rv，因此 <span>$\lim_{t\to\infty}Pr\left\{S_n\ge t\right\} = 0$</span><!-- Has MathJax --> ，故 <span>$\lim_{t\to\infty}Pr\left\{N(t)&lt;n\right\} = 0$</span><!-- Has MathJax --> 故 <span>$\lim_{t\to\infty}N(t)=\infty, \lim_{t\to\infty}E[N(t)]=\infty$</span><!-- Has MathJax --></p>
+<p>因为 <span>$\lim \dfrac{S_n}{n} = \bar{X}$</span><!-- Has MathJax -->，故 <span>$\lim_{n\to\infty} \dfrac{n}{S_n} = \dfrac{1}{\bar{X} }$</span><!-- Has MathJax --> 。又由下图知：<br><img src="http://ww1.sinaimg.cn/large/9dec4451gw1f1qw6rxjivj20lc07g3zk.jpg" alt=""><br><span>$\dfrac{N(t)}{S_{N(t)+1} } \le \dfrac{N(t)}{t} \le \dfrac{N(t)}{S_{N(t)} }$</span><!-- Has MathJax --><br>所以 <span>$\lim_{t\to\infty}\dfrac{N(t)}{S_{N(t)+1} }=\lim_{t\to\infty}\dfrac{n}{S_{n+1} }=\lim_{t\to\infty}\dfrac{n+1}{S_{n+1} }\dfrac{n}{n+1}=\dfrac{1}{\bar{X} }$</span><!-- Has MathJax --></p>
+<p>同理，<span>$\lim_{t\to\infty}\dfrac{N(t)}{S_{N(t)} } = \dfrac{1}{\bar{X} }$</span><!-- Has MathJax --> 。得证</p>
+<h2 id="CLT-for-Renewal-process"><a href="#CLT-for-Renewal-process" class="headerlink" title="CLT for Renewal process"></a>CLT for Renewal process</h2><span>$\lim_{t\to\infty}Pr\left\{\dfrac{N(t)-t/\bar{X} }{\sigma\bar{X}^{-3/2}\sqrt{t} } &lt; \alpha\right\} = \Phi(\alpha)$</span><!-- Has MathJax -->
+<h1 id="Renewal-reward-process"><a href="#Renewal-reward-process" class="headerlink" title="Renewal-reward process"></a>Renewal-reward process</h1><p>和markov chain一样，我们也给renewal process加上reward。在renewal process中，变化的是时间，因此reward自然也和时间有关。</p>
+<h2 id="三个重要的例子：residual-life、age、duration"><a href="#三个重要的例子：residual-life、age、duration" class="headerlink" title="三个重要的例子：residual life、age、duration"></a>三个重要的例子：residual life、age、duration</h2><h3 id="residual-life"><a href="#residual-life" class="headerlink" title="residual life"></a>residual life</h3><p>poisson process中也定义过这个变量，即从时间t开始下一次到达还需要同时。可以用 <span>$S_{N(t)+1}-t$</span><!-- Has MathJax --> 表示。我们用 <span>$Y(t)$</span><!-- Has MathJax --> 表示residual life。则<br><span>$\int_{\tau=0}^tY(\tau)d\tau = \frac{1}{2}\sum_{n=1}^{N(t)}X^2_n+\int_{\tau=S_{N(t)} }^tY(\tau)d\tau$</span><!-- Has MathJax --><br>由上市可以推出 <span>$\dfrac{1}{2t}\sum_{n=1}^{N(t)}X^2_n\le\dfrac{1}{t}\int_{\tau=0}^tY(\tau)d\tau\le\dfrac{1}{2t}\sum_{n=1}^{N(t)+1}X^2_n$</span><!-- Has MathJax --></p>
+<p>由 <span>$\lim_{t\to\infty}\dfrac{\sum_{n=1}^{N(t)}X_n^2}{2t} = \lim_{t\to\infty}\dfrac{\sum_{n=1}^{N(t)}X_n^2}{N(t)}\dfrac{N(t)}{2t}=\dfrac{E[X^2]}{E[X]}$</span><!-- Has MathJax --> ，<span>$\lim_{t\to\infty}\dfrac{\sum_{n=1}^{N(t)+1}X_n^2}{2t}=\lim_{t\to\infty}\dfrac{\sum_{n=1}^{N(t)+1}X_n^2}{N(t)+1}\dfrac{N(t)+1}{N(t)}\dfrac{N(t)}{2t} = \dfrac{E[X^2]}{E[X]}$</span><!-- Has MathJax --> 知：<br><span>$\lim_{t\to\infty}\int_{\tau=0}^tY(\tau)d\tau = \dfrac{E[X^2]}{2E[X]}$</span><!-- Has MathJax --></p>
+<h3 id="age"><a href="#age" class="headerlink" title="age"></a>age</h3><p>和residual life正好相反，age表示t时刻与上次到达的间隔，即 <span>$t-S_{N(t)}$</span><!-- Has MathJax --> ，记做 <span>$Z(t)$</span><!-- Has MathJax --> 。 与residual life的过程类似，我们可以求出 <span>$\lim_{t\to\infty}\int_{\tau=0}^tZ(\tau)d\tau = \dfrac{E[X^2]}{2E[X]}$</span><!-- Has MathJax --></p>
+<h3 id="duration"><a href="#duration" class="headerlink" title="duration"></a>duration</h3><p>duration 表示t时刻所在的interval长度，记做 <span>$\tilde{X}(t) = X_{N(t)+1} = S_{N(t)+1}-S_{N(t)}=Z(t)+Y(t)$</span><!-- Has MathJax --> 。易知 <span>$\lim_{t\to\infty}\int_{\tau=0}^t\tilde{X}(\tau)d\tau = \dfrac{E[X^2]}{E[X]}$</span><!-- Has MathJax --></p>
+<h2 id="泛化的定义"><a href="#泛化的定义" class="headerlink" title="泛化的定义"></a>泛化的定义</h2><p>从前面的三个例子，很容易发现：只要我们掌握了 <span>$Y(t),Z(t),\tilde{X}(t)$</span><!-- Has MathJax --> 中的任意两个，就掌握了一个interval。因此泛化的reward被定义为： <span>$R(Z(t),\tilde{X}(t))$</span><!-- Has MathJax --> 。当然了，这并不意味着 <span>$R(t)$</span><!-- Has MathJax --> 一定和 <span>$Z(t),\tilde{X}(t)$</span><!-- Has MathJax --> 都有关。 我们将 <span>$R_n$</span><!-- Has MathJax --> 定义为第n个interval的accumulated reward，即<br><span>$$R_n = \int^{S_n}_{S_{n-1} }R(\tau)d\tau = \int^{S_n}_{S_{n-1} }R(Z(t),\tilde{X}(t))dt
+\int^{S_n}_{S_{n-1} }R(t-S_{n-1},\tilde{X}(t))dt=\int^{x_n}_0R(z,\tilde{X}(t))dz$$</span><!-- Has MathJax --></p>
+<p>如果 <span>$\left\{R(t);t&gt;0\right\}\ge 0, \bar{X}&lt;\infty, E[R(t)]&lt;\infty$</span><!-- Has MathJax --> ，则有<br><span>$$\begin{equation}
+\label{eq:R_n}
+\lim_{t\to\infty}\dfrac{1}{t}\int_0^tR(\tau)d\tau=\dfrac{E[R_n]}{\bar{X} }
+\end{equation}$$</span><!-- Has MathJax --><br>证明：因为 <span>$\int_0^tR(\tau)d\tau = \int_0^{S_1}R(\tau)d\tau+...+\int^t_{S_{N(t)} }R(\tau)d\tau = \sum_0^{N(t)}R_n + \int^t_{S_{N(t)} }R(\tau)d\tau$</span><!-- Has MathJax --><br>故 <span>$\dfrac{\sum_{n=1}^{N(t)}R_n}{t} \le \dfrac{\int_0^tR(\tau)d\tau}{t} \le \dfrac{\sum_{n=1}^{N(t)+1}R_n}{t}$</span><!-- Has MathJax --></p>
+<p>接下来和residual life的证明基本一样。</p>
+<h1 id="stopping-trial"><a href="#stopping-trial" class="headerlink" title="stopping trial"></a>stopping trial</h1><p>定义：对于rv <span>$X_1,X_2...X_n$</span><!-- Has MathJax --> ，stopping trial 是非负的indicator rv <span>$\mathbb{I}_{J=n}$</span><!-- Has MathJax --> ，n是关于<span>$X_1,X_2...X_n$</span><!-- Has MathJax --> 的函数。</p>
+<p>这么说太形式化了。简单地说，假如你在赌博，如果你赚100块就不赌了。在这个例子中，赌博就是随机过程，赚到100就不赌就是stopping trial。</p>
+<h2 id="Wald’s-equality"><a href="#Wald’s-equality" class="headerlink" title="Wald’s equality"></a>Wald’s equality</h2><span>${X_n;n\ge1}$</span><!-- Has MathJax --> 为 IID rv， 期望为 <span>$\bar{X}$</span><!-- Has MathJax --> ；<span>$J$</span><!-- Has MathJax -->为 <span>$X_n$</span><!-- Has MathJax --> 的stopping trial，<span>$S_J=X_1+...+X_J$</span><!-- Has MathJax -->则：<span>$E[S_J]=\bar{X}E[J]$</span><!-- Has MathJax -->
+<p>证明：由<span>$S_J=\sum_{n=1}^JX_n=\sum_{n=1}^\infty X_n\mathbb{I}_{\left\{J\ge n\right\} }$</span><!-- Has MathJax -->，可以推出<br><span>$E[S_J]=E\bigg[\sum_{n=1}^\infty X_n\mathbb{I}_{\left\{J\ge n\right\} }\bigg]=E\bigg[\bar{X}\sum_{n=1}^\infty \mathbb{I}_{\left\{J\ge n\right\} }\bigg]=\bar{X}E[J]$</span><!-- Has MathJax --></p>
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><p>感觉还是太抽象了一点，举个例子说明一下好了。以抛硬币为例子，当然还是泛化一点，正面概率为 <span>$p$</span><!-- Has MathJax --> ，反面概率为 <span>$1-p$</span><!-- Has MathJax --> 。抛到正面得一分，反面扣一分；得分为1时停止游戏。</p>
+<p>令 <span>$\theta = Pr\left\{J&lt;\infty\right\}$</span><!-- Has MathJax --> 。则我们得一分有两种情况：第一次抛到正面；第一次抛到反面，然后抛数次得分再次为-1，然后抛到2次正面。在这个过程中，最终从-1到0与从0到1的概率是一样的，都是 <span>$\theta$</span><!-- Has MathJax --> 。所以有下面的式子成立：<br><span>$\theta = p + (1-p)\theta^2$</span><!-- Has MathJax --><br>对于 <span>$p\le 0.5$</span><!-- Has MathJax --> 我们可以解出 <span>$\theta=p/(1-p)$</span><!-- Has MathJax --> 对于 <span>$p&gt;0.5$</span><!-- Has MathJax --> 算出来都大于1了，当然不成立。对于这种情况，和上面计算一样，我们可以得到<br><span>$E[J] = p + (1-p)(1+2E[J]) \Rightarrow E[J]=\dfrac{1}{2p-1}$</span><!-- Has MathJax --><br>由 <span>$J=1,E[J]=1$</span><!-- Has MathJax --> 可得 <span>$\bar{X}=2p-1$</span><!-- Has MathJax --></p>
+<h2 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算<span>$E[N(t)]$</span><!-- Has MathJax --></h2><p>我们将 <span>$S_n$</span><!-- Has MathJax --> 视为rv。但是需要注意的是，我们只有知道了 <span>$S_{N(t)+1}$</span><!-- Has MathJax --> 才能确定 <span>$N(t)$</span><!-- Has MathJax --> ，所以stopping trial为 <span>$N(t)+1$</span><!-- Has MathJax --> 。那么根据Wald’s equality，有：<br><span>$$E[S_{N(t)+1}] = \bar{X}E[N(t)+1]=\bar{X}[m(t)+1]\\
+\Rightarrow m(t) = \dfrac{E[S_{N(t)+1}]}{\bar{X} }-1\ge\dfrac{t}{\bar{X} }-1\\
+\Rightarrow \dfrac{m(t)}{t} \ge\dfrac{1}{\bar{X} }-\dfrac{1}{t}$$</span><!-- Has MathJax --></p>
+<h2 id="泛化的版本"><a href="#泛化的版本" class="headerlink" title="泛化的版本"></a>泛化的版本</h2><p>之前我们给出的定义中stopping trial只接受一个rv，我们可以扩展到一对rv <span>$(X_n,V_n)$</span><!-- Has MathJax --> 。<span>$(X_n,V_n)$</span><!-- Has MathJax --> 之间必须是IID的，但是 <span>$X_n, V_n$</span><!-- Has MathJax --> 可以相关。当然了， Wald’s equality仍然是成立的。</p>
+<p>下面以G/G/1 queque为例说明。在排队论中，通常用M代表memoryless，G代表general(即IID)；一个场景的3个参数分别为：arrival的类型(M/G)，service time的类型(M/G)，以及窗口数量。例如上面的G/G/1表示arrival和service time均为IID，窗口数量为1的队列。一个队列由3个变量： <span>$x_n,w^q_n,v_n$</span><!-- Has MathJax --> 表示。三个变量实际含义对应下图：<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f1rutm9k3kj20oi0a2aaz.jpg" alt=""><br>分别表示用户的到达间隔、等待时间、服务时间。从图中我们可以很容易的得到下面的结论：<br><span>$W_i^q = max(W_{i-1}^q + V_{i-1}-X_i, 0)$</span><!-- Has MathJax --></p>
+<p>如果我们考察第一个到达时队列为空的用户，即 <span>$W_i^q=0$</span><!-- Has MathJax --> 这就是一个关于 <span>$V_{i-1},X_i$</span><!-- Has MathJax --> 的stopping trial</p>
+<h2 id="Little’s-theorem"><a href="#Little’s-theorem" class="headerlink" title="Little’s theorem"></a>Little’s theorem</h2><p>对于一个FCFS G/G/1 queue，<span>$\bar{X}$</span><!-- Has MathJax --> finite，队伍中平均人数=<span>$\bar{L}\quad WP1$</span><!-- Has MathJax -->，平均等待时间=<span>$\bar{W}\quad WP1$</span><!-- Has MathJax --> ，且 <span>$\bar{L}=\lambda \bar{W}$</span><!-- Has MathJax --> ，<span>$\lambda$</span><!-- Has MathJax --> 与poisson process一样，为arrival rate。</p>
+<p>证明：<br><img src="http://ww1.sinaimg.cn/large/9dec4451gw1f1s3705sssj20o6082mxq.jpg" alt=""><br>由上图，可知：<br><span>$$L_n = \int_{S_{n-1}^r}^{S_n^r}L(\tau)d\tau = \sum_{i=N(S_{n-1}^r)}^{N(S_{n}^r)-1} W_i\\
+\Rightarrow \sum_{n=1}^{N^r(t)}L_n \le \int_{\tau=0}^tL(\tau)d\tau \le \sum_{i=0}^{N(t)} W_i \le \sum_{n=1}^{N^r(t)+1} L_n$$</span><!-- Has MathJax --><br>由 \ref{eq:R_n} 可知：<br><span>$\lim_{t\to\infty} \dfrac{\sum_{i=0}^N(t)W_i}{t} = \lim_{t\to\infty}\dfrac{\int_{\tau=0}^tL(\tau)d\tau}{t} = \dfrac{E[L_n]}{E[X^r]}$</span><!-- Has MathJax --><br>而 <span>$\lim_{t\to\infty}\dfrac{\sum_{i=0}^{N(t)}W_i}{t} = \lim_{t\to\infty}\dfrac{\sum_{i=0}^{N(t)}W_i}{N(t)}\lim_{t\to\infty}\dfrac{ {N(t)}W_i}{t}=\lambda\bar{W}$</span><!-- Has MathJax --></p>
+<p>所以 <span>$\bar{L}^q = \lambda \bar{W}^q$</span><!-- Has MathJax -->。当然对于FCFS以及有多个服务窗口的队列，该结论也成立。</p>
+<p>对于单窗口来说，令 <span>$\rho$</span><!-- Has MathJax --> 表示系统繁忙(即队列有人)的时间比例，<span>$\bar{V}$</span><!-- Has MathJax --> 表示平均服务时间，则：<br><span>$\rho = \lambda \bar{V}$</span><!-- Has MathJax --></p>
+<h2 id="M-G-1-queue的用户平均等待时间"><a href="#M-G-1-queue的用户平均等待时间" class="headerlink" title="M/G/1 queue的用户平均等待时间"></a>M/G/1 queue的用户平均等待时间</h2><p>为了计算 M/G/1 queue，我们首先需要指定一些符号。将 <span>$L^q(t)$</span><!-- Has MathJax --> 记做队列中用户数量；<span>$R(t)$</span><!-- Has MathJax --> 为队列中当前用户完成服务的时间； <span>$U(t)$</span><!-- Has MathJax --> 为单个用户在t时刻的平均等待时间。则有：<br><span>$$U(t) = \sum_{i=0}^{L^q(t)}V_{N(t)-i}+R(t)\\
+\Rightarrow E[U(t)]=E[L^q(t)]E[V]+E[R(t)]$$</span><!-- Has MathJax --><br>首先求 <span>$E[R(t)]$</span><!-- Has MathJax --> 。易知：<br><span>$\int_0^{S^r_{N^r(t)} }R(\tau)d\tau = \sum_{i=0}^{N(S^r_{N^r(t)})-1} \dfrac{V_i^2}{2}\le \sum_{i=0}^{N(t)}\dfrac{V_i^2}{2}$</span><!-- Has MathJax --></p>
+<span>$N(S^r_{N^R(t)})-1$</span><!-- Has MathJax -->的原因是<span>$N(S^r_{N^R(t)})$</span><!-- Has MathJax --> 是新的队列(即队列中的客户数量由0变为1)开始的第一个arrival，所以需要减一。故<br><span>$\lim_{t\to\infty}\dfrac{\int_0^tR(\tau)d\tau}{t} = \lim_{t\to\infty}\dfrac{\sum_{i=1}^{A(t)}V_i^2}{2A(t)}\dfrac{ {A(t)} }{t}=\dfrac{\lambda E[V]^2}{2}$</span><!-- Has MathJax -->
+<p>而在上一节中，我们给出了 <span>$E[L^q(t)]=\lambda \bar{W}$</span><!-- Has MathJax --> ，故<br><span>$E[U(t)]=\lambda \bar{W} E[V]+\dfrac{\lambda E[V]^2}{2}$</span><!-- Has MathJax --><br>从字面上看，我们给出的 <span>$U(t),W$</span><!-- Has MathJax --> 的定义是一样的。但是他们实际上是不同的。也不知道怎么说，直接给原文好了：</p>
+<blockquote>
+<p>The first is the expected unfinished work at time t, which is the queueing delay that a customer would incur by arriving at t; the second is the sample-path-average expected queueing delay.</p>
+</blockquote>
+<p>对于poisson process来说，由于其memoryless的特性，<span>$\lim_{t\to\infty}E[U(t)]=\bar{W}^q$</span><!-- Has MathJax --> (在前面对 <span>$W^q$</span><!-- Has MathJax --> 的定义中我们会发现 <span>$W^q$</span><!-- Has MathJax --> 的值依赖于<span>$X$</span><!-- Has MathJax --> 而 <span>$U(t)$</span><!-- Has MathJax --> 不需要。所以对于poisson来说，<span>$W^q$</span><!-- Has MathJax --> 与 <span>$X$</span><!-- Has MathJax --> 独立，所以自然就一样样了)。在这种情况下，我们可以得到 Pollaczek-Khinchin formula：<br><span>$\bar{W}^q=\dfrac{\lambda E[V^2]}{2(1-\lambda E[v])}$</span><!-- Has MathJax --><br>我们会发现上式表示V的方差越大，队伍平均等待时间越长。这也很好解释，所有排队是基本都碰到过这种情况：突然发现自己的队伍不动了，然后发现前面的顾客推了2大箱东西结算。这就是方差大的情况，这种情况下平均的排队时间自然会变长。</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a><span>$E[N(t)]$</span><!-- Has MathJax --></h1><p>对 <span>$m(t)=R[N(t)]$</span><!-- Has MathJax --> 的求解是一个很trike的事情，而且会引出Blackwell’s theorem</p>
+<h2 id="求解m-t"><a href="#求解m-t" class="headerlink" title="求解m(t)"></a>求解m(t)</h2><span>$$\begin{aligned}
+m(t) &amp;= E[N(t)] = \sum_{n=1}^\infty Pr\left\{N(t)\ge n\right\} = \sum_{n=1}^\infty Pr\left\{S_n\le t\right\}\\
+&amp;=\int_{x=0}^t \sum_{n=1}^\infty Pr\left\{S_n-1\le t-x\right\} dF_X(x) = F_X(t)+ \int_{x=0}^t \sum_{n=2}^\infty Pr\left\{S_n-1\le t-x\right\} dF_X(x)\\
+&amp;=F_X(t)+ \int_{x=0}^t \sum_{n=2}^\infty m(t-x) dF_X(x)
+\end{aligned}$$</span><!-- Has MathJax -->
+<p>对两边都进行Laplace transform 就可以求解了。解为<br><span>$m(t) = \dfrac{t}{\bar{X} } + \dfrac{E[X^2]}{2\bar{X}^2} + \dfrac{1}{2} + \epsilon(t) \quad t&gt;0$</span><!-- Has MathJax --><br>其中 <span>$\lim_{t\to\infty}\epsilon(t)=0$</span><!-- Has MathJax --></p>
+<p>求出上面的式子后，自然会有<br><span>$\lim_{t\to\infty}\dfrac{E[N(t)]}{t} = \dfrac{1}{\bar{X} }$</span><!-- Has MathJax --><br>当然，不用上面的结论，对 <span>$X$</span><!-- Has MathJax -->做截断也可以求出来上面的式子。</p>
+<h2 id="Blackwell’s-theorem"><a href="#Blackwell’s-theorem" class="headerlink" title="Blackwell’s theorem"></a>Blackwell’s theorem</h2><p>对于 <span>$\lambda$</span><!-- Has MathJax --> 随时间变化的系统，很自然会有疑问：不同时间段的期望应该是不同的吧？Blackwell’s theorem 解答的就是这个问题。<br>首先我们需要定义arithmetic的概念。和markov chain中的period类似，如果interval有公约数(有理数、无理数都可以)的话，就成为arithmetic。比如说，如果你的到达间隔为1，<span>$\pi$</span><!-- Has MathJax --> 的话，那你就只能是non-arithmetic了。<br>对于 arithmetic renewal process来说，有<br><span>$\lim_{t\to\infty}[m(t+\lambda)-m(t)] = \dfrac{\lambda}{E[X]}$</span><!-- Has MathJax --></p>
+<p>对于non-arithmetic renewal process来说，对于任意 <span>$\delta &gt;0$</span><!-- Has MathJax -->，都有<br><span>$\lim_{t\to\infty}[m(t+\delta)-m(t)] = \dfrac{\delta}{E[X]}$</span><!-- Has MathJax --></p>
+<p>对于<span>$\lim_{k\to\infty}Pr\left\{Renewal at \lambda k\right\} =\lim_{k\to\infty} [m(\lambda k) - m(\lambda (k-1))] = \dfrac{\lambda}{\bar{X}}$</span><!-- Has MathJax --></p>
+<h1 id="再挖一挖reward"><a href="#再挖一挖reward" class="headerlink" title="再挖一挖reward"></a>再挖一挖reward</h1><h2 id="Age-and-duration"><a href="#Age-and-duration" class="headerlink" title="Age and duration"></a>Age and duration</h2><h3 id="arithmetic-process"><a href="#arithmetic-process" class="headerlink" title="arithmetic process"></a>arithmetic process</h3><p>为了简化过程，我们假设 <span>$\lambda = 1$</span><!-- Has MathJax --> 。很容易发现<br><span>$$p_{Z(t),\tilde{X}(t)}(i,k)=
+\begin{cases}
+p_X(k) &amp; \text{for} i=t,k&gt;t\\
+q_{t-i}p_X(k) &amp; \text{for} 0\le i&lt;t,k&gt;i\\
+0 &amp; \text{otherwise}
+\end{cases}$$</span><!-- Has MathJax --><br>其中 <span>$q_{j}$</span><!-- Has MathJax --> 表示在j时刻有到达事件。</p>
+<p>对 <span>$Z(t)$</span><!-- Has MathJax --> 取边缘分布，得<br><span>$$p_{Z(t)}(i)=
+\begin{cases}
+F^c_X(i) &amp; \text{for} i=t\\
+q_{t-i}F^c_X(i) &amp; \text{for} 0\le i&lt;t\\
+0 &amp; \text{otherwise}
+\end{cases}$$</span><!-- Has MathJax --></p>
+<p>同时，<span>$m(j)-m(j-1) =\sum_{n=0}^\infty E[Pr\left\{N(j)&gt;n\right\}-Pr\left\{N(j-1)&gt;n\right\}]$</span><!-- Has MathJax --> = q_j</p>
+<p>对 <span>$\tilde{X}(t)$</span><!-- Has MathJax --> 取边缘分布，得：<br><span>$$p_{\tilde{X}(t)}(k)=
+\begin{cases}
+p_X(k)[m(t)-m(t-k)] &amp; \text{for} k&lt;t\\
+p_X(k)m(t) &amp; \text{for} k=i\\
+p_X(k)[m(t)+1] &amp; \text{for} k&gt;t
+\end{cases}$$</span><!-- Has MathJax --></p>
+<p>根据Blackwell’s theorem，可得<br><span>$$\lim_{t\to\infty}p_{Z(t)}(i) = \dfrac{F^c_X(i)}{\bar{X} }\\
+\lim_{t\to\infty}p_{\tilde{X}(t)}(i) = \dfrac{kp_X(i)}{\bar{X} }$$</span><!-- Has MathJax --></p>
+<p>当然还可以计算出期望的极限<br><span>$$\begin{aligned}
+\lim_{t\to\infty} E[Z(t)] &amp;= \sum_ii\lim_{t\to\infty}p_{Z(t)}(i) = \dfrac{1}{\bar{X} }\sum_{i=1}^\infty\sum_{j=i+1}^\infty ip_X(j)\\
+&amp;=\dfrac{1}{\bar{X} }\sum_{j=2}^\infty\sum_{i=1}^{j-1} ip_X(j)=\dfrac{1}{\bar{X} }\sum_{j=2}^\infty \dfrac{j(j-1)}{2}p_X(j)\\
+&amp;=\dfrac{E[X^2]}{2\bar{X} }-\dfrac{1}{2}\\
+
+\lim_{t\to\infty} E[\tilde{X}(t)] &amp;= \sum_k\lim_{t\to\infty}kp_{\tilde{X}(t)}(k) = \sum_k\dfrac{k^2p_X(k)}{\bar{X} } = \sum_k\dfrac{E[X^2]}{\bar{X} }
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<h3 id="non-arithmetic-process"><a href="#non-arithmetic-process" class="headerlink" title="non-arithmetic process"></a>non-arithmetic process</h3><p>对于non-arithmetic process来说，情况就要复杂的多。我们首先从联合概率分布说起。</p>
+<p>令 <span>$A=\left\{z\le Z(t) &lt; z+\delta\right\}\bigcap\left\{x-\delta&lt; \tilde{X}(t) \le x\right\}$</span><!-- Has MathJax --> (当然 <span>$z-2\delta\le x$</span><!-- Has MathJax -->)。则A可以被表示为<br><span>$$\begin{aligned}
+A&amp;=\left\{t-z-\delta&lt; S_{N(t)} \le t-z\right\}\bigcap\left\{x-\delta&lt; X_{N(t)+1} \le x\right\}\\
+&amp;=\bigcup_{n=1}^\infty \left\{\left\{t-z-\delta&lt; S_n \le t-z\right\}\bigcap\left\{x-\delta&lt; X_{n+1} \le x\right\}\right\}
+\end{aligned}$$</span><!-- Has MathJax --><br>而<br><span>$$Pr\left\{\left\{t-z-\delta&lt; S_n \le t-z\right\}\bigcap\left\{x-\delta&lt; X_{n+1} \le x\right\}\right\}\\
+= Pr\left\{t-z-\delta&lt; S_n \le t-z\right\}[F_X^c(x)-F_X^c(x-\delta)]\\
+\Rightarrow Pr\left\{A\right\} = [m(t-z)-m(t-z-\delta)] [F_X^c(x)-F_X^c(x-\delta)]$$</span><!-- Has MathJax --></p>
+<p>现在我们继续看 <span>$Z(t)$</span><!-- Has MathJax --> 的边缘分布和期望。我们首先求<span>$Pr\left\{z\le Z(t) &lt; z+\delta\right\}$</span><!-- Has MathJax --></p>
+<p>易知：<br><span>$$Pr\left\{z\le Z(t) &lt; z+\delta\right\} = Pr\left\{T\right\}+Pr\left\{B\right\}\\
+T = \left\{z\le Z(t) &lt; z+\delta\right\} \bigcap \left\{Z(t)&lt; \tilde{X}(t) \le z+\delta\right\}\\
+B = \left\{z\le Z(t) &lt; z+\delta\right\} \bigcap \left\{\tilde{X}(t) &gt; z+\delta\right\}$$</span><!-- Has MathJax --><br>而由上节我们算出的联合概率分布，我们可以很容易的计算出<br><span>$Pr\left\{B\right\}=[m(t-z)-m(t-z-\delta)]F_X^c(z+\delta)$</span><!-- Has MathJax --><br>对于 <span>$T$</span><!-- Has MathJax --> ，我们有：<br><span>$$\begin{aligned}
+T &amp;= \left\{z\le Z(t) &lt; z+\delta\right\} \bigcap \left\{Z(t)&lt; \tilde{X}(t) \le z+\delta\right\}\\
+&amp;=\bigcup_{n\ge1}[\left\{t-z-\delta&lt;S_n&lt;t-z\right\}\bigcap\left\{t-S_n&lt;X_{n+1}&lt;z+\delta\right\}]\\
+&amp;\subseteq \bigcup_{n\ge1}[\left\{t-z-\delta&lt;S_n&lt;t-z\right\}\bigcap\left\{z&lt;X_{n+1}&lt;z+\delta\right\}]
+\end{aligned}$$</span><!-- Has MathJax --><br><span>$$\begin{aligned}
+\Rightarrow Pr\left\{T\right\} &amp;\le [\sum_{n\ge 1}Pr\left\{t-z-\delta&lt;S_n&lt;t-z\right\}][F^c_X(z)-F^c_X(z+\delta)]\\
+&amp;=[m(t-z)-m(t-z-\delta)][F^c_X(z)-F^c_X(z+\delta)]
+\end{aligned}$$</span><!-- Has MathJax --><br><span>$$\Rightarrow Pr\left\{Z(t)&lt;z\right\} = \sum_{k=0}^{l-1}Pr\left\{k\delta\le Z(t)&lt;k\delta+\delta\right\}\\
+\Rightarrow Pr\left\{Z(t)&lt;z\right\} \ge \sum_{k=0}^{l-1}[m(t-k\delta)-m(t-k\delta-\delta)]F^c_X(k\delta+\delta)\\
+Pr\left\{Z(t)&lt;z\right\} \le \sum_{k=0}^{l-1}[m(t-k\delta)-m(t-k\delta-\delta)]F^c_X(k\delta)\\
+\Rightarrow Pr\left\{Z(t)&lt;z\right\} = \int_{t-z}^t F^c_X(t-\tau)dm(\tau)\\
+\Rightarrow F_{Z(t)}(z) = \int_{t-z}^t F^c_X(t-\tau)dm(\tau)$$</span><!-- Has MathJax --><br>倒数第二步是通过让 <span>$\delta$</span><!-- Has MathJax --> 无穷小然后做Riemann sum得到的。当然条件是积分必须存在了。</p>
+<p>然后我们就可以求期望了。如果 <span>$Z(t)=t$</span><!-- Has MathJax --> ，那么必然可以推出 <span>$X_1=t$</span><!-- Has MathJax --> 。对于其他情况，我们还是将时间 <span>$l$</span><!-- Has MathJax -->等分，每一份时间长度为 <span>$\delta$</span><!-- Has MathJax --> 。则<br><span>$$\begin{aligned}
+E[Z(t)] &amp;\ge F_X^c(t) + \sum_{k=0}^{l-1} k\delta Pr\left\{k\delta \le Z(t)&lt;k\delta+\delta\right\}\\
+&amp; \ge F_X^c(t) + \sum_{k=0}^{l-1} k\delta[m(t-k\delta)-m(t-k\delta-\delta)]F_X^c(k\delta+\delta)\\
+E[Z(t)] &amp;\le F_X^c(t) + \sum_{k=0}^{l-1} (k\delta+\delta) Pr\left\{k\delta \le Z(t)&lt;k\delta+\delta\right\}\\
+&amp; \le F_X^c(t) + \sum_{k=0}^{l-1} (k\delta+\delta)[m(t-k\delta)-m(t-k\delta-\delta)]F_X^c(k\delta+\delta)
+\end{aligned}$$</span><!-- Has MathJax --><br>同理，做Riemann sum，可以得到<br><span>$E[Z(t)] = F^c_X(x) + \int_0^t(t-\tau)F^c_X(t-\tau)dm(\tau)$</span><!-- Has MathJax --></p>
+<h4 id="看看-如何"><a href="#看看-如何" class="headerlink" title="看看  如何"></a>看看 <span>$\infty$</span><!-- Has MathJax --> 如何</h4><p>对上面求得的概率分布求极限，可得：<br><span>$$\lim_{t\to\infty}Pr\left\{Z(t)&lt;z\right\} = \dfrac{1}{\bar{X} } \int_0^zF^c_X(\tau)d\tau\\
+\Rightarrow \lim_{t\to\infty}f_{Z(t)}(z) = \dfrac{1}{\bar{X} } f_X(z)$$</span><!-- Has MathJax --><br>对于极限，还有Key renewal theorem：<br><span>$\lim_{t\to\infty}\int_{\tau=0}^t r(t-\tau)dm(\tau) = \dfrac{1}{\bar{X} }\int_0^\infty r(x)dx$</span><!-- Has MathJax --><br>其中<span>$r(x)$</span><!-- Has MathJax --> 为directly Riemann integrable function.对于 <span>$\lim_{b\to\infty}\int_0^bf(x)dx = \int_0^\infty f(x)dx$</span><!-- Has MathJax --><br>两种求无线积分的方式，第一种称为Riemann integrable，第二种称为directly Riemann integrable。两种积分似乎有细微的差别，有些情况下directly Riemann integrable无法成立。反正我不知道=。=</p>
+<p>利用key theorem，可得：<br><span>$\lim_{t\to\infty} F_{Z(t)}(z) = \int_{t-z}^t F^c_X(t-\tau)dm(\tau) = \dfrac{1}{\bar{X} }\int_0^z F_X^c(x)dx$</span><!-- Has MathJax --><br>若令 <span>$r(x)=xF_X^c(x)$</span><!-- Has MathJax --> ，则<br><span>$\lim_{t\to\infty} E[Z(t)] = \lim_{t\to\infty}[F_X^c(t) + \int_0^t(t-\tau)F^c_X(t-\tau)dm(\tau)] = \dfrac{1}{\bar{X} }\int_0^\infty r(x)dx = \dfrac{E[X^2]}{2\bar{X} }$</span><!-- Has MathJax --></p>
+<h1 id="Delay-Renewal"><a href="#Delay-Renewal" class="headerlink" title="Delay Renewal"></a>Delay Renewal</h1><p>我们在描述renewal是，总是默认队列在开始时有一个用户。如果没有用户，就是delay renewal。这只是把整个过程后移了t段时间，整体并没有发生太大改变。所以不进行说明了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/stochastic-process/" rel="tag">#stochastic process</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/07/sed-多行问题/" rel="next" title="sed 多行问题">
+                <i class="fa fa-chevron-left"></i> sed 多行问题
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/12/countable-state-markov-chain/" rel="prev" title="countable-state markov chain">
+                countable-state markov chain <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/09/renewal-process/"
+           data-title="renewal process" data-url="/2016/03/09/renewal-process/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#再来看看大数定律"><span class="nav-number">1.</span> <span class="nav-text">再来看看大数定律</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WP1"><span class="nav-number">1.1.</span> <span class="nav-text">WP1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SLLN-for-Renewal-Process"><span class="nav-number">1.2.</span> <span class="nav-text">SLLN for Renewal Process</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CLT-for-Renewal-process"><span class="nav-number">1.3.</span> <span class="nav-text">CLT for Renewal process</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Renewal-reward-process"><span class="nav-number">2.</span> <span class="nav-text">Renewal-reward process</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#三个重要的例子：residual-life、age、duration"><span class="nav-number">2.1.</span> <span class="nav-text">三个重要的例子：residual life、age、duration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#residual-life"><span class="nav-number">2.1.1.</span> <span class="nav-text">residual life</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#age"><span class="nav-number">2.1.2.</span> <span class="nav-text">age</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#duration"><span class="nav-number">2.1.3.</span> <span class="nav-text">duration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛化的定义"><span class="nav-number">2.2.</span> <span class="nav-text">泛化的定义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stopping-trial"><span class="nav-number">3.</span> <span class="nav-text">stopping trial</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Wald’s-equality"><span class="nav-number">3.1.</span> <span class="nav-text">Wald’s equality</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一个例子"><span class="nav-number">3.1.1.</span> <span class="nav-text">一个例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算"><span class="nav-number">3.2.</span> <span class="nav-text">计算$E[N(t)]$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛化的版本"><span class="nav-number">3.3.</span> <span class="nav-text">泛化的版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Little’s-theorem"><span class="nav-number">3.4.</span> <span class="nav-text">Little’s theorem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#M-G-1-queue的用户平均等待时间"><span class="nav-number">3.5.</span> <span class="nav-text">M/G/1 queue的用户平均等待时间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#"><span class="nav-number">4.</span> <span class="nav-text">$E[N(t)]$</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#求解m-t"><span class="nav-number">4.1.</span> <span class="nav-text">求解m(t)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blackwell’s-theorem"><span class="nav-number">4.2.</span> <span class="nav-text">Blackwell’s theorem</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#再挖一挖reward"><span class="nav-number">5.</span> <span class="nav-text">再挖一挖reward</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Age-and-duration"><span class="nav-number">5.1.</span> <span class="nav-text">Age and duration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#arithmetic-process"><span class="nav-number">5.1.1.</span> <span class="nav-text">arithmetic process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#non-arithmetic-process"><span class="nav-number">5.1.2.</span> <span class="nav-text">non-arithmetic process</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#看看-如何"><span class="nav-number">5.1.2.1.</span> <span class="nav-text">看看 $\infty$ 如何</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Delay-Renewal"><span class="nav-number">6.</span> <span class="nav-text">Delay Renewal</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

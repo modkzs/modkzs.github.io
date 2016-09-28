@@ -1,0 +1,862 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="stochastic process," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="随机过程最后一部分的内容了=。=主要讲随机游走">
+<meta property="og:type" content="article">
+<meta property="og:title" content="random walk">
+<meta property="og:url" content="/2016/03/20/random-walk/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="随机过程最后一部分的内容了=。=主要讲随机游走">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/9dec4451jw1f235xy8atnj20ry0c2ab4.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/9dec4451jw1f24d4az2eej20vo0cy401.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451jw1f24dbceukuj20ti0ck3zs.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451jw1f24kacf0kuj20ic0b60td.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451jw1f24mxrjs98j20rs0860th.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/9dec4451jw1f25r8d9wcnj20ss08waaz.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451jw1f25u1i1tb1j20qm09gmxw.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451jw1f25x25be5dj20w40cy0tk.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451jw1f26tjqe74nj20x0098gmu.jpg">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="random walk">
+<meta name="twitter:description" content="随机过程最后一部分的内容了=。=主要讲随机游走">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/9dec4451jw1f235xy8atnj20ry0c2ab4.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/03/20/random-walk/"/>
+
+  <title> random walk | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                random walk
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-20T10:03:20+08:00" content="Mar 20 2016">
+              Mar 20 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/20/random-walk/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/20/random-walk/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>随机过程最后一部分的内容了=。=主要讲随机游走<br><a id="more"></a></p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>随机游走感觉其实就是markov process。它的数学定义是 <span>$X_i$</span><!-- Has MathJax --> 是IID的rv， <span>$S_n = X_1 + X_2 +...+X_n$</span><!-- Has MathJax --> 。将integer-time process <span>$S_n$</span><!-- Has MathJax --> 成为随机游走，或者说是基于 <span>$X_i$</span><!-- Has MathJax --> 的一维随机游走。</p>
+<p>随机游走有2个重要的应用领域：queue delay和detection problem。</p>
+<h2 id="queue-delay"><a href="#queue-delay" class="headerlink" title="queue delay"></a>queue delay</h2><p>还是考虑一个G/G/1 queue如下图：<br><img src="http://ww4.sinaimg.cn/large/9dec4451jw1f235xy8atnj20ry0c2ab4.jpg" alt=""><br>令 <span>$U_n = Y_{n-1}-X_n$</span><!-- Has MathJax --> 。则<br><span>$$\begin{aligned}
+W_n &amp;= max[W_{n-1}+Y_{n-1}-X_n, 0]\\
+&amp;= max[W_{n-1}+U_n, 0]\\
+&amp;= max[max[W_{n-2}+U_{n-1}, 0] + U_n, 0]\\
+&amp;= max[(W_{n-2}+U_{n-1}+U_n), U_n, 0]\\
+&amp;= max[(W_{n-3}+U_{n-2}+U_{n-1}), (U_n+U_{n-1}), U_n,0]\\
+&amp;= ...\\
+&amp;= max[(U_1+U_2+..+U_n),(U_2+..+U_n),...,U_n]
+\end{aligned}$$</span><!-- Has MathJax --><br>令 <span>$Z_i^n = U_n+U_{n-1}+...+U_{n-i+1}$</span><!-- Has MathJax --> ，则<br><span>$$W_n = max[0,Z_1^n, Z_2^n,...,Z_n^n]\\
+Pr\left\{W_n \ge \alpha\right\} = Pr\left\{max[0,Z_1^n, Z_2^n,...,Z_n^n] \ge \alpha\right\}$$</span><!-- Has MathJax --></p>
+<p>根据随机游走的定义，可知 <span>$Z_i^n$</span><!-- Has MathJax --> 就是一种随机游走。而 <span>$W_n \ge \alpha$</span><!-- Has MathJax --> 即 随机游走在第n次trial之前大于thresold <span>$\alpha$</span><!-- Has MathJax --></p>
+<h2 id="detection-problem"><a href="#detection-problem" class="headerlink" title="detection problem"></a>detection problem</h2><p>和ml里面的贝叶斯判别差别不大，只不过是在随机过程中换了个名字，叫hypothesis testing。我们在这里只考虑H有2种取值。对于每一个假说H都有2种可能的取值，0和1，其PMF分别为 <span>$p_H(0) = p_0, p_H(1) = p_1 = 1-p_0$</span><!-- Has MathJax --></p>
+<p>令 <span>$Y=(Y_1, Y_2, ... Y_n)$</span><!-- Has MathJax --> 表示n个观测，都是基于 <span>$H=0\text{或}1$</span><!-- Has MathJax --> 产生的并且其联合概率分布<span>$f_{Y|H}(y|0),f_{Y|H}(y|1)$</span><!-- Has MathJax --> 均大于0. 联合概率分布的定义为 <span>$f_{Y|H}(y|l) = \prod_{i=1}^n f_{Y|H}(y_i|l)$</span><!-- Has MathJax --></p>
+<p>所以根据贝爷的定律，有：<br><span>$$Pr\left\{H=0|y\right\} = \dfrac{p_0f_{Y|H}(y|0)}{p_1f_{Y|H}(y|0) + p_0f_{Y|H}(y|0)}\\
+
+\dfrac{Pr\left\{H=0|y\right\}}{Pr\left\{H=1|y\right\}} = \dfrac{p_0f_{Y|H}(y|0)}{p_1f_{Y|H}(y|1)}$$</span><!-- Has MathJax --></p>
+<p>当上面的比值大于1时，我们认为 <span>$\hat{h} = 0$</span><!-- Has MathJax --> ；小于1时认为 <span>$\hat{h} = 1$</span><!-- Has MathJax --> ；等于1时就都一样了。这种选法被称为MAP(Maximum a posteriori probability)</p>
+<p>定义 <span>$\Lambda(y) = \dfrac{f_{Y|H}(y|0)}{f_{Y|H}(y|1)}$</span><!-- Has MathJax --> ，则我们可以将MAP表示为：<br><span>$$\Lambda(y) =
+  \begin{cases}
+    &gt;p_1/p_0&amp; \text{select}\hat{h} = 0\\
+
+    \le p_1/p_0&amp; \text{select}\hat{h} = 1  
+  \end{cases}$$</span><!-- Has MathJax --></p>
+<p>令 <span>$z_i = \ln\dfrac{f_{Y|H}(y_i|0)}{f_{Y|H}(y_i|1)}$</span><!-- Has MathJax --> ，MAP可以表示为：<br><span>$$\sum_{i=1}^n z_i =
+  \begin{cases}
+    &gt;p_1/p_0&amp; \text{select}\hat{h} = 0\\
+
+    \le p_1/p_0&amp; \text{select}\hat{h} = 1  
+  \end{cases}$$</span><!-- Has MathJax --></p>
+<p>如果我们令 <span>$\eta = p_1/p_0$</span><!-- Has MathJax --> ，则MAP就是一个threshold test。</p>
+<p>当然，我们也可以根据错误进行。我们可以让 <span>$Pr\left\{e|H=1\right\}$</span><!-- Has MathJax --> 和 <span>$Pr\left\{e|H=0\right\}$</span><!-- Has MathJax --> 低于某个上界 <span>$\alpha$</span><!-- Has MathJax --> 。这被称为Neyman-Pearson rule。</p>
+<p>对于一个test，我们定义 A 为由hypothesis 1产生的观测，则错误率为：<br><span>$q_0(A) = Pr\left\{Y\in A|H=0\right\};q_1(A) = Pr\left\{Y\in A^c|H=1\right\}$</span><!-- Has MathJax --><br>所以错误的概率 <span>$Pr\left\{e(A)\right\} = p_0q_0(A) + p_1q_1(A)$</span><!-- Has MathJax --></p>
+<p>如果test是threshold test，则 <span>$A = \left\{y:\dfrac{f_{Y|H}(y|0)}{f_{Y|H}(y|1)}\le\eta\right\}$</span><!-- Has MathJax --> 。对于一个threshold test来说， <span>$\eta$</span><!-- Has MathJax --> 至关重要。所以我们用 <span>$\eta$</span><!-- Has MathJax --> 表示threshold test。</p>
+<p>对于任意一个test A和threshold test <span>$0&lt;\eta&lt;\infty$</span><!-- Has MathJax --> ， <span>$(q_1(A), q_0(A))$</span><!-- Has MathJax --> 必在直线 <span>$y = -\eta x + q_0(\eta)+\eta q_1(\eta)$</span><!-- Has MathJax --> 上方(如下图所示)<br><img src="http://ww3.sinaimg.cn/large/9dec4451jw1f24d4az2eej20vo0cy401.jpg" alt=""><br>令 <span>$u(\alpha) = \sup_{0\le \eta &lt; \infty} q_0(\eta)+\eta(q_1(\eta)-\alpha)$</span><!-- Has MathJax --> ，则如下图所示：<br><img src="http://ww1.sinaimg.cn/large/9dec4451jw1f24dbceukuj20ti0ck3zs.jpg" alt=""></p>
+<p>Neyman-Pearson test是在 <span>$q_0(A)$</span><!-- Has MathJax --> 的一些限制下，选择A以最小化 <span>$q_1(A)$</span><!-- Has MathJax --> 。这也是一个threshold test。</p>
+<h2 id="一个小例子"><a href="#一个小例子" class="headerlink" title="一个小例子"></a>一个小例子</h2><p>最简单的例子：只有观测只有一个维度的数据，不同hypothesis产生观测的概率为：<br><span>$p_{Y|H}(0|0)=p_{Y|H}(1|1) = \frac{2}{3}; p_{Y|H}(1|0)=p_{Y|H}(1|0) = \frac{1}{3}$</span><!-- Has MathJax --></p>
+<p>根据MAP的判断条件，可知： 当 <span>$p_1 &lt; 1/3$</span><!-- Has MathJax --> 时，必有 <span>$\hat{h} = 0$</span><!-- Has MathJax --> ；当  <span>$p_1 \ge 2/3$</span><!-- Has MathJax --> 时，必有 <span>$\hat{h} = 1$</span><!-- Has MathJax --> 。只有在两者之间时，才需要进行判断；对于 <span>$\eta$</span><!-- Has MathJax --> 来说，是一样的。所以对于这种情况，图就变成了：<br><img src="http://ww1.sinaimg.cn/large/9dec4451jw1f24kacf0kuj20ic0b60td.jpg" alt=""></p>
+<h1 id="随机游走中的threshold-crossing问题"><a href="#随机游走中的threshold-crossing问题" class="headerlink" title="随机游走中的threshold crossing问题"></a>随机游走中的threshold crossing问题</h1><p>令 <span>$X_i$</span><!-- Has MathJax --> 表示IID的rv，<span>$S_n=X_1+X_2+...+X_n$</span><!-- Has MathJax --> 表示随机游走， <span>$g_X(r) = E[e^{rX}]$</span><!-- Has MathJax --> 为MGF， <span>$r_-, r_+$</span><!-- Has MathJax --> 表示 <span>$g_X(r)$</span><!-- Has MathJax --> finite的下界和上界。threshold crossing考虑的问题为 <span>$Pr\left\{\bigcup_{n=1}^\infty S_n\ge \alpha\right\}$</span><!-- Has MathJax --><br>即随机游走的值大于threshold <span>$\alpha$</span><!-- Has MathJax --> 的概率。</p>
+<p>我们在这里假设 <span>$\bar{X} &lt; 0$</span><!-- Has MathJax --> ，但是<span>$X$</span><!-- Has MathJax --> 取正取负的概率均大于0</p>
+<h2 id="Chernoff-bound"><a href="#Chernoff-bound" class="headerlink" title="Chernoff bound"></a>Chernoff bound</h2><p>在<a href="http://modkzs.github.io/2016/02/28/%E6%BC%AB%E8%B0%88%E5%A4%A7%E6%95%B0%E5%AE%9A%E5%BE%8B/" target="_blank" rel="external">前面</a>曾经讨论过Chernoff bound：<br><span>$Pr\left\{S_n \ge na\right\}\le \exp(n[\gamma_X(r)-ra])$</span><!-- Has MathJax --><br>其中 <span>$\gamma_X(r) = \ln g_X(r)$</span><!-- Has MathJax --><br>tightest bound为<br><span>$Pr\left\{S_n \ge na\right\}\le \exp(n\mu_X(a))\quad \mu_X(a) = \inf_{r\in(0, r_+)} \gamma_X(r)-ra$</span><!-- Has MathJax --><br>可以发现 <span>$\gamma_X&apos;&apos;(r)&gt;0$</span><!-- Has MathJax --> ，故可将图像表示为：<br><img src="http://ww1.sinaimg.cn/large/9dec4451jw1f24mxrjs98j20rs0860th.jpg" alt=""><br>所以 <span>$Pr\left\{S_n \ge na\right\}\le \exp(n[\gamma(r_0)-r_0\gamma&apos;(r_0)]), \gamma&apos;(r_0)=a$</span><!-- Has MathJax --></p>
+<p>作进一步的替换可以得到<br><span>$$\begin{equation}
+\label{eq:basic1}
+Pr\left\{S_n \ge n\gamma&apos;(r)\right\}\le \exp(n[\gamma(r)-r\gamma&apos;(r)])
+\end{equation}$$</span><!-- Has MathJax --></p>
+<h2 id="Tilted-probabilities"><a href="#Tilted-probabilities" class="headerlink" title="Tilted probabilities"></a>Tilted probabilities</h2><p>和上面一样， <span>$X_n$</span><!-- Has MathJax --> 为IID的rv， <span>$g_X(r)$</span><!-- Has MathJax --> 在 <span>$(r_-,r_+)$</span><!-- Has MathJax --> 范围内finite。在 <span>$r\in(r_-,r_+)$</span><!-- Has MathJax --> ，定义 <span>$X$</span><!-- Has MathJax --> 的tilted PMF为<br><span>$q_{X,r(x)} = p_X(x)\exp[rx-\gamma(r)]$</span><!-- Has MathJax --><br>易知： <span>$q_{X,r(x)} \ge 0$</span><!-- Has MathJax --> 且 <span>$\sum_x q_{X,r(x)} = \sum_x p_X(x)e^{rx}/E[e^{rx}] = 1$</span><!-- Has MathJax --> ，这是满足定义的。<br>所以有<br><span>$q_{X^n,r(x_1,...,x_n)} = p_{X^n}(x_1,...,x_n)\exp(\sum_{i=1}^n[rx_i-\gamma(r)])$</span><!-- Has MathJax --><br>而 <span>$S_n = \sum_{i=1}^n x_n$</span><!-- Has MathJax --> ，故<br><span>$q_{S_n, r(S_n)} = p_{S_n}(S_n)\exp[rs_n-n\gamma(r)]$</span><!-- Has MathJax --><br>将tilted PMF下的期望记为 <span>$E_r[X]$</span><!-- Has MathJax --> 。则<br><span>$$\begin{aligned}
+E_r[X] &amp;= \sum_x xq_{X,r(x)} = \sum_x xp_X(x)\exp[rx-\gamma(r)]\\
+&amp;= \frac{1}{g_X(r)}\sum_x\frac{d}{dr} p_X(x)\exp[rx]\\
+&amp;= \frac{g_X&apos;(r)}{g_X(r)} = \gamma&apos;(r)
+\end{aligned}$$</span><!-- Has MathJax --><br>根据WLLN( <span>$\lim_{n\to\infty}Pr\left\{|\frac{S_n}{n}-\bar{X}|&gt;\epsilon\right\} = 0$</span><!-- Has MathJax --> )，有<br><span>$$\begin{aligned}
+1-\delta &amp;\le \sum_{(\gamma&apos;(r)-\epsilon)n \le s_n \le (\gamma&apos;(r)-\epsilon)n} q_{S_n, r(s_n)}\\
+&amp; = \sum_{(\gamma&apos;(r)-\epsilon)n \le s_n \le (\gamma&apos;(r)-\epsilon)n} p_{S_n}(s_n) \exp[rs_n-n\gamma(r)]\\
+&amp; \le \sum_{(\gamma&apos;(r)-\epsilon)n \le s_n \le (\gamma&apos;(r)-\epsilon)n} p_{S_n}(s_n) \exp[n(r\gamma&apos;(r)+r\epsilon-\gamma(r))]\\
+&amp; \le \sum_{(\gamma&apos;(r)-\epsilon)n \le s_n} p_{S_n}(s_n)\exp[n(r\gamma&apos;(r)+r\epsilon-\gamma(r))]\\
+&amp; = \exp[n(r\gamma&apos;(r)+r\epsilon-\gamma(r))]Pr\left\{S_n \ge n(\gamma&apos;(r)-\epsilon)\right\}
+\end{aligned}$$</span><!-- Has MathJax --><br>故<br><span>$Pr\left\{S_n \ge n(\gamma&apos;(r)-\epsilon)\right\}\ge(1-\delta)\exp[n(\gamma(r) - r\gamma&apos;(r) - r\epsilon)]$</span><!-- Has MathJax --></p>
+<h2 id="回到threshold-crossing"><a href="#回到threshold-crossing" class="headerlink" title="回到threshold crossing"></a>回到threshold crossing</h2><p>我们取 <span>$r_0$</span><!-- Has MathJax --> 使得 <span>$\gamma&apos;(r_o) = \alpha/n$</span><!-- Has MathJax --> 。在此情况下，有：<br><span>$$\begin{equation}
+\label{eq:basic2}
+Pr\left\{S_n\ge \alpha\right\}\le \exp\left\{\alpha \Bigg[\frac{\gamma(r_o)}{\gamma&apos;(r_o)}-r_o\Bigg]\right\}
+\end{equation}$$</span><!-- Has MathJax --><br>下图给出了其几何解释：<br><img src="http://ww3.sinaimg.cn/large/9dec4451jw1f25r8d9wcnj20ss08waaz.jpg" alt=""><br>我们可以看到当 <span>$n$</span><!-- Has MathJax --> 很大时，slope很小，所以 <span>$r_o$</span><!-- Has MathJax --> 很小，水平的截断很大；当 <span>$n$</span><!-- Has MathJax --> 开始减小时， <span>$r_o$</span><!-- Has MathJax --> 开始增加，水平截断开始减小直到 <span>$r_o = r^*$</span><!-- Has MathJax --> ；在这之后， <span>$r_o$</span><!-- Has MathJax --> 继续增加，但是水平截断此时也开始增加。</p>
+<p>从上面的描述可以发现：<span>$r^*$</span><!-- Has MathJax --> 是水平截断最小时 <span>$r$</span><!-- Has MathJax --> 的取值。所以有<br><span>$Pr\left\{S_n\ge \alpha\right\} \le \exp(-r^* \alpha) \quad \text{for }\alpha &gt; 0, n\ge 1$</span><!-- Has MathJax --><br>现在我们讨论 <span>$r_+&lt;\infty$</span><!-- Has MathJax --> 的情况。这时我们需要考虑2种情况： <span>$\gamma(r_+)$</span><!-- Has MathJax --> 是否为 finite。对于 <span>$\gamma(r_+)=\infty$</span><!-- Has MathJax --> 的情况，当 <span>$r\to r_+$</span><!-- Has MathJax --> 时， <span>$\gamma(r)\to\infty$</span><!-- Has MathJax --> 。故 <span>$r^*$</span><!-- Has MathJax --> 必然存在；对于 <span>$\gamma(r_+)&lt;\infty$</span><!-- Has MathJax --> ，如下图所示，如果 <span>$r_o&lt;r_+$</span><!-- Has MathJax -->，则 \ref{eq:basic1} 和 \ref{eq:basic2} 仍然成立。如果对于所有的 <span>$r&lt;r_+$</span><!-- Has MathJax --> 都有 <span>$\alpha/n &gt; \gamma&apos;(r)$</span><!-- Has MathJax --> ，则我们可以进一步优化不等式为：<br><span>$Pr\left\{S_n \ge \alpha\right\}\le\exp\left\{n[\gamma(r_+)-r_+\alpha/n]\right\} = \exp\left\{\alpha[\gamma(r_+)n/\alpha-r_+]\right\}$</span><!-- Has MathJax --><br><img src="http://ww1.sinaimg.cn/large/9dec4451jw1f25u1i1tb1j20qm09gmxw.jpg" alt=""><br>如果我们将 <span>$r^*$</span><!-- Has MathJax --> 的定义修改为 <span>$\sup_{r&gt;0}\gamma(r)&lt;0$</span><!-- Has MathJax --> ，这样两个式子就得到了统一。这样的情况下就可以计算 thresold crossing的问题了。不过这么算很麻烦，不够优雅(°д°) 接下来介绍一种优雅的方法</p>
+<h1 id="Wald’s-identity"><a href="#Wald’s-identity" class="headerlink" title="Wald’s identity"></a>Wald’s identity</h1><p>我们在这里定义2个 thresold <span>$\alpha&gt;0, \beta&lt;0$</span><!-- Has MathJax --> , thresold crossing问题在这里变成了 crossing其中任意一个 thresold 的问题(如下图)。<br><img src="http://ww1.sinaimg.cn/large/9dec4451jw1f25x25be5dj20w40cy0tk.jpg" alt=""></p>
+<p>令 <span>$X_i$</span><!-- Has MathJax --> 为 IID 的 rv ，但是不全为0(不太能理解不全为0不就不是 IID 了么(・・))，<span>$S_n = X_1+X_2+...+X_n$</span><!-- Has MathJax --> ，<span>$\alpha&gt;0,\beta &lt;0$</span><!-- Has MathJax --> ，<span>$J$</span><!-- Has MathJax --> 是最小的使得 <span>$S_n\ge\alpha$</span><!-- Has MathJax --> 或 <span>$S_n\le\beta$</span><!-- Has MathJax --> 的 <span>$n$</span><!-- Has MathJax --> .则 <span>$J$</span><!-- Has MathJax --> 是 rv (即 <span>$\lim_{m\to\infty}Pr\left\{J \ge m\right\} = 0$</span><!-- Has MathJax -->),且各阶矩均为 finite.</p>
+<p>这个的证明比较 trike.由于 <span>$X$</span><!-- Has MathJax --> 不全为0,故必存在一些 <span>$n$</span><!-- Has MathJax --> 使得 <span>$Pr\left\{S_n \le -\alpha+\beta\right\} &gt; 0,\  Pr\left\{S_n \le \alpha-\beta\right\} &gt; 0$</span><!-- Has MathJax --> .在这种情况下,我们定义 <span>$\epsilon = \max[Pr\left\{S_n \le -\alpha+\beta\right\}, Pr\left\{S_n \le \alpha-\beta\right\}]$</span><!-- Has MathJax --></p>
+<p>对于任何一个 <span>$k\ge 1$</span><!-- Has MathJax -->, 假设 <span>$J&gt;n(k-1),\ S_{n(k-1)}\in(\beta, \alpha)$</span><!-- Has MathJax --> ,则有:<br><span>$$Pr\left\{J&gt;nk|J&gt;n(k-1)\right\} \le 1-\epsilon\\
+\Rightarrow Pr\left\{J&gt;nk\right\}\le (1-\epsilon)^k$$</span><!-- Has MathJax --><br>故 <span>$J$</span><!-- Has MathJax --> 为 rv,且 <span>$g_J(r)$</span><!-- Has MathJax --> 在 <span>$r=0$</span><!-- Has MathJax --> 时连续,故各阶矩均存在</p>
+<h2 id="Wald’s-identity-1"><a href="#Wald’s-identity-1" class="headerlink" title="Wald’s identity"></a>Wald’s identity</h2><p>有了前面的定义后,我们在来谈本节的主角:Wald’s identity.定理表述如下:</p>
+<p>令 <span>$X_i$</span><!-- Has MathJax --> 为 IID 的 rv, <span>$\gamma(r)=\ln\left\{E[e^{rX}]\right\}$</span><!-- Has MathJax --> ,且在 <span>$r_-&lt;0&lt;r_+$</span><!-- Has MathJax --> 范围内 finite. 令 <span>$S_n = X_1+X_2+...+X_n, \ \alpha&gt;0,\ \beta&lt;0,\ J$</span><!-- Has MathJax --> 为最小的令  <span>$S_n\ge\alpha$</span><!-- Has MathJax --> 或 <span>$S_n\le\beta$</span><!-- Has MathJax --> 的 <span>$n$</span><!-- Has MathJax --> .对于所有的 <span>$r \in (r_-,r_+)$</span><!-- Has MathJax -->, 都有<br><span>$E[\exp(rS_J-J\gamma(r))]=1$</span><!-- Has MathJax --><br>证明:我们使用前面提到过的 tilted PMF, 令 <span>$X^n = (X_1, X_2,...,X_n)，\ s_n = \sum_{i=1}^n x_i$</span><!-- Has MathJax --> .则：<br><span>$q_{X^n, r(x^n)} = p_{X^n}(x^n)\exp[rs_n-n\gamma(r)]$</span><!-- Has MathJax --><br>令 <span>$\mathcal{T}_n$</span><!-- Has MathJax --> 表示 <span>$X_1,X_2,...,X_n$</span><!-- Has MathJax --> 满足情况 <span>$\beta&lt;S_i&lt;\alpha \text{ for }1\le i&lt;n$</span><!-- Has MathJax --> 且 <span>$S_n\ge\alpha$</span><!-- Has MathJax --> 或 <span>$S_n\le\beta$</span><!-- Has MathJax --> 。所以 stopping trial <span>$J$</span><!-- Has MathJax --> 的 tilted PMF 为<br><span>$$\begin{aligned}
+q_{J,r(n)} &amp;= \sum_{x^n\in\mathcal{T}_n} q_{X^n,r(x^n)} = \sum_{x^n\in\mathcal{T}_n} p_{X^n}(x^n)\exp[rs_n-n\gamma(r)]\\
+&amp;= E[\exp[rS_n-n\gamma(r)|J=n]]Pr\left\{J=n\right\}
+\end{aligned}$$</span><!-- Has MathJax --><br>等式两边对 <span>$n$</span><!-- Has MathJax --> 求和即可</p>
+<h3 id="与-Wald’s-equality-的关系"><a href="#与-Wald’s-equality-的关系" class="headerlink" title="与 Wald’s equality 的关系"></a>与 Wald’s equality 的关系</h3><p>我们在 renewal process 中提到了Wald’s equality( <span>$E[S_J] = \bar{X}E[J]$</span><!-- Has MathJax --> ).我们对 Wald’s identity 两边求导，可得：<br><span>$E[S_J - J\gamma&apos;(r)]\exp \left\{rS_J-J\gamma(r)\right\}= 0$</span><!-- Has MathJax --><br>令 <span>$r=0$</span><!-- Has MathJax --> ，即可得到 Wald’s equality。如果我们取2阶导，可得：<br><span>$E[(S_J-J\gamma&apos;(r))^2-J\gamma&apos;&apos;(r)]\exp \left\{rS_J-J\gamma(r)\right\}= 0$</span><!-- Has MathJax --><br>同样令 <span>$r=0$</span><!-- Has MathJax --> ，可得：<br><span>$E[S_J^2 - 2JS_J\bar{X} + J^2\bar{X}^2] = \sigma^2_XE[J]\\$</span><!-- Has MathJax --><br>当 <span>$\bar{X}=0$</span><!-- Has MathJax --> 时，原式可以简化为 <span>$E[S^2_J] = \sigma^2_XE[J]$</span><!-- Has MathJax --></p>
+<h2 id="来考虑一个特殊情况"><a href="#来考虑一个特殊情况" class="headerlink" title="来考虑一个特殊情况"></a>来考虑一个特殊情况</h2><p>上面我们为了简化结果，假设 <span>$\bar{X}=0$</span><!-- Has MathJax --> 。对于随机游走，我们也考虑这种情况，假设 <span>$Pr\left\{X=1\right\}=1/2,\ Pr\left\{X=-1\right\}=1/2$</span><!-- Has MathJax --> 且 thresold <span>$\alpha,\ \beta$</span><!-- Has MathJax --> 均为整数。故 <span>$S_n$</span><!-- Has MathJax --> 在 crossing thresold之前，必然先是 thresold 。因此我们可以将 stopping trial 定义为 <span>$S_J = \alpha$</span><!-- Has MathJax --> 或 <span>$S_J = \beta$</span><!-- Has MathJax --> 。令 <span>$q_\alpha = Pr\left\{S_J=\alpha\right\}$</span><!-- Has MathJax --> ，则 <span>$S_J$</span><!-- Has MathJax --> 的期望为 <span>$\alpha q_\alpha + \beta(1-q_\alpha)$</span><!-- Has MathJax --> 。根据 Wald’sequality, <span>$E[S_J] = 0$</span><!-- Has MathJax --> 。故有：<br><span>$$q_\alpha = \dfrac{-\beta}{\alpha-\beta}\quad 1-q_\alpha = \dfrac{\alpha}{\alpha-\beta}\\
+\Rightarrow \sigma^2_XE[J] = E[S_J^2] = \alpha^2q_\alpha + \beta^2(1-q_\alpha)\\
+\Rightarrow E[J] = -\beta\alpha/\delta^2_X = -\beta\alpha$$</span><!-- Has MathJax --></p>
+<h2 id="thresold-crossing-的指数边界"><a href="#thresold-crossing-的指数边界" class="headerlink" title="thresold crossing 的指数边界"></a>thresold crossing 的指数边界</h2><p>在满足 Wald’s identity 的基础上，如果 <span>$\bar{X}&lt;0$</span><!-- Has MathJax --> 且对于 <span>$r^* &gt; 0$</span><!-- Has MathJax --> 有 <span>$\gamma(r^* ) = 0$</span><!-- Has MathJax --> ，则有：<br><span>$Pr\left\{S_J\ge\alpha\right\}\le\exp(-r^* \alpha)$</span><!-- Has MathJax --><br>证明：既然要满足 Wald’s identity，那么自然是要用的。我们令 <span>$r = r^*$</span><!-- Has MathJax --> ，则Wald’s identity可以化为 <span>$E[\exp(r^* S_J)]=1$</span><!-- Has MathJax --> 。而该式可以被表示为：<br><span>$$Pr\left\{S_J\ge\alpha\right\}E[\exp(r^* S_J)|S_J\ge\alpha] + Pr\left\{S_J\le\beta\right\}E[\exp(r^* S_J)|S_J\le\beta] = 1\\
+\Rightarrow Pr\left\{S_J\ge\alpha\right\}E[\exp(r^* S_J)|S_J\ge\alpha]\le 1\\
+\Rightarrow Pr\left\{S_J\ge\alpha\right\}\exp(r^* \alpha)\le 1$$</span><!-- Has MathJax --><br>我们同样可以推导得到 <span>$\beta$</span><!-- Has MathJax --> 的不等式</p>
+<p>将上面的理论运用到 G/G/1 queue中，我们可以得到Kingman Bound：</p>
+<p>令 <span>$X_i, Y_i$</span><!-- Has MathJax --> 分别表示到达间隔和服务时间，队列初始为空，用户在0时刻到达。令 <span>$U_i = Y_{i-1}-X_i, \gamma(r) = \ln\left\{E[e^{Ur}]\right\}$</span><!-- Has MathJax --> 。假设存在 <span>$r^* &gt;0$</span><!-- Has MathJax --> 使得 <span>$\gamma(r) = 0$</span><!-- Has MathJax --> 。令 <span>$W_n$</span><!-- Has MathJax --> 表示第 n 个顾客达到时队列的 queue delay。则：<br><span>$Pr\left\{W_n\ge \alpha\right\}\le Pr\left\{W\ge \alpha\right\}\le\exp(-r^* \alpha)$</span><!-- Has MathJax --></p>
+<p>对于 <span>$\bar{X}&gt;0$</span><!-- Has MathJax --> 我们可以通过交换符号的方式来处理 <span>$S_J&lt;\beta$</span><!-- Has MathJax --> 的情况。但是 <span>$\bar{X}=0$</span><!-- Has MathJax --> 就不好做了。考虑 <span>$Pr\left\{S_J\le \beta\right\} = 1-Pr\left\{S_J\ge \alpha\right\}$</span><!-- Has MathJax --> 。则可以解出<br><span>$Pr\left\{S_J\ge \alpha\right\} = \dfrac{1-E[\exp(r^* S_J)|S_J\le\beta] }{E[\exp(r^* S_J)|S_J\ge\alpha] -E[\exp(r^* S_J)|S_J\le\beta] }$</span><!-- Has MathJax --><br>由于 <span>$\alpha,\beta$</span><!-- Has MathJax --> 均为整数，故有 <span>$E[\exp(r^* S_J)| S_J\le\beta] = \exp(r^* \beta),\ E[\exp(r^* S_J)| S_J\ge\alpha] = \exp(r^* \alpha)$</span><!-- Has MathJax --> 。故<br><span>$Pr\left\{S_J\ge \alpha\right\} = \dfrac{\exp(-r^* \alpha)[1-\exp(r^* \beta)] }{1 -\exp[-r^* (\alpha-\beta)] }$</span><!-- Has MathJax --></p>
+<h2 id="binary-hypothesis-test"><a href="#binary-hypothesis-test" class="headerlink" title="binary hypothesis test"></a>binary hypothesis test</h2><p>我们在前面讨论过 hypothesis test ，在这里主要讨论如何基于已有观测进行决策以及什么时间应该停止观测。首先回忆一下我们前面的定义：<br><span>$p_H(0) = p_0,\ p_H(1) = p_1$</span><!-- Has MathJax --> 。给定 <span>$n$</span><!-- Has MathJax --> 个观测 <span>$y_1, y_2, ...,y_n$</span><!-- Has MathJax --> ，有 likelihood ratio<br><span>$\Lambda_n(y) = \prod_{i=1}^n \dfrac{f_{Y|H}(y_n|0)}{f_{Y|H}(y_n|1)}$</span><!-- Has MathJax --><br>在此基础上，我们定义 log-likelihood-ratio:<br><span>$s_n = \sum_{i=1}^n z_n;\quad z_n =\ln\dfrac{f_{Y|H}(y_n|0)}{f_{Y|H}(y_n|1)}$</span><!-- Has MathJax --><br>我们给出选择标准：<br><span>$$s_n
+\begin{cases}
+
+&gt; \ln(p_1/p_0) &amp; \hat{h} = 0\\
+\le \ln(p_1/p_0) &amp; \hat{h} = 1
+
+\end{cases}$$</span><!-- Has MathJax --><br>这就又成了 thresold crossing 的问题。即， <span>$Pr\left\{e|H=1\right\} = Pr\left\{S_n \ge \ln(p_1/p_0)|H=1\right\}$</span><!-- Has MathJax --> 。在此情况下，<span>$\gamma_1(r)\text{ of } Z \text{ given }H=1$</span><!-- Has MathJax --> 可以表示为：<br><span>$$\begin{aligned}
+\gamma_1(r) &amp;= \ln\int_y f_{Y|H}(y|1)\exp\left\{r\Bigg[\ln \dfrac{f_{Y|H}(y|0)}{f_{Y|H}(y|1)}\Bigg]\right\}dy\\
+&amp;= \ln\int_y [f_{Y|H}(y|1)]^{1-r}[f_{Y|H}(y|0)]^r dy
+\end{aligned}$$</span><!-- Has MathJax --><br>可以发现 <span>$\gamma_1(1) \ln\int_yf_{Y|H}(y|0)dy=0$</span><!-- Has MathJax --> ，即 <span>$r^* = 1$</span><!-- Has MathJax --> 。用Chernoff bound可得：<br><span>$Pr\left\{e|H=1\right\}\le\exp\left\{n(\min_r\gamma_1(r)-ra)\right\}\quad a = \dfrac{1}{n}\ln(p_1/p_0)$</span><!-- Has MathJax --><br>上面不等式可以用下图表示：<br><img src="http://ww1.sinaimg.cn/large/9dec4451jw1f26tjqe74nj20x0098gmu.jpg" alt=""><br>同样的，我们可以找到 <span>$Pr\left\{e|H=0\right\}$</span><!-- Has MathJax --> 。首先<br><span>$\gamma_0(r)= \ln\int_y [f_{Y|H}(y|1)]^{-r}[f_{Y|H}(y|0)]^{1+r} dy$</span><!-- Has MathJax --><br>可以发现 <span>$\gamma_0(r)=\gamma_1(r-1)$</span><!-- Has MathJax --> 。故<br><span>$Pr\left\{e|H=0\right\}\le\exp\left\{n[\min_r\gamma_1(r)+(1-r)a]\right\}$</span><!-- Has MathJax --></p>
+<p>再一次观测结束之后，我们可以有3种选择：接受 hypothesis 1, 接受 hypothesis 2或者继续实验。我们在前面研究了前两个选项，我们在这里研究第三个选项。这显然是一个 stopping trial。</p>
+<p>我们假设当 stopping 发生时， <span>$\hat{h} = 0 \text{ if } S_J&gt;\alpha$</span><!-- Has MathJax --> ，<span>$\hat{h} = 1 \text{ if } S_J&lt;\beta$</span><!-- Has MathJax --> 。则错误判断的概率分别为：<br><span>$$Pr\left\{e|H=1\right\} = Pr\left\{S_J\ge \alpha|H=1\right\} \le \exp-\alpha\\
+Pr\left\{e|H=0\right\} = Pr\left\{S_J\le \beta|H=0\right\} \le \exp\beta$$</span><!-- Has MathJax --><br>随着我们增加 <span>$\alpha,\beta$</span><!-- Has MathJax --> ，错误率会越来越低。<br>根据 Wald’s equality ，有：<br><span>$E[J|H=0] = \dfrac{E[S_J|H=0]}{E[Z|H=0]} \approx\dfrac{\alpha + E[overshoot]}{E[Z|H=0]}$</span><!-- Has MathJax --><br>上式种我们忽视了 crossing thresold <span>$\beta$</span><!-- Has MathJax --> 的概率，因为 <span>$\alpha$</span><!-- Has MathJax --> 和 <span>$\beta$</span><!-- Has MathJax --> 很大的情况下，这种概率很小。</p>
+<h2 id="crossing-time-以及-barrier-的联合分布"><a href="#crossing-time-以及-barrier-的联合分布" class="headerlink" title="crossing time 以及 barrier 的联合分布"></a>crossing time 以及 barrier 的联合分布</h2><p>最后我们考察 <span>$Pr\left\{J\ge n, S_J \ge \alpha\right\}$</span><!-- Has MathJax --> 。同样假设 <span>$\bar{X}&lt;0$</span><!-- Has MathJax --> ，对于部分 <span>$r^* &gt; 0$</span><!-- Has MathJax --> ，有 <span>$\gamma(r)\le 0$</span><!-- Has MathJax --> 。对于 $0\le r\le r^* ,J<br>\ge n<span>$，有$</span><!-- Has MathJax -->-J\gamma(r)\ge -n\gamma(r)$ 根据 Wald identity，有<br><span>$$\begin{aligned}
+1 &amp;\ge E[\exp[rS_J-J\gamma(r)]|J\ge n, S_J \ge \alpha] Pr\left\{J\ge n, S_J \ge \alpha\right\}
+&amp;\ge \exp[r\alpha-n \gamma(r)]Pr\left\{J\ge n, S_J \ge \alpha\right\}
+\end{aligned}$$</span><!-- Has MathJax --><br><span>$\Rightarrow Pr\left\{J\ge n, S_J \ge \alpha\right\} \le \exp[n \gamma(r) - r\alpha]$</span><!-- Has MathJax --><br>因为 <span>$r\in(0, r^* ]$</span><!-- Has MathJax --> ，我们可以获得上式的 tightest bound。 定义 <span>$n^* = \alpha/\gamma&apos;(r^* )$</span><!-- Has MathJax --> ，则：<br><span>$$Pr\left\{J\ge n, S_J \ge \alpha\right\} \le
+\begin{cases}
+\exp[n\gamma(r_o) -r_o\alpha] &amp; \text{for }n&gt; n^* , \alpha/n = \gamma&apos;(r_o)\\
+\exp[-r^* \alpha] &amp; n \le n^*
+\end{cases}$$</span><!-- Has MathJax --></p>
+<h1 id="Martingales"><a href="#Martingales" class="headerlink" title="Martingales"></a>Martingales</h1><p>Martingales 是一种 integer-time 随机过程，定义为 <span>$Z_n$</span><!-- Has MathJax --> ，满足 <span>$E[|Z_n|] &lt; \infty$</span><!-- Has MathJax --> 且<br><span>$E[Z_n|Z_{n-1},Z_{n-2},...,Z_1] = Z_{n-1}$</span><!-- Has MathJax --><br>对于上面的定义，一般有两种解读的视角：第一种就是直接来看， <span>$E[Z_n|Z_{n-1}=z_{n-1},Z_{n-2}=z_{n-2},...,Z_1=z_1] = z_{n-1}$</span><!-- Has MathJax --> ；第二种将 <span>$E[Z_n|Z_{n-1},Z_{n-2},...,Z_1]$</span><!-- Has MathJax --> 看做一个函数。第二种看法更加复杂，必然也更加强大。</p>
+<p>Martingales 和 markov 很像，不过前者是期望，后者是概率。</p>
+<h2 id="一些例子"><a href="#一些例子" class="headerlink" title="一些例子"></a>一些例子</h2><p>Martingales 可能是我目前看到的随机过程里面最抽象的一个了。所以举几个例子加深一下印象</p>
+<h3 id="Random-walk"><a href="#Random-walk" class="headerlink" title="Random walk"></a>Random walk</h3><p>martingale 的例子之一就是0期望的随机游走。这一点很容易看到：<br><span>$$\begin{aligned}
+E[Z_n|Z_{n-1}, Z_{n-2},...,Z_1] &amp;= E[X_n+Z_{n-1}|Z_{n-1}, Z_{n-2},...,Z_1]
+&amp;= E[X_n]+Z_{n-1} = Z_{n-1}
+\end{aligned}$$</span><!-- Has MathJax --><br>当然，对于任意的 rv <span>$X$</span><!-- Has MathJax --> 来说，令 <span>$Z_n = S_n-n\bar{X}$</span><!-- Has MathJax --> 也可以做到这一点。</p>
+<h3 id="Sums-of-dependent-zero-mean-variables"><a href="#Sums-of-dependent-zero-mean-variables" class="headerlink" title="Sums of dependent zero-mean variables"></a>Sums of dependent zero-mean variables</h3><p>令 <span>$X_i$</span><!-- Has MathJax --> 为相关的 rv 且满足 <span>$E[X_i|X_{i-1},...,X_1] = 0$</span><!-- Has MathJax --> ，<span>$Z_n = X_1+X_2+...+X_n$</span><!-- Has MathJax --> 。则：<br><span>$$\begin{aligned}
+E[Z_n|Z_{n-1},...,Z_1] &amp;= E[X_n+Z_{n-1}|Z_{n-1},...,Z_1]\\
+&amp;= E[X_n|Z_{n-1},...,Z_1] + E[Z_{n-1}|Z_{n-1},...,Z_1]
+&amp;= Z_{n-1}
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<h3 id="Product-form-martingales"><a href="#Product-form-martingales" class="headerlink" title="Product-form martingales"></a>Product-form martingales</h3><p>和上面的差不多，不过是把加法换成了乘法，即 <span>$Z_n=X_1X_2...X_n$</span><!-- Has MathJax --> 如果 <span>$X_i$</span><!-- Has MathJax --> 的均值为1，则：<br><span>$$\begin{aligned}
+E[Z_n|Z_{n-1},...,Z_1] &amp;= E[X_nZ_{n-1}|Z_{n-1},...,Z_1]\\
+&amp;=E[X_n]E[Z_{n-1}|Z_{n-1},...,Z_1] = Z_{n-1}
+\end{aligned}$$</span><!-- Has MathJax --><br>乘法的 martingale 有一个很重要应用。 我们假设 <span>$X_i$</span><!-- Has MathJax --> 为 IID ，<span>$S_n = X_1+X_2+...+X_n$</span><!-- Has MathJax --> 为随机游走， <span>$\gamma(r) = \ln\left\{E[\exp(rX)]\right\}$</span><!-- Has MathJax --> 。定义 <span>$Z_n$</span><!-- Has MathJax --> 为<br><span>$$\begin{aligned}
+Z_n &amp;= \exp\left\{rS_n-n\gamma(r)\right\}\\
+&amp;= \exp\left\{rX_n-\gamma(r)\right\}\exp\left\{rS_{n-1}-(n-1)\gamma(r)\right\}\\
+&amp;=\exp\left\{rX_n-\gamma(r)\right\} Z_{n-1}
+\end{aligned}$$</span><!-- Has MathJax --><br>故<br><span>$E[Z_n|Z_{n-1},...,Z_1] = E[\exp\left\{rX_n-\gamma(r)\right\}]E[Z_{n-1}|Z_{n-1},...,Z_1] = Z_{n-1}$</span><!-- Has MathJax --></p>
+<h3 id="branching-process"><a href="#branching-process" class="headerlink" title="branching process"></a>branching process</h3><p>我们<a href="http://modkzs.github.io/2016/03/12/countable-state-markov-chain/#Branching_process" target="_blank" rel="external">之前</a>曾经讨论过branching process。branching process可以抽象为两个变量，其中 <span>$Y_{i,n}$</span><!-- Has MathJax --> 为 IID， <span>$X_{n+1} = \sum_{i=1}^{X_n}Y_{i,n}$</span><!-- Has MathJax --> 。</p>
+<p>令 <span>$\bar{Y}=E[Y_{i,n}]$</span><!-- Has MathJax --> ，则 <span>$E[X_n|X_{n-1}]=\bar{Y}X_{n-1}$</span><!-- Has MathJax --> 。我们定义 <span>$Z_n=X_n/\bar{Y}^n$</span><!-- Has MathJax --> ，则：<br><span>$E[Z_n|Z_{n-1},...,Z_1] = E[\dfrac{X_n}{\bar{Y}^n}|X_{n-1},...,X_1]= \dfrac{\bar{Y}X_{n-1}}{\bar{Y}^n} = Z_{n-1}$</span><!-- Has MathJax --></p>
+<p>可以看到，<span>$Z_n$</span><!-- Has MathJax --> 也是 martingale</p>
+<h2 id="过去和未来的-partial-isolation"><a href="#过去和未来的-partial-isolation" class="headerlink" title="过去和未来的 partial isolation"></a>过去和未来的 partial isolation</h2><p>令 <span>$Z_n$</span><!-- Has MathJax --> 为 martingale 对于任意的 <span>$1\le i &lt;n$</span><!-- Has MathJax --> ，有<br><span>$E[Z_n|Z_i, Z_{i-1},...,Z_1] = Z_i$</span><!-- Has MathJax --></p>
+<p>证明：对于 <span>$n=i+1$</span><!-- Has MathJax --> ，有 <span>$E[Z_{i+1}|Z_i,...,Z_1] = Z_i$</span><!-- Has MathJax --> 。我们可以用下面的方法计算 <span>$E[Z_{i+2}|Z_i,...,Z_1]$</span><!-- Has MathJax --> :<br><span>$$\begin{aligned}
+E[Z_{i+2}|Z_i,...,Z_1] &amp;= E[E[Z_{i+2}|Z_{i+1},...,Z_1]|Z_i,...,Z_1] \\
+&amp;= E[Z_{i+1}|Z_i,...,Z_1] = Z_i
+\end{aligned}$$</span><!-- Has MathJax --><br>同样的方法可以用来计算 <span>$E[Z_{i+3}|Z_i,...,Z_1]$</span><!-- Has MathJax --> 等等。当然最后我们有：<br><span>$E[Z_n] = E[Z_1]$</span><!-- Has MathJax --></p>
+<p>用在前面乘法的例子种，可以得到：<br><span>$$\begin{aligned}
+E[\exp(rS_n-n\gamma(r))] &amp;= E[\exp(rX-\gamma(r))]\\
+&amp;= E[\exp(rX)]/g(r) = 1
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<h2 id="submartingale-以及-supermartingale"><a href="#submartingale-以及-supermartingale" class="headerlink" title="submartingale 以及 supermartingale"></a>submartingale 以及 supermartingale</h2><p>submartingale 和 supermartingale都是martingale最简单的泛化。具体的定义如下：</p>
+<p>同样对于integer-time随机过程 <span>$Z_n$</span><!-- Has MathJax --> 满足 <span>$E[|Z_n|]&lt;\infty$</span><!-- Has MathJax --> ，如果满足 <span>$E[Z_n|Z_{n-1}, Z_{n-2},...,Z_1] \ge Z_{n-1}$</span><!-- Has MathJax --> ，则是submartingale；如果满足 <span>$E[Z_n|Z_{n-1}, Z_{n-2},...,Z_1] \le Z_{n-1}$</span><!-- Has MathJax --> ，则是supermartingale。</p>
+<p>注意到martingale同时满足两个定义，所以它既是 submartingale ，也是 supermartingale 。如果 <span>$Z_n$</span><!-- Has MathJax --> 为submartingale ，则 <span>$-Z_n$</span><!-- Has MathJax --> 为 supermartingale。</p>
+<p>对于partial isolation，修改如下：</p>
+<p>令 <span>$1\le i &lt; n$</span><!-- Has MathJax --> ，对于submartingale有 <span>$E[Z_n|Z_i,...Z_1]\ge Z_i$</span><!-- Has MathJax --> ；对于supermartingale有 <span>$E[Z_n|Z_i,...Z_1]\le Z_i$</span><!-- Has MathJax --> 。</p>
+<p>随机游走 S_n 是 submartingale, martingale, supermartingale 分别对应 <span>$\bar{X}\ge 0, \bar{X}= 0, \bar{X}\le 0$</span><!-- Has MathJax --> ；同样如果存在semi- invariant moment generating function <span>$\gamma(r)$</span><!-- Has MathJax --> ，定义 <span>$Z_n = \exp(rS_n)$</span><!-- Has MathJax --> ，<span>$Z_n$</span><!-- Has MathJax --> 为 submartingale, martingale, supermartingale 分别对应 <span>$\gamma(r) \ge 0,\gamma(r) = 0 ,\gamma(r) \le 0$</span><!-- Has MathJax --></p>
+<p>如果 <span>$h(x)$</span><!-- Has MathJax --> 为凸函数，对于 submartingale 或者 martingale <span>$Z_n$</span><!-- Has MathJax --> ，<span>$h(Z_n)$</span><!-- Has MathJax --> 也是 submartingale 。证明很简单，直接用Jensen不等式就行了。</p>
+<h1 id="stopped-processes-and-stopping-trials"><a href="#stopped-processes-and-stopping-trials" class="headerlink" title="stopped processes and stopping trials"></a>stopped processes and stopping trials</h1><p>在 renewal process 中我们讨论过 <a href="http://modkzs.github.io/2016/03/09/renewal-process/#stopping_trial" target="_blank" rel="external">stopping trial</a> 。如果 <span>$J$</span><!-- Has MathJax --> 是一个defective rv，那么将 <span>$J$</span><!-- Has MathJax --> 称为defective stopping trial(即该过程必然终止)。如果没有说明，我们将 <span>$J$</span><!-- Has MathJax --> 称为possibly-defective stopping trial 。</p>
+<p>对于 possibly-defective stopping trial <span>$J$</span><!-- Has MathJax --> 我们定义 stopped process <span>$Z_n^* = Z_n$</span><!-- Has MathJax --> 如果 <span>$J\ge n$</span><!-- Has MathJax --> 否则 <span>$Z_n^* = Z_J$</span><!-- Has MathJax --> 。<br>对于 <span>$Z_n^*$</span><!-- Has MathJax --> 和 <span>$Z_n$</span><!-- Has MathJax --> 来说，如果 <span>$Z_n$</span><!-- Has MathJax --> 为 submartingale，<span>$Z_n^*$</span><!-- Has MathJax --> 也是 submartingale 。对于其他两种情况也一样。</p>
+<p>给定一个随机过程 <span>$Z_n$</span><!-- Has MathJax -->, possibly-defective stopping trial  <span>$J$</span><!-- Has MathJax --> ，则我们可以找到对应的 <span>$Z_n^*$</span><!-- Has MathJax --> 。其与 <span>$Z_n$</span><!-- Has MathJax --> 的关系如下：<br><span>$$E[Z_1] \le E[Z_n^*] \le E[Z_n] \quad \text{(submartingale)} \\
+E[Z_1] = E[Z_n^*] = E[Z_n] \quad \text{(martingale)} \\
+E[Z_1] \ge E[Z_n^*] \ge E[Z_n] \quad \text{(supermartingale)} \\$$</span><!-- Has MathJax --></p>
+<p>令 <span>$J$</span><!-- Has MathJax --> 为 martingale <span>$Z_n$</span><!-- Has MathJax --> 的 stopping trial ，则 <span>$E[Z_n] = E[Z_1]$</span><!-- Has MathJax --> 当且仅当<br><span>$\lim_{n\to\infty}E[Z_n|J&gt;n]Pr\left\{J&gt;n\right\} = 0,\ E[|Z_J|] &lt; \infty$</span><!-- Has MathJax --></p>
+<h1 id="The-Kolmogorov-inequalities"><a href="#The-Kolmogorov-inequalities" class="headerlink" title="The Kolmogorov inequalities"></a>The Kolmogorov inequalities</h1><p>Kolmogorov’s submartingale inequalities 表述如下：</p>
+<span>$Z_n$</span><!-- Has MathJax --> 为非负的 submartingale，对于所有的正整数 <span>$m$</span><!-- Has MathJax --> 以及正数 <span>$a$</span><!-- Has MathJax --> ,都有<br><span>$Pr\left\{\max_{1\le i \le m} Z_i\ge a\right\} \le \dfrac{E[Z_m]}{a}$</span><!-- Has MathJax -->
+<p>证明： 对于一个非负的 martingale <span>$Z_n$</span><!-- Has MathJax --> ，给定正数 <span>$a$</span><!-- Has MathJax --> 和正整数 <span>$m$</span><!-- Has MathJax --> ，我们定义 stopping trial <span>$J$</span><!-- Has MathJax --> 为 最早的 <span>$n\le m$</span><!-- Has MathJax --> 满足 <span>$Z_n\ge a$</span><!-- Has MathJax --> 。如果对于所有的 <span>$n\le m,\ Z_n&lt;a$</span><!-- Has MathJax --> 则 <span>$n=m$</span><!-- Has MathJax --> 。所以 <span>$J$</span><!-- Has MathJax --> 必然会在 <span>$m$</span><!-- Has MathJax --> 停止。故：<br><span>$Pr\left\{\max_{1\le i \le m}Z_i\ge a\right\} = Pr{Z_J\ge a}\le \dfrac{E[Z_J]}{a}$</span><!-- Has MathJax --><br>由于 <span>$J$</span><!-- Has MathJax --> 必在 <span>$m$</span><!-- Has MathJax --> 停止，故 <span>$Z_J = Z_m^*$</span><!-- Has MathJax --> 。而 <span>$E[Z_m^*]\le E[Z_m]$</span><!-- Has MathJax --> 带入原式即得证。</p>
+<p>从这个不等式出发，我们可以推导出一系列不等式。</p>
+<h2 id="一些衍生的不等式"><a href="#一些衍生的不等式" class="headerlink" title="一些衍生的不等式"></a>一些衍生的不等式</h2><h3 id="Nonnegative-martingale-inequality"><a href="#Nonnegative-martingale-inequality" class="headerlink" title="Nonnegative martingale inequality"></a>Nonnegative martingale inequality</h3><p>令 <span>$Z_n$</span><!-- Has MathJax --> 为非负的martingale， <span>$a&gt;0$</span><!-- Has MathJax --> 则：<br><span>$Pr\left\{\sup_{n \ge 1} Z_n\ge a\right\} \le \dfrac{E[Z_1]}{a}$</span><!-- Has MathJax --></p>
+<h3 id="Kolmogorov’s-martingale-inequality"><a href="#Kolmogorov’s-martingale-inequality" class="headerlink" title="Kolmogorov’s martingale inequality"></a>Kolmogorov’s martingale inequality</h3><p>令 <span>$Z_n$</span><!-- Has MathJax --> 为 martingale 满足 <span>$E[Z_n^2]&lt;\infty$</span><!-- Has MathJax -->， <span>$b&gt;0,m &gt;1$</span><!-- Has MathJax --> 故<br><span>$Pr\left\{\max_{1\le n \le m} |Z_n|\ge b\right\} \le \dfrac{E[Z_m^2]}{b^2}$</span><!-- Has MathJax --></p>
+<h3 id="Kolmogorov’s-random-walk-inequality"><a href="#Kolmogorov’s-random-walk-inequality" class="headerlink" title="Kolmogorov’s random walk inequality"></a>Kolmogorov’s random walk inequality</h3><span>$X_i$</span><!-- Has MathJax --> 为 IID 的 rv，均值为 <span>$\bar{X}$</span><!-- Has MathJax --> ，方差为 <span>$\sigma^2$</span><!-- Has MathJax --> ，<span>$S_n=X_1+X_2+...+X_n$</span><!-- Has MathJax --> 。对于任意正整数 <span>$m$</span><!-- Has MathJax --> 和正数 <span>$\epsilon$</span><!-- Has MathJax --> ，有：<br><span>$Pr\left\{\max_{1\le n \le m} |S_n-n\bar{X}|\ge m\epsilon\right\}\le \dfrac{\sigma^2}{m\epsilon^2}$</span><!-- Has MathJax -->
+<h3 id="还有2个没名字的"><a href="#还有2个没名字的" class="headerlink" title="还有2个没名字的"></a>还有2个没名字的</h3><span>$S_n=X_1+X_2+...+X_n$</span><!-- Has MathJax --> 为随机游走， <span>$X_i$</span><!-- Has MathJax --> 有均值 <span>$\bar{X}$</span><!-- Has MathJax --> 和 semi-invariant moment generating function <span>$\gamma(x)$</span><!-- Has MathJax --> 。对于任意一个 <span>$r&gt;0$</span><!-- Has MathJax --> 满足 <span>$0&lt;\gamma(r)&lt;\infty$</span><!-- Has MathJax --> ， <span>$a&gt;0$</span><!-- Has MathJax --> ，有：<br><span>$Pr\left\{\max_{1\le n \le m}S_i\ge\alpha\right\}\le \exp\left\{-r\alpha + n\gamma(r)\right\}$</span><!-- Has MathJax -->
+<p>令 <span>$Z_n$</span><!-- Has MathJax --> 为非负的 submartingale，对于任意的正整数 <span>$m$</span><!-- Has MathJax --> 和 <span>$a&gt;0$</span><!-- Has MathJax --> ，都有<br><span>$Pr\left\{\bigcup_{i\ge m}\left\{Z_i\ge a\right\}\right\}\le \dfrac{E[Z_m]}{a}$</span><!-- Has MathJax --></p>
+<h2 id="SLLN"><a href="#SLLN" class="headerlink" title="SLLN"></a>SLLN</h2><p><a href="http://modkzs.github.io/2016/03/09/renewal-process/#WP1" target="_blank" rel="external">之前</a>曾经证明过4阶矩存在时的SLLN，这里我们们削弱一下条件，证明二阶矩存在即可。</p>
+<p>首先还是说明下SLLN。令 <span>$X_i$</span><!-- Has MathJax --> 为 IID 的 rv，均值为 <span>$\bar{X}$</span><!-- Has MathJax --> ，方差为 <span>$\sigma^2&lt;\infty$</span><!-- Has MathJax --> ，令 <span>$S_n = X_1+X_2+...+X_n$</span><!-- Has MathJax --> 。则对于任意的 <span>$\epsilon &gt; 0$</span><!-- Has MathJax --> 都有<br><span>$$Pr\left\{\lim_{n\to\infty}\dfrac{S_n}{n}=\bar{X}\right\} = 1\\
+\lim_{n\to\infty}Pr\left\{\bigcup_{m &gt; n}\bigg|\dfrac{S_m}{m}-\bar{X}\bigg|&gt;\epsilon\right\} = 0$$</span><!-- Has MathJax --><br>当然了，这两个式子是等价的，所以我们只要证明后一个就好了<br><span>$$\begin{aligned}
+Pr\left\{\bigcup_{m &gt; 2^k}\bigg|\dfrac{S_m}{m}-\bar{X}\bigg|&gt;\epsilon\right\} &amp;= Pr\left\{\bigcup_{j=k}^\infty\bigcup_{m=2^j+1}^{2^{j+1}}\bigg|\dfrac{S_m}{m}-\bar{X}\bigg|&gt;\epsilon\right\}\\
+&amp;\le \sum_{j=k}^\infty Pr\left\{\bigcup_{m=2^j+1}^{2^{j+1}}\bigg|\dfrac{S_m}{m}-\bar{X}\bigg|&gt;\epsilon\right\}\\
+&amp;= \sum_{j=k}^\infty Pr\left\{\bigcup_{m=2^j+1}^{2^{j+1}}|S_m-m\bar{X}|&gt;\epsilon m\right\}\\
+&amp;\le \sum_{j=k}^\infty Pr\left\{\bigcup_{m=2^j+1}^{2^{j+1}}|S_m-m\bar{X}|&gt;\epsilon 2^j\right\}\\
+&amp;= \sum_{j=k}^\infty Pr\left\{\max_{2^j+1\le m \le 2^{j+1}}|S_m-m\bar{X}|&gt;\epsilon 2^j\right\}\\
+&amp;\le \sum_{j=k}^\infty Pr\left\{\max_{1\le m \le 2^{j+1}}|S_m-m\bar{X}|&gt;\epsilon 2^j\right\}\\
+&amp;\le \sum_{j=k}^\infty \dfrac{2^{j+1}\sigma^2}{\epsilon^22^{2j}} = \dfrac{2^{-k+2}\sigma^2}{\epsilon^2}
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<h2 id="martingale-convergence-theorem"><a href="#martingale-convergence-theorem" class="headerlink" title="martingale convergence theorem"></a>martingale convergence theorem</h2><p>由Kolmogorov submartingale inequalit可以推出的非常重要的结论，表述如下：</p>
+<span>$Z_i$</span><!-- Has MathJax --> 为 martingale 且存在 <span>$M&lt;\infty$</span><!-- Has MathJax --> 使得 <span>$E[Z_n^2]\ge M$</span><!-- Has MathJax --> 。则存在一个 rv <span>$Z$</span><!-- Has MathJax --> 使得 <span>$\lim_{n\to\infty}Z_n=Z$</span><!-- Has MathJax -->
+<p>证明：易知，<span>$Z_i$</span><!-- Has MathJax --> 也是 submartingale 。因此 <span>$E[Z_n^2]$</span><!-- Has MathJax --> 在 <span>$n$</span><!-- Has MathJax --> 上递增。由于 <span>$E[Z_n^2]\ge M$</span><!-- Has MathJax --> 故必有 <span>$\lim_{n\to\infty}E[Z_n^2] = M&apos;$</span><!-- Has MathJax --> 。由于对于任意正整数<span>$k$</span><!-- Has MathJax --> <span>$Y_n = Z_{k+n}-Z_k$</span><!-- Has MathJax --> 是均值为0的martingale，因此<br><span>$Pr\left\{\max_{1\le n \le m}|Z_{k+n}-Z_k|\ge b\right\}\le \dfrac{E[(Z_{k+m}-Z_k)^2]}{b^2}$</span><!-- Has MathJax --><br>由 <span>$E[Z_{k+m}Z_k|Z_k = z_k, Z_{k-1}=z_{k-1},...,Z_1=z_1] = z_k^2$</span><!-- Has MathJax --> 故 <span>$E[(Z_{k+m}-Z_k)^2] = E[Z_{k+m}^2]-E[Z_{k}^2]\le M&apos;-E[Z_{k}^2]$</span><!-- Has MathJax --> 。故<br><span>$Pr\left\{\sup_{n \ge 1}|Z_{k+n}-Z_k|\ge b\right\}\le \dfrac{M&apos;-E[Z_k^2]}{b^2} = 0$</span><!-- Has MathJax --></p>
+<p>故<br><span>$Pr\left\{\sup_{n \ge 1}|Z_{k+n}-Z_k|\ge b\right\} = 0$</span><!-- Has MathJax --></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/stochastic-process/" rel="tag">#stochastic process</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/14/markov-process/" rel="next" title="markov process">
+                <i class="fa fa-chevron-left"></i> markov process
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/24/machine-learning-的采样和模拟/" rel="prev" title="machine learning 的模拟和采样">
+                machine learning 的模拟和采样 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/20/random-walk/"
+           data-title="random walk" data-url="/2016/03/20/random-walk/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#queue-delay"><span class="nav-number">1.1.</span> <span class="nav-text">queue delay</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#detection-problem"><span class="nav-number">1.2.</span> <span class="nav-text">detection problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个小例子"><span class="nav-number">1.3.</span> <span class="nav-text">一个小例子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#随机游走中的threshold-crossing问题"><span class="nav-number">2.</span> <span class="nav-text">随机游走中的threshold crossing问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Chernoff-bound"><span class="nav-number">2.1.</span> <span class="nav-text">Chernoff bound</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tilted-probabilities"><span class="nav-number">2.2.</span> <span class="nav-text">Tilted probabilities</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回到threshold-crossing"><span class="nav-number">2.3.</span> <span class="nav-text">回到threshold crossing</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Wald’s-identity"><span class="nav-number">3.</span> <span class="nav-text">Wald’s identity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Wald’s-identity-1"><span class="nav-number">3.1.</span> <span class="nav-text">Wald’s identity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#与-Wald’s-equality-的关系"><span class="nav-number">3.1.1.</span> <span class="nav-text">与 Wald’s equality 的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#来考虑一个特殊情况"><span class="nav-number">3.2.</span> <span class="nav-text">来考虑一个特殊情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thresold-crossing-的指数边界"><span class="nav-number">3.3.</span> <span class="nav-text">thresold crossing 的指数边界</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#binary-hypothesis-test"><span class="nav-number">3.4.</span> <span class="nav-text">binary hypothesis test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#crossing-time-以及-barrier-的联合分布"><span class="nav-number">3.5.</span> <span class="nav-text">crossing time 以及 barrier 的联合分布</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Martingales"><span class="nav-number">4.</span> <span class="nav-text">Martingales</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些例子"><span class="nav-number">4.1.</span> <span class="nav-text">一些例子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Random-walk"><span class="nav-number">4.1.1.</span> <span class="nav-text">Random walk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sums-of-dependent-zero-mean-variables"><span class="nav-number">4.1.2.</span> <span class="nav-text">Sums of dependent zero-mean variables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Product-form-martingales"><span class="nav-number">4.1.3.</span> <span class="nav-text">Product-form martingales</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#branching-process"><span class="nav-number">4.1.4.</span> <span class="nav-text">branching process</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过去和未来的-partial-isolation"><span class="nav-number">4.2.</span> <span class="nav-text">过去和未来的 partial isolation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#submartingale-以及-supermartingale"><span class="nav-number">4.3.</span> <span class="nav-text">submartingale 以及 supermartingale</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stopped-processes-and-stopping-trials"><span class="nav-number">5.</span> <span class="nav-text">stopped processes and stopping trials</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Kolmogorov-inequalities"><span class="nav-number">6.</span> <span class="nav-text">The Kolmogorov inequalities</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些衍生的不等式"><span class="nav-number">6.1.</span> <span class="nav-text">一些衍生的不等式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Nonnegative-martingale-inequality"><span class="nav-number">6.1.1.</span> <span class="nav-text">Nonnegative martingale inequality</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kolmogorov’s-martingale-inequality"><span class="nav-number">6.1.2.</span> <span class="nav-text">Kolmogorov’s martingale inequality</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kolmogorov’s-random-walk-inequality"><span class="nav-number">6.1.3.</span> <span class="nav-text">Kolmogorov’s random walk inequality</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#还有2个没名字的"><span class="nav-number">6.1.4.</span> <span class="nav-text">还有2个没名字的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SLLN"><span class="nav-number">6.2.</span> <span class="nav-text">SLLN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#martingale-convergence-theorem"><span class="nav-number">6.3.</span> <span class="nav-text">martingale convergence theorem</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

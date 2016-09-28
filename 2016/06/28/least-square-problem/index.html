@@ -1,0 +1,723 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="optimization," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="机器学习中最常见的损失函数就是最小平方误差，所以我们来看看 LSE 有什么高效的解法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="least-square problem">
+<meta property="og:url" content="/2016/06/28/least-square-problem/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="机器学习中最常见的损失函数就是最小平方误差，所以我们来看看 LSE 有什么高效的解法。">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="least-square problem">
+<meta name="twitter:description" content="机器学习中最常见的损失函数就是最小平方误差，所以我们来看看 LSE 有什么高效的解法。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/06/28/least-square-problem/"/>
+
+  <title> least-square problem | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                least-square problem
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-28T14:45:26+08:00" content="Jun 28 2016">
+              Jun 28 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/28/least-square-problem/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/28/least-square-problem/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>机器学习中最常见的损失函数就是最小平方误差，所以我们来看看 LSE 有什么高效的解法。<br><a id="more"></a><br>LSE中，我们的优化目标常常是<br><span>$f(x) = \frac{1}{2}\sum_{j=1}^mr^2_j(x)$</span><!-- Has MathJax --><br>令 <span>$r(x) = (r_1(x),r_2(x),...,r_m(x))^T$</span><!-- Has MathJax -->，则上面的函数可以简写为 <span>$f(x) = \|r(x)\|^2$</span><!-- Has MathJax --> 。令<br><span>$J(x) = \begin{bmatrix}\nabla r_1(x)^T\\\nabla r_2(x)^T\\.\\.\\.\\\nabla r_m(x)^T\end{bmatrix}$</span><!-- Has MathJax --><br>则<br><span>$$\begin{align}
+\nabla f(x) &amp;= \sum_{j=1}^m r_j(x)\nabla r_j(x) = J(x)^Tr(x)\\
+\nabla^2 f(x) &amp;= \sum_{j=1}^m \nabla r_j(x)\nabla r_j(x)^T + \sum_{j=1}^m r_j(x)\nabla^2 r_j(x)\\
+&amp;= J(x)^TJ(x) + \sum_{j=1}^m r_j(x)\nabla^2 r_j(x)
+\end{align}$$</span><!-- Has MathJax --><br>当我们的解接近最优解时，<span>$r_j(x)$</span><!-- Has MathJax --> 或 <span>$\nabla^2 r_j(x)$</span><!-- Has MathJax --> 很小，这时第二项可以基本忽略。</p>
+<h1 id="Linear-Least-square"><a href="#Linear-Least-square" class="headerlink" title="Linear Least-square"></a>Linear Least-square</h1><p>首先看一个简单的情况，我们要拟合的函数也是线性函数。这种情况下目标函数可以写成<br><span>$f(x) = \frac{1}{2} \|Jx-y\|^2$</span><!-- Has MathJax --><br>此时一阶导和二阶导分别为：<br><span>$$\nabla f(x) = J^T(Jx-y)
+\nabla^2 f(x) = J^TJ$$</span><!-- Has MathJax --><br>求解其实只要计算 <span>$J^TJx^* = J^Ty$</span><!-- Has MathJax --> 。主要的问题在于如何计算。下面介绍3种方法计算。</p>
+<h2 id="Cholesky-factorization"><a href="#Cholesky-factorization" class="headerlink" title="Cholesky factorization"></a>Cholesky factorization</h2><p>思路非常清晰：</p>
+<ol>
+<li>计算 <span>$J^TJ$</span><!-- Has MathJax --> 和 <span>$J^Ty$</span><!-- Has MathJax --></li>
+<li>对 <span>$J^TJ$</span><!-- Has MathJax --> 进行 Cholesky factorization</li>
+<li>求解 <span>$J^TX = J^Ty, Jx^* = X$</span><!-- Has MathJax --> 得到 <span>$x^*$</span><!-- Has MathJax --></li>
+</ol>
+<p>但是如果 <span>$J$</span><!-- Has MathJax --> 的条件数非常大，<span>$J^TJ$</span><!-- Has MathJax --> 会将其进一步放大。这种情况下 Cholesky factorization 的效果会很差，但是在 m 远大于 n 的情况下，该算法会有较好的效果</p>
+<h2 id="QR-factorization"><a href="#QR-factorization" class="headerlink" title="QR factorization"></a>QR factorization</h2><p>易知， 当 <span>$Q$</span><!-- Has MathJax -->正交时， <span>$\|Jx-y\| = \|Q(Jx-y)\|$</span><!-- Has MathJax --> 根据 QR分解，有<br><span>$J\Pi = Q\begin{bmatrix}R\\0\end{bmatrix} = \begin{bmatrix}Q_1&amp;Q_2\end{bmatrix}\begin{bmatrix}R\\0\end{bmatrix} = Q_1R$</span><!-- Has MathJax --><br>其中， <span>$\Pi$</span><!-- Has MathJax --> 为 n<em> n 维的 permutation 矩阵；<span>$Q$</span><!-- Has MathJax --> 为正交矩阵； <span>$Q_1$</span><!-- Has MathJax --> 是 <span>$Q$</span><!-- Has MathJax --> 的前 n 列，<span>$Q_2$</span><!-- Has MathJax --> 是 <span>$Q$</span><!-- Has MathJax --> 的剩下的 m-n 列； <span>$R$</span><!-- Has MathJax --> 为 n</em>n 的正定上三角矩阵。所以<br><span>$$\begin{align}
+\|Jx-y\|_ 2^2 &amp;= \Bigg\|\begin{bmatrix}Q_1^T\\Q_2^T\end{bmatrix}(J\Pi\Pi^Tx-y)\Bigg\|\\
+&amp; =\Bigg\|\begin{bmatrix}R\\0\end{bmatrix}\Pi^Tx - \begin{bmatrix}Q_1^Ty\\Q_2^Tys\end{bmatrix}\Bigg\|\\
+&amp; =\|R(\Pi^Tx) - Q_1^Ty\|^2_2 + \|Q^T_2y\|^2_2
+\end{align}$$</span><!-- Has MathJax --><br>最后我们需要解 <span>$x^* = \Pi R^{-1}Q_1^Ty$</span><!-- Has MathJax --> 。实际一般解 <span>$Rz = Q_1^Ty$</span><!-- Has MathJax --> ，然后令 <span>$x^* = \Pi z$</span><!-- Has MathJax --> 。它的优点在于避开了 Cholesky factorization 中的坑，<span>$J$</span><!-- Has MathJax --> 的条件数很大时能拿到相对较好的结果。</p>
+<h2 id="SVD"><a href="#SVD" class="headerlink" title="SVD"></a>SVD</h2><p>当我们需要更为健壮的结果时，就要用到SVD了。对 <span>$J$</span><!-- Has MathJax --> 做SVD分解，可得：<br><span>$J = U\begin{bmatrix}S\\0\end{bmatrix}V^T = \begin{bmatrix}U_1&amp;U_2\end{bmatrix}\begin{bmatrix}S\\0\end{bmatrix}V^T = U_1SV^T$</span><!-- Has MathJax --><br>这种情况下<br><span>$$\begin{align}
+\|Jx-y\| &amp;= \Bigg\|\begin{bmatrix}S\\0\end{bmatrix}(V^Tx)-\begin{bmatrix}U_1^T\\U_2^T\end{bmatrix}y\Bigg\|^2\\
+&amp; = \|S(V^Tx)-U_1^Ty\|^2 + \|U_2^Ty\|^2
+\end{align}$$</span><!-- Has MathJax --><br>可以得到 <span>$x^* = VS^{-1}U_1^Ty = \sum_{i=1}^n\dfrac{u_i^Ty}{\sigma_i}v_i$</span><!-- Has MathJax --> 。当然，有些 <span>$\sigma_i$</span><!-- Has MathJax --> 可能是0， 这时候可以将公式改写为 <span>$x^* = \sum_{\sigma_i\neq0}\dfrac{u_i^Ty}{\sigma_i}v_i + \sum_{\sigma_i=0}{\tau_i}v_i$</span><!-- Has MathJax --> ，一般令 <span>$\tau_i=0$</span><!-- Has MathJax --> 。这是3个方法中最为健壮的。毕竟SVD分解的计算量摆在那，不好谁用啊。</p>
+<p>当然，对于大数据量来说，还是CG什么的迭代式的更好点。</p>
+<h1 id="NonLinear-Least-square"><a href="#NonLinear-Least-square" class="headerlink" title="NonLinear Least-square"></a>NonLinear Least-square</h1><p>讲完线性的，现在来看非线性的。</p>
+<h2 id="Gauss-Newton-method"><a href="#Gauss-Newton-method" class="headerlink" title="Gauss-Newton method"></a>Gauss-Newton method</h2><p>我们可以用 <span>$J_k^TJ_k$</span><!-- Has MathJax --> 来近似二阶导，然后和牛顿法类似，解<br><span>$J_k^TJ_kp_k^{GN} = -J_k^Tr_k$</span><!-- Has MathJax --><br>得到下降方向 <span>$p_k^{GN}$</span><!-- Has MathJax --> 。</p>
+<p>当 <span>$J$</span><!-- Has MathJax --> 满秩， <span>$\nabla f$</span><!-- Has MathJax --> 不为0时，有<br><span>$(p_k^{GN})^T\nabla f = (p_k^{GN})^TJ_k^Tr_k = -(p_k^{GN})^TJ_kJ_k^Tp_k^{GN} = -\|J_k^Tp_k^{GN}\|^2\le0$</span><!-- Has MathJax --><br>所以这必然是下降方向；而且很多情况下都可以认为 <span>$B_k\approx J_k^TJ_k$</span><!-- Has MathJax --> 。而且这和上面讲的线性方程的函数类似，所以上面的方法可以直接用到这里来。</p>
+<p>当然这是 <span>$J$</span><!-- Has MathJax --> 满秩的情况。 <span>$J$</span><!-- Has MathJax --> 不满秩就比较麻烦了。这时 <span>$p_k^{GN}$</span><!-- Has MathJax --> 会有无穷多个解，上面的条件可能不再满足，因此算法的收敛性可能无法得到保证。</p>
+<p>收敛速度方面，可以推出<br><span>$\|x_k+p_k^{GN}-x^* \| \approx \|[J^TJ(x^* )]^{-1}H(x^* )\|\|x_k-x^* \| + O(\|x_k-x^* \|^2)$</span><!-- Has MathJax --><br>所以收敛速度方面是很快的。</p>
+<p>在遇到大数据量的情况下，可以用 <a href="http://modkzs.github.io/2016/06/10/large-scale-unconstrained-optimization/" target="_blank" rel="external">inexact newton method</a> ，不过需要把 <span>$B_k$</span><!-- Has MathJax --> 的计算替换为 <span>$J_k^TJ_k$</span><!-- Has MathJax --></p>
+<h2 id="The-Levenberg-marquardt-method"><a href="#The-Levenberg-marquardt-method" class="headerlink" title="The Levenberg-marquardt method"></a>The Levenberg-marquardt method</h2><p>和上面的方法类似，Levenberg-marquardt 也用了一样的方法去近似 Hessian 矩阵，但是用的搜索是 trust-region 。这样避免了 <span>$J$</span><!-- Has MathJax --> 的条件数过高带来的问题。</p>
+<p>每次迭代，我们需要求解<br><span>$\min_p \frac{1}{2}\|J_kp+r_k\|^2\quad s.t. \|p\|\le\Delta_k$</span><!-- Has MathJax --><br>如果 Gauss-Newton 解出的 <span>$p^{GN}_k$</span><!-- Has MathJax --> 满足 <span>$p^{GN}_k \le \Delta_k$</span><!-- Has MathJax --> ，直接用就可以了。否则根据KKT条件，需要求解<br><span>$$(J^TJ+\lambda I)p=-J^Tr\\
+p = \Delta$$</span><!-- Has MathJax --></p>
+<p>可以用 trust-region 中解决子问题所用的<a href="http://modkzs.github.io/2016/06/06/Trust-region-method/" target="_blank" rel="external">迭代式算法</a>去解。不过在这种场景中有更高效的 Cholesky factorization 的方法。</p>
+<p>令 <span>$Q_\lambda, R_\lambda$</span><!-- Has MathJax --> 为正交矩阵和上三角矩阵，其中 <span>$R_\lambda^TR_\lambda = (J^J+\lambda I)$</span><!-- Has MathJax --> ，且<br><span>$$\label{eq}
+\begin{bmatrix}R_\lambda\\0\end{bmatrix} = Q_\lambda \begin{bmatrix}J\\\sqrt{\lambda} I\end{bmatrix}$$</span><!-- Has MathJax --></p>
+<p>为了减小计算量，我们先对 <span>$J$</span><!-- Has MathJax --> 做QR分解：<br><span>$J = Q\begin{bmatrix}R\\0\end{bmatrix}$</span><!-- Has MathJax --><br>对上式做一点变形，可得:<br><span>$\begin{bmatrix}R\\0\\\sqrt{\lambda}I\end{bmatrix} = \begin{bmatrix}Q^T&amp;\\&amp;I\end{bmatrix} \begin{bmatrix}J\\\sqrt{\lambda} I\end{bmatrix}$</span><!-- Has MathJax --><br>对上式的左边做行变换，使其变为上三角矩阵：<br><span>$\bar{Q}_\lambda^T\begin{bmatrix}R\\0\\\sqrt{\lambda}I\end{bmatrix} = \begin{bmatrix}R_\lambda\\0\\0\end{bmatrix}$</span><!-- Has MathJax --><br>令 <span>$Q_\lambda = \begin{bmatrix}Q^T&amp;\\&amp;I\end{bmatrix}\bar{Q}_\lambda^T$</span><!-- Has MathJax --><br>然后带到\ref{eq}就可以了。当然，对于条件数太高的情况，可以进行 scaling，这和 trust-region 基本一样，就不多说了。</p>
+<p>大数据量和上面一样，上CG</p>
+<h2 id="Large-residual-problem"><a href="#Large-residual-problem" class="headerlink" title="Large-residual problem"></a>Large-residual problem</h2><p>在这种问题中，由于残差很大，所以用 <span>$J_k^TJ_k$</span><!-- Has MathJax --> 近似二阶导的效果很差，收敛速度大概为 linear，远远差于 quasi-newton 方法。但是在早期迭代时，上面方法的速度又优于 quasi-newton 法。<br>这种情况下我们有2种处理办法。</p>
+<p>一是用启发式的方法确定是否使用 quasi-newton 还是 Gauss-Newton。 如果使用 Gauss-Newton 带来的损失函数减少量较大(例如减少10%)，就使用 Gauss-Newton ，并令 <span>$B_k=J^T_kJ_k$</span><!-- Has MathJax --> ，否则继续使用 <span>$B_k$</span><!-- Has MathJax --> 。但是更新 <span>$B_k$</span><!-- Has MathJax --> 时需要用类似 BFGS 的方法</p>
+<p>二是令 <span>$B_k = J^T_kJ_k + S_k$</span><!-- Has MathJax --> 每次迭代时更新 <span>$S_k$</span><!-- Has MathJax -->，更新规则为：<br><span>$S_{k+1} = S_k + \dfrac{(\hat{y}-S_ks)y^T + y(\hat{y}-S_ks)^T}{y^Ts} - \dfrac{(\hat{y}-S_ks)^Ts}{(y^Ts)^2}yy^T$</span><!-- Has MathJax --><br>其中 <span>$s = x_{k+1}-x_k, y = J_{k+1}^Tr_{k+1}-J_{k}^Tr_{k}, \hat{y} = J_{k+1}^Tr_{k+1}-J_{k}^Tr_{k+1}$</span><!-- Has MathJax --></p>
+<p>但是该算法不保证在 <span>$S_k$</span><!-- Has MathJax --> 会趋向于0。所以可以在 <span>$S_k$</span><!-- Has MathJax --> 之前乘上一个系数 <span>$\tau_k = \min(1, \dfrac{|S^T\hat{y}|}{|S^TS_kS|})$</span><!-- Has MathJax --></p>
+<h1 id="Orthogonal-distance-regression"><a href="#Orthogonal-distance-regression" class="headerlink" title="Orthogonal distance regression"></a>Orthogonal distance regression</h1><p>在上面的问题中，我们的假设都是 t 是精确的，而 y 是不精确的。但是如果 x 也不精确，该如何处理？</p>
+<p>这种情况下我们假设 <span>$\epsilon_k ,\delta_k$</span><!-- Has MathJax --> 分别表示 t 和 y 的误差。则实际的函数可以表示为<br><span>$y_j = \phi(x;t_j+\delta_j)+\epsilon_j$</span><!-- Has MathJax --><br>则我们的目标为<br><span>$\min_{x,\epsilon_j,\delta_j} \frac{1}{2}\sum_{j=1}^m w_j^2\epsilon^2_j + d_j^2\delta_j^2$</span><!-- Has MathJax --><br>上式可以重写为<br><span>$\min_{x,\delta} \frac{1}{2} \sum_{j=1}^m w_j^2[y_j-\phi(x;t_i+\delta_j)]^2 + d_j^2\delta_j^2$</span><!-- Has MathJax --><br>令<br><span>$r_j(x,\delta) = \begin{cases}w_j^2[y_j-\phi(x;t_i+\delta_j)]^2&amp;j=1,2...m\\d_{j-m}^2\delta_{j-m}^2&amp;j=m+1,m+2...2m\end{cases}$</span><!-- Has MathJax --><br>则可以化简为<br><span>$\frac{1}{2}\sum_{j=1}^{2m}r_j^2(x,\delta)$</span><!-- Has MathJax --><br>但是上式的 Jacobian 矩阵很特殊：<br><span>$J(x,\delta) = \begin{bmatrix}\hat{J}&amp;V\\0&amp;D\end{bmatrix}$</span><!-- Has MathJax --><br>对上面的式子用 Levenberg-marquardt method 方法求解即可。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/optimization/" rel="tag">#optimization</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/14/Derivate-free-optimization/" rel="next" title="Derivate-free optimization">
+                <i class="fa fa-chevron-left"></i> Derivate-free optimization
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/02/nonlinear-equations/" rel="prev" title="nonlinear equations">
+                nonlinear equations <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/28/least-square-problem/"
+           data-title="least-square problem" data-url="/2016/06/28/least-square-problem/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linear-Least-square"><span class="nav-number">1.</span> <span class="nav-text">Linear Least-square</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cholesky-factorization"><span class="nav-number">1.1.</span> <span class="nav-text">Cholesky factorization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QR-factorization"><span class="nav-number">1.2.</span> <span class="nav-text">QR factorization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVD"><span class="nav-number">1.3.</span> <span class="nav-text">SVD</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NonLinear-Least-square"><span class="nav-number">2.</span> <span class="nav-text">NonLinear Least-square</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gauss-Newton-method"><span class="nav-number">2.1.</span> <span class="nav-text">Gauss-Newton method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Levenberg-marquardt-method"><span class="nav-number">2.2.</span> <span class="nav-text">The Levenberg-marquardt method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Large-residual-problem"><span class="nav-number">2.3.</span> <span class="nav-text">Large-residual problem</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Orthogonal-distance-regression"><span class="nav-number">3.</span> <span class="nav-text">Orthogonal distance regression</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

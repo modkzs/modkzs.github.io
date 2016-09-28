@@ -1,0 +1,872 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="optimization," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="其实感觉 Derivate-free optimization(DFO)的方法当中，大多数还是需要依靠导数的，尤其是在确定算法的初值的时候。嘛，不过相比于其他的方法来说，倒确实少了很多。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Derivate-free optimization">
+<meta property="og:url" content="/2016/06/14/Derivate-free-optimization/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="其实感觉 Derivate-free optimization(DFO)的方法当中，大多数还是需要依靠导数的，尤其是在确定算法的初值的时候。嘛，不过相比于其他的方法来说，倒确实少了很多。">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Derivate-free optimization">
+<meta name="twitter:description" content="其实感觉 Derivate-free optimization(DFO)的方法当中，大多数还是需要依靠导数的，尤其是在确定算法的初值的时候。嘛，不过相比于其他的方法来说，倒确实少了很多。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/06/14/Derivate-free-optimization/"/>
+
+  <title> Derivate-free optimization | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Derivate-free optimization
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-14T10:42:28+08:00" content="Jun 14 2016">
+              Jun 14 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/14/Derivate-free-optimization/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/14/Derivate-free-optimization/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>其实感觉 Derivate-free optimization(DFO)的方法当中，大多数还是需要依靠导数的，尤其是在确定算法的初值的时候。嘛，不过相比于其他的方法来说，倒确实少了很多。<br><a id="more"></a><br>DFO的方法往往用于处理无约束优化或者带有简单约束的优化(如边界等)。常见的做法往往是进行插值拟合，然后对拟合出的函数运用已有的优化算法。</p>
+<h1 id="model-basd-method"><a href="#model-basd-method" class="headerlink" title="model-basd method"></a>model-basd method</h1><p>根据 Taylor theorm，函数可以展开为下面的式子：<br><span>$m_k(x_k+p)=c+g^Tp+\frac{1}{2}p^TGp$</span><!-- Has MathJax --><br>我们可以拟合上面的函数得到原函数的近似。插值点的个数 <span>$q=\frac{1}{2}(n+1)(n+2)$</span><!-- Has MathJax --> ，因为需要估算出这么多的变量(假设 <span>$G$</span><!-- Has MathJax --> 是对称的)。这种情况下，我们需要解 <span>$q$</span><!-- Has MathJax --> 个等式：<br><span>$$m_k(y^l) = f(y^l)\quad l=1,2,3...q
+\label{eq:sim}$$</span><!-- Has MathJax --><br>其实本质上来说，这就是一个线性方程组。为了保证恒有解，我们挑选的 <span>$y^l$</span><!-- Has MathJax --> 必须保证系数非奇异。</p>
+<p>确定了 <span>$m_k$</span><!-- Has MathJax --> 之后，就可以用其他方法去算更新量了。书中给的是 Trust-region，所以这里我们也以 Trust-region 为例进行说明。用 Trust-region 去计算更新量，也就是计算<br><span>$\min_p m_k(x_k+p) \quad s.t. \|p\|_ 2\le\Delta$</span><!-- Has MathJax --><br>和 Trust-region 一样，我们以比值<br><span>$\rho=\dfrac{f(x_k)-f(x_k^+)}{m_k(x_k)-m_k(x_k^+)}$</span><!-- Has MathJax --><br>表征本次迭代的效果(<span>$x_k^+$</span><!-- Has MathJax --> 为下一次可能的<span>$x_k$</span><!-- Has MathJax -->)。<br>但是和 Trust-region 不同的是，我们需要对 <span>$m_k$</span><!-- Has MathJax --> 做更新。</p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>先描述下整个算法的流程。对于 <span>$m_k$</span><!-- Has MathJax --> 更新的部分，我们在后面再说。算法的流程如下：</p>
+<ol>
+<li>select <span>$Y = \{y^1,y^2...y^q\}$</span><!-- Has MathJax --> satisfy condition</li>
+<li>select <span>$x_0$</span><!-- Has MathJax --> satisfy <span>$f(x_0)\le f(y^i)$</span><!-- Has MathJax --> for all <span>$y^i\in Y$</span><!-- Has MathJax --></li>
+<li>given <span>$\Delta_0,\ \eta\in(0,1)$</span><!-- Has MathJax --></li>
+<li><p>repeat</p>
+<ul>
+<li>form <span>$m_k(x_k+p)$</span><!-- Has MathJax --></li>
+<li>get <span>$p$</span><!-- Has MathJax --> by trust-region</li>
+<li><span>$x_k^+=x_k+p$</span><!-- Has MathJax --></li>
+<li>compute <span>$\rho$</span><!-- Has MathJax --></li>
+<li>if <span>$\rho &gt; \eta$</span><!-- Has MathJax --><ul>
+<li>replace an element in <span>$Y$</span><!-- Has MathJax --> by x</li>
+<li>choose <span>$\Delta_{k+1}\ge\Delta_{k}$</span><!-- Has MathJax --></li>
+<li><span>$x_{k+1}=x_k^+$</span><!-- Has MathJax --></li>
+<li>continue</li>
+</ul>
+</li>
+<li>else if <span>$Y$</span><!-- Has MathJax --> don’t need improve:<ul>
+<li>choose <span>$\Delta_{k+1}&lt;\Delta_{k}$</span><!-- Has MathJax --></li>
+<li><span>$x_{k+1}=x_k$</span><!-- Has MathJax --></li>
+<li>continue</li>
+</ul>
+</li>
+<li>update <span>$Y$</span><!-- Has MathJax --></li>
+<li><span>$\Delta_{k+1}=\Delta_{k}$</span><!-- Has MathJax --></li>
+<li><span>$x=\arg_y\min_{y\in Y}f(y)$</span><!-- Has MathJax --></li>
+<li><span>$x_k^+ = x$</span><!-- Has MathJax -->, compute <span>$\rho$</span><!-- Has MathJax --></li>
+<li>if <span>$\rho \ge\eta$</span><!-- Has MathJax -->, <span>$x_{k+1}=x_{k}^+$</span><!-- Has MathJax --></li>
+<li><p>else <span>$x_{k+1}=x_{k}$</span><!-- Has MathJax --></p>
+<p>until convergence</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>算法首先会判断当前迭代的效果。和 Trust-region 一样，效果好的话，扩大 <span>$\Delta$</span><!-- Has MathJax --> 。效果不好则存在2种情况：用 <span>$Y$</span><!-- Has MathJax --> 解出的拟合效果不好；或者是 <span>$\Delta$</span><!-- Has MathJax --> 过大。 <span>$Y$</span><!-- Has MathJax --> 的拟合效果不好可以理解为 \ref{eq:sim} 中的解为一个低维子空间。如果 \ref{eq:sim} 中的系数矩阵 condition number 过大，就会出现这种问题(我也不知道为什么)。在这种情况下，对 <span>$Y$</span><!-- Has MathJax --> 进行调整即可；否则就调整 <span>$\Delta$</span><!-- Has MathJax --> 。</p>
+<p>对于 <span>$Y$</span><!-- Has MathJax --> 的初值来说，选择单纯形每条边的中点即可。</p>
+<p>可以看到每次迭代我们需要对 <span>$m_k$</span><!-- Has MathJax --> 进行拟合。对于二次函数来说，拟合的计算代价过大。我们可以将二次函数切换为线性函数，减小计算量。</p>
+<h2 id="插值模拟"><a href="#插值模拟" class="headerlink" title="插值模拟"></a>插值模拟</h2><p>对于插值拟合来说，我们需要解决<br><span>$m_k(y^l) = f(y^l)$</span><!-- Has MathJax --><br>而<br><span>$m_k(x_k+p) = f(x_k) + g^Tp + \sum_{i&lt;j}G_{ij}p_ip_j + \frac{1}{2}\sum_{i}G_{ii}p_i^2$</span><!-- Has MathJax --><br>令<br><span>$$\begin{align}
+\hat{g} &amp;= (g^T,\{G_{ij}\}_{i&lt;j}，\{\frac{1}{\sqrt{2}}G_{ii}\})^T\\
+\hat{p} &amp;= (p^T,\{p_ip_j\}_{i&lt;j}，\{\frac{1}{\sqrt{2}}p_{i}^2\})^T
+\end{align}$$</span><!-- Has MathJax --><br>则 <span>$m_k(x_k) = f(x_k)+\hat{g}^T\hat{p}$</span><!-- Has MathJax -->。直接求解等式即可。当然，我们也可以假设<br><span>$m_k(x) = \sum_{i=1}^q\alpha_i\phi_i(x)$</span><!-- Has MathJax --><br>可以求解出 <span>$\alpha$</span><!-- Has MathJax --> 当<br><span>$\delta(Y) = det\begin{pmatrix}\phi_1(y^1)&amp;\cdot\cdot\cdot &amp; \phi_1(y^q)\\\cdot&amp; &amp; \cdot\\\cdot&amp; &amp; \cdot\\\cdot&amp; &amp; \cdot\\\phi_q(y^1)&amp;\cdot\cdot\cdot &amp; \phi_q(y^q)\end{pmatrix}$</span><!-- Has MathJax --><br>非奇异。但是随着迭代次数的增加， <span>$\delta(Y)$</span><!-- Has MathJax --> 会越来越小，最后趋向于0。我们需要通过 <span>$Y$</span><!-- Has MathJax --> 的更新来解决这个问题。</p>
+<h2 id="的更新"><a href="#的更新" class="headerlink" title=" 的更新"></a><span>$Y$</span><!-- Has MathJax --> 的更新</h2><p>为了解决上面的问题，我们需要保证在每轮迭代时 <span>$\delta(Y)$</span><!-- Has MathJax --> 不会下降。定义 <span>$L(\cdot,y)$</span><!-- Has MathJax --> 对于 <span>$Y$</span><!-- Has MathJax --> 中的所有点 <span>$y, \bar{y}$</span><!-- Has MathJax --> 满足如下条件：<br><span>$L(\bar{y}, y) = \begin{cases}0 &amp;\bar{y}=y\\1&amp;\bar{y}\neq y\end{cases}$</span><!-- Has MathJax --><br>则有<br><span>$\|\delta(Y^+)\| \le \|L(y_+,y_-)\|\|\delta(Y)\|$</span><!-- Has MathJax --><br>其中 <span>$y_-$</span><!-- Has MathJax --> 是要被替换的点， <span>$y_+$</span><!-- Has MathJax --> 是替换 <span>$y_-$</span><!-- Has MathJax --> 的点，<span>$Y$</span><!-- Has MathJax --> 是原来的集合， <span>$Y^+$</span><!-- Has MathJax --> 是替换后的集合。</p>
+<p>再回到上面的算法。在第一个条件满足(<span>$\rho\ge\eta$</span><!-- Has MathJax -->)时，我们直接让 <span>$y_+ = x^+$</span><!-- Has MathJax --> ，然后去求 <span>$y_-$</span><!-- Has MathJax -->：<br><span>$y_- = \arg\min_{y\in Y}|L(x^+,y)|$</span><!-- Has MathJax --></p>
+<p>该条件不满足的情况下，首先需要判断是不是 <span>$Y$</span><!-- Has MathJax --> 的问题。如果对于所有的 <span>$y^i\in Y$</span><!-- Has MathJax --> 的情况下都有 <span>$\|x_k-y^i\|\le\Delta$</span><!-- Has MathJax --> 。这样的情况下我们需要更新 <span>$\Delta$</span><!-- Has MathJax --> 。否则我们需要找到一个可以增加 <span>$\delta(Y)$</span><!-- Has MathJax --> 的 <span>$y_+$</span><!-- Has MathJax --> 。对于每一个 <span>$y^i\in Y$</span><!-- Has MathJax --> ，都可以找到对应的 <span>$y^+_ i$</span><!-- Has MathJax --> ：<br><span>$y^+_ i = \arg\max_{\|y-x_k\|\le\Delta} |L(y,y^i)|$</span><!-- Has MathJax --><br>我们需要找到 <span>$\max|L(y^+_ i, y^i)|$</span><!-- Has MathJax --> 的 <span>$y^i$</span><!-- Has MathJax --> 作为 <span>$y_-$</span><!-- Has MathJax -->。</p>
+<h2 id="基于-mininum-change-的更新"><a href="#基于-mininum-change-的更新" class="headerlink" title="基于 mininum-change 的更新"></a>基于 mininum-change 的更新</h2><p>书中简单的提到了这种方法。在这种方法中，我们最小只需要维持 <span>$n+1$</span><!-- Has MathJax --> 个点，每轮迭代的优化目标为：<br><span>$$\min_{f,g,G} \|G-G_k\|_ F\\
+s.t.\quad G^T=G\\
+m(y^l) = f(y^l)\quad l=1,2,...\hat{q}$$</span><!-- Has MathJax --><br>其中 <span>$\|\cdot\|_ F$</span><!-- Has MathJax --> 为 Frobenius 范式，即矩阵每个元素的平方和。为了保证 <span>$G$</span><!-- Has MathJax --> 和 <span>$G_k$</span><!-- Has MathJax --> 不一样，<span>$\hat{q}$</span><!-- Has MathJax --> 至少得大于 <span>$n+1$</span><!-- Has MathJax -->；推荐为 <span>$2n+1$</span><!-- Has MathJax --> ，同时还需要保证 <span>$y^i$</span><!-- Has MathJax --> 不共面。</p>
+<p>不过这种方法应该是最近提出的，所以介绍不多。</p>
+<h1 id="coordinate"><a href="#coordinate" class="headerlink" title="coordinate"></a>coordinate</h1><p>坐标梯度下降，一种很简单的方法，每次下降的方向都是一个基坐标向量。在遍历完所有的下降方向之后，再从头开始。坐标梯度下降的主要问题在于收敛的判断条件。在这种情况下我们不可能用 <span>$\|\nabla f\| &lt;\epsilon$</span><!-- Has MathJax --> 所以很难判断什么时候收敛。</p>
+<h1 id="Pattern-search"><a href="#Pattern-search" class="headerlink" title="Pattern-search"></a>Pattern-search</h1><p>Pattern-search 类似于一种泛化的坐标梯度下降，每次迭代时从一个备选集中选出当前的迭代方向，在这个方向上下降。我们将这个备选集定义为 <span>$D_k$</span><!-- Has MathJax --> ，算法的具体过程如下：</p>
+<ol>
+<li>given <span>$\gamma_{tol},\ \theta_{max}$</span><!-- Has MathJax --> , decrease function <span>$\rho(t)$</span><!-- Has MathJax --> that <span>$\lim_{t\to 0} \dfrac{\rho(t)}{t}=0$</span><!-- Has MathJax --></li>
+<li>choose <span>$x_0,\ \gamma_0&gt;\gamma_{tol},\ D_0$</span><!-- Has MathJax --></li>
+<li>repeat<ul>
+<li>if <span>$\gamma_k&lt;\gamma_{tol}$</span><!-- Has MathJax --> break</li>
+<li>if <span>$f(x_k+\gamma_kp_k)&lt;f(x_k) - \rho(\gamma_k)$</span><!-- Has MathJax --> for some <span>$p_k\in D_k$</span><!-- Has MathJax --><ul>
+<li><span>$x_{k+1} = x_k+\gamma_kp_k$</span><!-- Has MathJax --></li>
+<li><span>$\gamma_{k+1} = \phi_k\gamma_k$</span><!-- Has MathJax --> for <span>$\phi_k&gt;1$</span><!-- Has MathJax --></li>
+</ul>
+</li>
+<li>else<ul>
+<li><span>$x_{k+1}=x_k$</span><!-- Has MathJax --></li>
+<li><span>$\gamma_{k+1} = \theta_k\gamma_{k},\  0&lt;\theta_k\le \theta_{max}$</span><!-- Has MathJax -->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="的选择"><a href="#的选择" class="headerlink" title="的选择"></a><span>$D$</span><!-- Has MathJax -->的选择</h2><span>$D$</span><!-- Has MathJax --> 在这个算法中的重要性自然不用说。所以 <span>$D_k$</span><!-- Has MathJax --> 中方向的选择就成了一个重要的问题。我们需要建立一些基础条件。在 Line search 中，每次迭代时都有 <span>$\cos\theta=\dfrac{-\nabla f_k^Tp}{\|\nabla f_k\|\|p\|}\ge\delta$</span><!-- Has MathJax --> 。所以对于 <span>$D_k$</span><!-- Has MathJax --> 中的任何一个方向 <span>$p$</span><!-- Has MathJax --> 来说，都要满足上面的条件。我们将上面的条件描述为：<br><span>$k(D_k) = \min_{v\in R^n}\max_{p\in D_k} \dfrac{v^Tp}{\|v\|\|p\|}\ge \delta$</span><!-- Has MathJax -->
+<p>我们还需要让 <span>$D_k$</span><!-- Has MathJax --> 中的每个向量的长度保持在一定范围内。这样的话，不同向量的选择不会导致步长的变化过大。也就是说<br><span>$\beta_{min} \le \|p\|\le\beta_{max}$</span><!-- Has MathJax --><br>结合上面两个条件，可以得到<br><span>$-\nabla f_k^T p \ge k(D_k)\|\nabla f_k\|\|p\|\ge\delta\beta_{min}\|\nabla f_k\|$</span><!-- Has MathJax --><br>有一些满足简单的满足条件的 <span>$D$</span><!-- Has MathJax --> 的例子：</p>
+<ul>
+<li><span>$\{e_1,e_2,...e_n,-e_1,-e_2,...-e_n\}$</span><!-- Has MathJax --></li>
+<li>令 <span>$e = (1,1,...,1)^T$</span><!-- Has MathJax -->，则 <span>$p_i=\frac{1}{2n}e-e_i, i=1,2,..,n;\ p_{n+1} = \frac{1}{2n}e$</span><!-- Has MathJax -->也是一组满足条件集合</li>
+</ul>
+<p>当然了，上面的例子往往只是 <span>$D_k$</span><!-- Has MathJax --> 的一个子集。其他的方向可以通过启发式算法得到，但是书中没有详细说明，所以这里也没法介绍(+ _ +)</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><span>$\rho(t)$</span><!-- Has MathJax --></h2><p>在上面的算法中我们引入了一个函数 <span>$\rho(t)$</span><!-- Has MathJax --> 书中给出的建议是 <span>$\rho(t) = Mt^{\frac{3}{2}}$</span><!-- Has MathJax -->，<span>$M$</span><!-- Has MathJax --> 为正数</p>
+<h1 id="conjugate-direction-method"><a href="#conjugate-direction-method" class="headerlink" title="conjugate-direction method"></a>conjugate-direction method</h1><p>这里的方法和 conjugate gradient 是一样的，只是这里在求向量的时候没有用到梯度(或者说很少用？)<br>和 conjugate gradient 一样，我们还是从二次函数说起。假设优化目标为<br><span>$f(x) = \frac{1}{2}x^TAx-b^Tx$</span><!-- Has MathJax --><br>假设我们的优化方向为 <span>$l_1(\alpha) = x_1+\alpha p,\ l_2(\alpha) = x_2+\alpha p$</span><!-- Has MathJax -->，且沿着两个方向优化的最终结果为 <span>$x_1^*,\ x_2^*$</span><!-- Has MathJax --> ，则 <span>$x_1^*- x_2^*$</span><!-- Has MathJax --> 与 <span>$p$</span><!-- Has MathJax --> 关于A 共轭。</p>
+<p>将上面的结果推而广之，对于 <span>$l$</span><!-- Has MathJax --> 个方向的集合 <span>$\{p_1,p_2,...,p_l\}$</span><!-- Has MathJax --> 来说，<br><span>$$S_1=\{x_1+\sum^l_{i=1}\alpha_ip_i|\alpha_i\in R, i=1,2,...,l\}\\
+S_2=\{x_2+\sum^l_{i=1}\alpha_ip_i|\alpha_i\in R, i=1,2,...,l\}$$</span><!-- Has MathJax --><br>而 <span>$x_1^*,\ x_2^*$</span><!-- Has MathJax --> 为沿着两个方向计算出的最小值点，则 <span>$x_1^*- x_2^*$</span><!-- Has MathJax --> 与 <span>$p$</span><!-- Has MathJax --> 关于A共轭。</p>
+<p>在这个结论的基础上，我们就可以构建算法了：</p>
+<ol>
+<li>choose <span>$x_0,\ p_i=e_i, i=1,2,..,n$</span><!-- Has MathJax --></li>
+<li>compute <span>$x_1$</span><!-- Has MathJax --> to min <span>$f(x_0+\alpha p_n)$</span><!-- Has MathJax --></li>
+<li><p>repeat</p>
+<ul>
+<li><span>$z_1 = x_k$</span><!-- Has MathJax --></li>
+<li>compute <span>$\alpha_j = \arg\min f(z_j+\alpha_jp_j)$</span><!-- Has MathJax --> and <span>$z_{j+1} = z_j+\alpha_jp_j$</span><!-- Has MathJax --> for j = 1,2,…,n</li>
+<li><span>$p_j = p_{j+1}$</span><!-- Has MathJax --> for j = 1,2,…,n-1</li>
+<li><span>$p_n = z_{n+1}-z_1$</span><!-- Has MathJax --></li>
+<li>compute <span>$\alpha_n = \arg\min f(z_{n+1}+\alpha_np_n)$</span><!-- Has MathJax --></li>
+<li><span>$x_{k+1} = z_{n+1}+\alpha_np_n$</span><!-- Has MathJax -->
+<p>until convergence</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>简单解释一下上面的算法。假设 <span>$n=3$</span><!-- Has MathJax --> ，即我们一开始有3个向量 <span>$e_1,e_2,e_3$</span><!-- Has MathJax -->。按照算法的步骤，我们计算出了 <span>$x_1$</span><!-- Has MathJax --> 以及 <span>$z_4$</span><!-- Has MathJax --> 。根据上面的结论 <span>$p_1 = z_4-x_1$</span><!-- Has MathJax --> 和 <span>$e_1,e_2,e_3$</span><!-- Has MathJax --> 共轭，而 <span>$x_2$</span><!-- Has MathJax --> 为 <span>$f$</span><!-- Has MathJax --> 在 <span>$S_1=\{y+\alpha_1e_3+\alpha_2p_1\}$</span><!-- Has MathJax --> 方向上的最小值。这种情况下我们得到了新的集合 <span>$\{e_2,e_3,p_1\}$</span><!-- Has MathJax --></p>
+<h2 id="非线性系统"><a href="#非线性系统" class="headerlink" title="非线性系统"></a>非线性系统</h2><p>上面的算法可以移植到任何的函数上，但是需要一些修改。我们不修改方向，只对长度做一些调整：<br><span>$\hat{p}_i = \dfrac{p_i}{\sqrt{p_i^TAp_i}}$</span><!-- Has MathJax --><br>则如果我们最大化<br><span>$|det(\hat{p}_1,\hat{p}_2,...,\hat{p}_n)|$</span><!-- Has MathJax --><br>那么 <span>$p$</span><!-- Has MathJax --> 就是关于A共轭的。我们可以调整上面的算法：</p>
+<ol>
+<li>find <span>$m\in \{1,2,...,n\}$</span><!-- Has MathJax --> max <span>$\psi_m=f(x_{m-1}) - f(x_m)$</span><!-- Has MathJax --></li>
+<li><span>$f_1=f(z_1), f_2=f(z_2),f_3=f(z_3)$</span><!-- Has MathJax --></li>
+<li>if <span>$f_3\ge f_1$</span><!-- Has MathJax --> or <span>$(f_1-2f_2+f_3)(f_1-2f_2-\psi_m)\ge \frac{1}{2}\psi_m(f_1-f_2)^2$</span><!-- Has MathJax --><ul>
+<li>set <span>$x_{k+1} = z_{n+1}$</span><!-- Has MathJax --></li>
+</ul>
+</li>
+<li>else<ul>
+<li>set <span>$\hat{p}=z_{n+1}-z_1$</span><!-- Has MathJax -->, compute <span>$\hat{\alpha}$</span><!-- Has MathJax --> to min <span>$f(z_{n+1}+\hat{\alpha}\hat{p})$</span><!-- Has MathJax --></li>
+<li><span>$x_{k+1} = z_{n+1} + \alpha\hat{p}$</span><!-- Has MathJax --></li>
+<li>remove <span>$p_m$</span><!-- Has MathJax --> , add <span>$\hat{p}$</span><!-- Has MathJax --></li>
+</ul>
+</li>
+</ol>
+<h1 id="Nelder-mead-method"><a href="#Nelder-mead-method" class="headerlink" title="Nelder-mead method"></a>Nelder-mead method</h1><p>The Nelder-mead simplex-reflection method，顾名思义和单纯形有关。在每次迭代时会所有的点的 convex hull 是一个单纯形。假设我们需要优化一个 <span>$n$</span><!-- Has MathJax --> 维函数 <span>$f(x)$</span><!-- Has MathJax --> 。易知， <span>$n$</span><!-- Has MathJax --> 维单纯形有 <span>$n+1$</span><!-- Has MathJax --> 个点。我们假设这 <span>$n+1$</span><!-- Has MathJax --> 个点为 <span>$\{x_1,x_2,...,x_{n+1}\}$</span><!-- Has MathJax --> ,其顺序满足下面的条件：<br><span>$f(x_1)\le f(x_2)\le...f(x_{n+1})$</span><!-- Has MathJax --><br>令 <span>$\bar{x} = \sum_{i=1}^nx_i, \bar{x}(t) = \bar{x}+t(x_{n+1}-\bar{x})$</span><!-- Has MathJax --> 。我们的算法就是用 <span>$\bar{x}(t)$</span><!-- Has MathJax --> 替代最差的 <span>$x_{n+1}$</span><!-- Has MathJax -->。算法的一次迭代如下：</p>
+<ol>
+<li>compute <span>$\bar{x}(-1), f_{-1}=f(\bar{x}(-1))$</span><!-- Has MathJax --></li>
+<li>if <span>$f(x_1)\le f_{-1}\le f(x_n)$</span><!-- Has MathJax --><ul>
+<li><span>$x_{n+1}=\bar{x}(-1)$</span><!-- Has MathJax --> and continue</li>
+</ul>
+</li>
+<li>else if <span>$f_{-1}&lt; f(x_1)$</span><!-- Has MathJax --><ul>
+<li>compute <span>$f_{-2}$</span><!-- Has MathJax --></li>
+<li>if <span>$f_{-2} &lt; f_{-1}$</span><!-- Has MathJax --><ul>
+<li><span>$x_{n+1}=\bar{x}(-2)$</span><!-- Has MathJax --> continue</li>
+<li><span>$x_{n+1}=\bar{x}(-1)$</span><!-- Has MathJax --> continue</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>else if <span>$f_{-1}&gt; f(x_n)$</span><!-- Has MathJax --><ul>
+<li>if <span>$f(x_n)\le f_{-1} \le f(x_{n+1})$</span><!-- Has MathJax --><ul>
+<li>compute <span>$f_{-1/2}$</span><!-- Has MathJax --></li>
+<li>if <span>$f_{-1/2} \le f_{-1}$</span><!-- Has MathJax --><ul>
+<li><span>$x_{n+1}=x_{-1/2}$</span><!-- Has MathJax --> continue</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>else<ul>
+<li>compute <span>$f_{1/2}$</span><!-- Has MathJax --></li>
+<li>if <span>$f_{1/2} &lt; f_{n+1}$</span><!-- Has MathJax --><ul>
+<li><span>$x_{n+1}=x_{1/2}$</span><!-- Has MathJax --> continue</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span>$x_i = (1/2)(x_1+x_i), i=2,3,...,n+1$</span><!-- Has MathJax -->
+</li>
+</ol>
+<p>在算法陷入停滞时，可以进行 restar。不过对于初值点的选择方面，似乎没有什么特别优秀的方案。</p>
+<h1 id="Implicit-Filtering"><a href="#Implicit-Filtering" class="headerlink" title="Implicit Filtering"></a>Implicit Filtering</h1><p>一个非常奇怪的方法= =。算法如下：</p>
+<ol>
+<li>choose <span>$\epsilon_k\to 0$</span><!-- Has MathJax -->, <span>$c,\rho \in (0,1), \alpha_{max}$</span><!-- Has MathJax --></li>
+<li><p>repeat</p>
+<ul>
+<li>increment_k = false</li>
+<li><p>repeat</p>
+<ul>
+<li>comupte <span>$f(x)，\nabla_{\epsilon_k}f(x)$</span><!-- Has MathJax --></li>
+<li>if <span>$\|\nabla_{\epsilon_k}f(x)\|\le \epsilon_k$</span><!-- Has MathJax --><ul>
+<li>increment_k = true</li>
+</ul>
+</li>
+<li>else<ul>
+<li>find <span>$m \in (0,a_{max})$</span><!-- Has MathJax --> that <span>$f(x-\rho^m\nabla_{\epsilon_k}f(x))\le f(x)-\rho^m\|\nabla_{\epsilon_k}f(x)\|^2$</span><!-- Has MathJax --></li>
+<li>if <span>$m$</span><!-- Has MathJax --> not exist<ul>
+<li>increment_k = true</li>
+</ul>
+</li>
+<li>else<ul>
+<li><span>$x = x -\rho^m\nabla_{\epsilon_k}f(x)$</span><!-- Has MathJax -->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>until increment_k</p>
+</li>
+<li><span>$x_k = x$</span><!-- Has MathJax -->
+</li>
+</ul>
+<p>until convergence</p>
+<p>当然，也可以用 <span>$\nabla_{\epsilon_k}f$</span><!-- Has MathJax --> 估计二阶导，然后用牛顿法解。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/optimization/" rel="tag">#optimization</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/10/large-scale-unconstrained-optimization/" rel="next" title="large-scale unconstrained optimization">
+                <i class="fa fa-chevron-left"></i> large-scale unconstrained optimization
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/28/least-square-problem/" rel="prev" title="least-square problem">
+                least-square problem <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/14/Derivate-free-optimization/"
+           data-title="Derivate-free optimization" data-url="/2016/06/14/Derivate-free-optimization/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#model-basd-method"><span class="nav-number">1.</span> <span class="nav-text">model-basd method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法"><span class="nav-number">1.1.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插值模拟"><span class="nav-number">1.2.</span> <span class="nav-text">插值模拟</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#的更新"><span class="nav-number">1.3.</span> <span class="nav-text">$Y$ 的更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于-mininum-change-的更新"><span class="nav-number">1.4.</span> <span class="nav-text">基于 mininum-change 的更新</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coordinate"><span class="nav-number">2.</span> <span class="nav-text">coordinate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Pattern-search"><span class="nav-number">3.</span> <span class="nav-text">Pattern-search</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#的选择"><span class="nav-number">3.1.</span> <span class="nav-text">$D$的选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">3.2.</span> <span class="nav-text">$\rho(t)$</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conjugate-direction-method"><span class="nav-number">4.</span> <span class="nav-text">conjugate-direction method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#非线性系统"><span class="nav-number">4.1.</span> <span class="nav-text">非线性系统</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nelder-mead-method"><span class="nav-number">5.</span> <span class="nav-text">Nelder-mead method</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Implicit-Filtering"><span class="nav-number">6.</span> <span class="nav-text">Implicit Filtering</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

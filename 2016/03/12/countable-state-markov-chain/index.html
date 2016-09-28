@@ -1,0 +1,801 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="stochastic process," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="对于为什么叫 countable-state，我一直不理解。。。。明明state是infinite的=。=不过一旦在infinite的情况下，很多东西就要改变了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="countable-state markov chain">
+<meta property="og:url" content="/2016/03/12/countable-state-markov-chain/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="对于为什么叫 countable-state，我一直不理解。。。。明明state是infinite的=。=不过一旦在infinite的情况下，很多东西就要改变了。">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451gw1f1v0e2rq8hj20xi038q3m.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/9dec4451gw1f1v0f959pcj20m602ggm1.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/9dec4451gw1f1v8md6pfrj20w805ejsd.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451gw1f1v9cotwxjj20vw048wfj.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451gw1f1vcw9zxkdj20u404ajsd.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451gw1f1vid68w0aj20pi0akjt0.jpg">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="countable-state markov chain">
+<meta name="twitter:description" content="对于为什么叫 countable-state，我一直不理解。。。。明明state是infinite的=。=不过一旦在infinite的情况下，很多东西就要改变了。">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/9dec4451gw1f1v0e2rq8hj20xi038q3m.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/03/12/countable-state-markov-chain/"/>
+
+  <title> countable-state markov chain | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                countable-state markov chain
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-12T15:12:42+08:00" content="Mar 12 2016">
+              Mar 12 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/12/countable-state-markov-chain/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/12/countable-state-markov-chain/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对于为什么叫 countable-state，我一直不理解。。。。明明state是infinite的=。=不过一旦在infinite的情况下，很多东西就要改变了。<br><a id="more"></a></p>
+<h1 id="还是从state说起"><a href="#还是从state说起" class="headerlink" title="还是从state说起"></a>还是从state说起</h1><p>在markov chain中，我们对每个state都分成了2类：recurrent和transient，并且证明了如果markov chain为ergodic，必然会收敛。这个简单的东西放在这里就不简单了。<br>还是以掷硬币为例，正面的1分，反面扣1分。这个过程用markov chain描绘的话如下：<br><img src="http://ww2.sinaimg.cn/large/9dec4451gw1f1v0e2rq8hj20xi038q3m.jpg" alt=""><br>我们可以直观的看到，当 <span>$p\neq1-p$</span><!-- Has MathJax --> 时，整个链条要不向左，要不向右无限扩展。但是这个markov chain的period为2，我们做个截断，让他变成1：<br><img src="http://ww3.sinaimg.cn/large/9dec4451gw1f1v0f959pcj20m602ggm1.jpg" alt=""><br>但是如果 <span>$p&gt;\dfrac{1}{2}$</span><!-- Has MathJax --> 的话，整个链条仍然会无限扩展，依然没有稳定状态。而 <span>$p=\dfrac{1}{2}$</span><!-- Has MathJax --> 时，停留在每个state的概率都趋向于0。这是一个很特殊的状态，被称为 null-recurrent。</p>
+<p>为了对countable-state markov chain的state进行定义，我们引入以前提过的first-passage-time probability的概念，其定义为 <span>$f_{ij}(n)=Pr\left\{X_n=j,X_{n-1}\neq j,X_{n-2}\neq j...X_1\neq j | X_0 = i\right\}$</span><!-- Has MathJax --> 。当然了 <span>$i=j$</span><!-- Has MathJax --> 是允许的。</p>
+<p>在first-passage-time的基础上，引入 <span>$F_{ij}(n) = \sum_{m=1}^n f_{ij}(m)$</span><!-- Has MathJax --></p>
+<p>我们可以定义 rv <span>$T_{ij}$</span><!-- Has MathJax --> 为从state i出发，第一次到达state j。 则 <span>$f_{ij}$</span><!-- Has MathJax --> 可以视为 <span>$T_{ij}$</span><!-- Has MathJax --> 的PMF，而 <span>$F_{ij}$</span><!-- Has MathJax --> 可以视为 <span>$T_{ij}$</span><!-- Has MathJax --> 的分布函数。</p>
+<p>在此基础上，我们可以对state进行定义：state j is recurrent if <span>$F_{jj}(\infty) = 1$</span><!-- Has MathJax --> ；is transient if <span>$F_{jj}(\infty) &lt; 1$</span><!-- Has MathJax --></p>
+<p>根据 <span>$F_{ij}(n)$</span><!-- Has MathJax --> 的定义，可知<br><span>$F_{ij}(n) = P_{ij} + \sum_{k\neq j}P_{ik}F_{kj}(n-1)$</span><!-- Has MathJax --></p>
+<p>当 <span>$n\to\infty$</span><!-- Has MathJax --> 时，等式依然成立，因此我们联立多个方程就可以求解。当然，理论上来说，无论如何 <span>$F_{ij}(n)=1$</span><!-- Has MathJax --> 都是可行解。但是当state为transient时，还存在一组“非1解”(+ _ +) 。</p>
+<p>我们令 <span>$N_{jj}(t)$</span><!-- Has MathJax --> 表示从state j出发，在t时间内到达 state j的次数。则下面四个描述是等价的：</p>
+<ul>
+<li>state j is recurrent</li>
+<li><span>$\lim_{t\to\infty} N_{jj}(t) = \infty$</span><!-- Has MathJax --> WP1</li>
+<li><span>$\lim_{t\to\infty} E[N_{jj}(t)] = \infty$</span><!-- Has MathJax --></li>
+<li><span>$\lim_{t\to\infty} \sum_{1\le n\le t} P_{jj}^n = \infty$</span><!-- Has MathJax -->
+</li>
+</ul>
+<p>有了上面的结论，很容易证明当state i和j互相可达，state j为recurrent时，state i也是recurrent (<span>$\sum_{n=1}^\infty P_{ii}^n \ge \sum_{n=1}^\infty P_{ii}^{m+n+k}\ge P_{ik}^mP_{kj}^k\sum_{n=1}^\infty P_{kk}^n$</span><!-- Has MathJax -->)。<br>所以对于 countable-state markov chain 来说，一个class中所有的state都是transient或者recurrent的。</p>
+<p>对于同处于一个recurrent class的state i和j来说， <span>$F_{ij}(\infty) = 1$</span><!-- Has MathJax --> 。</p>
+<p>证明：令 <span>$\alpha$</span><!-- Has MathJax --> 表示从 i到j的概率。则从state i 出发第一次回到state i 而不经过state j的概率必不大于 <span>$1-\alpha$</span><!-- Has MathJax --> ；第二次必不大于 <span>$(1-\alpha)^2$</span><!-- Has MathJax --> … 第n次 必不大于 <span>$(1-\alpha)^n$</span><!-- Has MathJax --> 。当 <span>$n\to\infty$</span><!-- Has MathJax --> 时，必有 <span>$F_{ij}(\infty) = 1$</span><!-- Has MathJax --></p>
+<p>对于处于同一个recurrent class的state i和j，若 <span>$i\neq j$</span><!-- Has MathJax --> ，则 <span>$N_{ij}(t)$</span><!-- Has MathJax --> 为delay renewal process。我们令 <span>$\bar{T}_{ij}$</span><!-- Has MathJax --> 表示state i到j的first-passage time的期望。则 <span>$\bar{T}_{ij} = 1 + \sum_{i=1}^\infty (1-F_{ij}(n))$</span><!-- Has MathJax --> 。直观上看，如果 <span>$F_{ij}(\infty)=1$</span><!-- Has MathJax --> ，<span>$\bar{T}_{ij}$</span><!-- Has MathJax --> 必然为finite。但是在讨论birth-death markov chain时，我们会发现存在 <span>$F_{ij}(\infty)=1$</span><!-- Has MathJax --> 而 <span>$\bar{T}_{ij} = \infty$</span><!-- Has MathJax --> 的情况。因此recurrent state有必要进行分类。</p>
+<p>我们将 <span>$F_{jj}(\infty)=1, \bar{T}_{jj} &lt; \infty$</span><!-- Has MathJax --> 的state j称为 positive-recurrent；<span>$F_{jj}(\infty)=1, \bar{T}_{jj} = \infty$</span><!-- Has MathJax --> 的state j称为 null-recurrent。</p>
+<p>我们可以看到 <span>$T_{jj}$</span><!-- Has MathJax --> 是IID rv，所以 <span>$N_{jj}(T)$</span><!-- Has MathJax --> 可以视为renewal process。根据renewal process的性质，可知：<br><span>$$\lim_{t\to\infty} \dfrac{N_{jj}(t)}{t} = \dfrac{1}{\bar{T}_{jj}}\\
+\lim_{t\to\infty} E\Big[\dfrac{N_{jj}(t)}{t}\Big] = \dfrac{1}{\bar{T}_{jj}}$$</span><!-- Has MathJax --></p>
+<p>根据Blackwell’s theorem，有<br><span>$\lim_{n\to\infty} Pr\left\{X_{n\lambda} = j | X_0 = j\right\} = \dfrac{\lambda}{\bar{T}_{jj}}$</span><!-- Has MathJax --><br>而在markov chain中， <span>$\lambda$</span><!-- Has MathJax --> 就是period。</p>
+<p>上面的结论对于 <span>$N_{ij}$</span><!-- Has MathJax --> 同样成立</p>
+<p>在markov chain中，同一个class中所有的state都是一样的，即都是positive-recurrent,null-recurrent或者transient。前面我能已经证明了recurrent和transient的情况，因此这里我们只需要证明positive-recurrent和null-recurrent。</p>
+<p>首先证明positive-recurrent的情况。令 <span>$R(t) =1$</span><!-- Has MathJax --> 当t时刻在state i。根据renewal-reward process，有<br><span>$\dfrac{1}{\bar{T}_{ii}} = \lim_{t\to\infty}\dfrac{1}{t}\int^t_0R(\tau)d\tau = \dfrac{E[R_n]}{\bar {T}_{jj}}$</span><!-- Has MathJax --><br>第一个等号成立是因为我们可以将 <span>$\lim_{t\to\infty}\dfrac{1}{t}\int^t_0R(\tau)d\tau$</span><!-- Has MathJax --> 视为停留在state i的时间占总时间的比值，而我们在前面计算出了这个比值。显而易见，当state j为positive-recurrent时，<span>$T_{jj} &lt; \infty$</span><!-- Has MathJax -->，故 <span>$T_{ii} &lt; \infty$</span><!-- Has MathJax --> 。反之也成立。</p>
+<p>对于停留时间的比例这种东西，敏感的人可能会将它和 <span>$\pi_j$</span><!-- Has MathJax --> 对应。对于 irreducible的markov chain来说，确实如此。irreducible markov chain就是所有的state都在同一个recurrent class里面。</p>
+<p>证明：令 <span>$\pi_j$</span><!-- Has MathJax --> 为markov chain的初始概率分布，<span>$\tilde{N}(t)$</span><!-- Has MathJax --> 为在时间1到t之间出现在state j的次数。则<br><span>$$(1/t)E[\tilde{N}(t)] = (1/t)\sum_{1\le n\le t} Pr\left\{X_n=j\right\} = \pi_j\\
+\pi_j = (1/t)E[\tilde{N}_j(t)] = \sum_i \pi_iE[N_{ij}(t)]\ge \sum_{i\le M} \pi_iE[N_{ij}(t)]\\
+E[N_{ij}(t)] \le E[N_{ij}(T_{ij}+t)] = 1+E[N_{jj}]\\
+\Rightarrow \pi_j \le 1/t + E[N_{jj}(t)/t]\\
+\Rightarrow \lim_{t\to\infty}\pi_j = \pi_j \le \lim_{t\to\infty} (1/t + E[N_{jj}(t)/t])=1/\bar{T}_{jj}\\
+\lim_{t\to\infty}\pi_j = \pi_j \ge \lim_{t\to\infty}\sum_{i\le M} \pi_iE[N_{ij}(t)] = \sum_{i\le M} \pi_i/T_{jj} \ge 1/T_{jj}\\
+\Rightarrow \pi_j = 1/T_{jj}$$</span><!-- Has MathJax --></p>
+<h2 id="Age-of-renewal-process"><a href="#Age-of-renewal-process" class="headerlink" title="Age of renewal process"></a>Age of renewal process</h2><p>我们用下图的markov chain 描绘renewal的interval<br><img src="http://ww3.sinaimg.cn/large/9dec4451gw1f1v8md6pfrj20w805ejsd.jpg" alt=""><br>其中 <span>$P_{n,n+1} = Pr\left\{W&gt;n+1\right\}/Pr\left\{W&gt;n\right\}$</span><!-- Has MathJax --> ，<span>$Pr\left\{W&gt;n\right\}$</span><!-- Has MathJax --> 表示interval大于n个时间单元， <span>$Pr\left\{W&gt;0\right\} =1$</span><!-- Has MathJax --></p>
+<p>故<br><span>$$\begin{aligned}
+\pi_n &amp;= \pi_{n-1}P_{n-1, n} = \pi_{n-2}P_{n-2,n-1}P_{n-1, n}= \pi_0P_{0,1}...P_{n-1, n}\\
+&amp;= \pi_0\dfrac{Pr\left\{W&gt;1\right\}Pr\left\{W&gt;2\right\}...Pr\left\{W&gt;n\right\}}{Pr\left\{W&gt;0\right\}Pr\left\{W&gt;1\right\}...Pr\left\{W&gt;n-1\right\}} = \pi_0Pr\left\{W&gt;n\right\}
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>故<br><span>$$\pi_0 = \dfrac{1}{\sum_{n=0}^\infty Pr\left\{W&gt;n\right\}} = \dfrac{1}{E[W]}\\
+\pi_n = \dfrac{Pr\left\{W&gt;n\right\}}{E[W]}$$</span><!-- Has MathJax --></p>
+<h1 id="birth-death-markov-chain"><a href="#birth-death-markov-chain" class="headerlink" title="birth-death markov chain"></a>birth-death markov chain</h1><p>birth-death markov chain如下图所示：<br><img src="http://ww2.sinaimg.cn/large/9dec4451gw1f1v9cotwxjj20vw048wfj.jpg" alt=""><br>从state i转移到 state i+1的次数可以表示为 <span>$\pi_ip_i$</span><!-- Has MathJax --> ，其中 <span>$\pi_i$</span><!-- Has MathJax --> 为系统稳定时在state i的概率。类似的，将state i+1转移到 state i的次数表示为 <span>$\pi_{i+1}q_i$</span><!-- Has MathJax --> 。若系统存在稳定状态，则 <span>$\pi_ip_i = \pi_{i+1}q_i$</span><!-- Has MathJax --></p>
+<p>令 <span>$\rho_i=p_i/q_{i+1}$</span><!-- Has MathJax --> ，则有 <span>$\pi_j = \rho_i\pi_i$</span><!-- Has MathJax --> 。故<br><span>$$\pi_i = \pi_0\prod_{j=0}^{i-1}\rho_i\\
+\pi_0 = \dfrac{1}{1+\sum_i^{\infty}\prod_{j=0}^{i-1}\rho_i}$$</span><!-- Has MathJax --></p>
+<h1 id="Reversible-markov-chain"><a href="#Reversible-markov-chain" class="headerlink" title="Reversible markov chain"></a>Reversible markov chain</h1><p>根据markov chain的定义有：<br><span>$$Pr\left\{X_{n+1}|X_n,X_{n-1}...X_0\right\} = Pr\left\{X_{n+1}|X_n\right\}\\
+Pr\left\{X_{n+k}, X_{n+k-1}, ...X_{n+1}|X_n,X_{n-1}...X_0\right\} = Pr\left\{X_{n+k}, X_{n+k-1}, ...X_{n+1}|X_n\right\}$$</span><!-- Has MathJax --><br>令 <span>$A^+$</span><!-- Has MathJax --> 表示 state <span>$X_{n+1}$</span><!-- Has MathJax --> 到 <span>$X_{n+k}$</span><!-- Has MathJax --> 的任意事件； <span>$A^-$</span><!-- Has MathJax --> 表示 state <span>$X_{1}$</span><!-- Has MathJax --> 到 <span>$X_{n-1}$</span><!-- Has MathJax --> 的任意事件。则：<br><span>$$Pr\left\{A^+|X_n, A^-\right\} = Pr\left\{A^+|X_n\right\}\\
+Pr\left\{A^+, A^-|X_n\right\} = Pr\left\{A^+|X_n\right\}Pr\left\{A^-|X_n\right\}\\
+Pr\left\{A^-|X_n, A^+\right\} = Pr\left\{A^+|X_n\right\}\\
+\Rightarrow Pr\left\{X_{n-1}|X_n\right\} = \dfrac{Pr\left\{X_n|X_{n-1}\right\}Pr\left\{X_{n-1}\right\}}{Pr\left\{X_n\right\}}$$</span><!-- Has MathJax --><br>很容易发现， <span>$Pr\left\{X_{n-1}|X_n\right\}$</span><!-- Has MathJax --> 是随 <span>$n$</span><!-- Has MathJax --> 而改变的。因此backward markov chain不一定为homogeneous(即满足 <span>$Pr\left\{X_{n+1}|X_n\right\}=Pr\left\{X_1|X_0\right\}$</span><!-- Has MathJax -->)。对于steady-state来说， <span>$Pr\left\{X_{n+1}=j\right\} = Pr\left\{X_n=j\right\} = \pi_j$</span><!-- Has MathJax --> 。此时，<br><span>$Pr\left\{X_{n-1} = j|X_n = i\right\} = P_{ji}\pi_j/\pi_i$</span><!-- Has MathJax --><br>如果我们令 <span>$P_{ij}^*$</span><!-- Has MathJax --> 表示backward markov chain的转移概率，则有 <span>$\pi_i P_{ij}^* = \pi_j P_{ji}$</span><!-- Has MathJax --> 。而对于steady-state markov chain来说，必有 <span>$\pi_i P_{ij} = \pi_j P_{ji}$</span><!-- Has MathJax --> 。故我们可以推出 <span>$P_{ij}^* = P_{ij}$</span><!-- Has MathJax --></p>
+<p>对于irreducible markov chain来说，如果对于所有的 <span>$i,j$</span><!-- Has MathJax --> 都有 <span>$\pi_i P_{ij} = \pi_j P_{ji}$</span><!-- Has MathJax --> 则 <span>$\pi_i$</span><!-- Has MathJax --> 就是其steady-state的分布；而它本身则是reversible。<br>假设irreducible markov chain的转移概率为 <span>$P_{ij}$</span><!-- Has MathJax --> ，<span>$\pi_i$</span><!-- Has MathJax --> 是和为1的正数集合，<span>$P_{ij}^*$</span><!-- Has MathJax --> 是转移概率，如果有<br><span>$\pi_iP_{ij} = \pi_jP_{ji}^*$</span><!-- Has MathJax --><br>则 <span>$\pi_i$</span><!-- Has MathJax --> 是steady-state分布， <span>$P_{ij}^* {}$</span><!-- Has MathJax --> 是backward chain的转移概率。</p>
+<h1 id="M-M-1-queue"><a href="#M-M-1-queue" class="headerlink" title="M/M/1 queue"></a>M/M/1 queue</h1><p>现用 markov chain 建模M/M/1 queue。假设 arrival rate为 <span>$\lambda$</span><!-- Has MathJax --> ，departure rate 为 <span>$\mu$</span><!-- Has MathJax --> 。还是将时间划分多个无穷小的等分，每等分的时间为 <span>$\delta$</span><!-- Has MathJax --> 。则M/M/1 queue可以表示为：<br><img src="http://ww2.sinaimg.cn/large/9dec4451gw1f1vcw9zxkdj20u404ajsd.jpg" alt=""><br>这被称为M/M/1 sample-time Markov chain</p>
+<p>根据上节的描述，则有：<br><span>$$\rho = \lambda / \mu &lt; 1\\
+\pi_i = \pi_0 \rho ^i \\
+\Rightarrow \pi_i = (1-\rho) \rho^i$$</span><!-- Has MathJax --></p>
+<p>而这个chain本身就是birth-death chain。当 <span>$\rho &lt;1$</span><!-- Has MathJax --> 时，它是reversible。左移和右移的过程有一些相似点：</p>
+<ol>
+<li>都可以被视为 M/M/1 chain</li>
+<li>左移的arrival可以被视为右移的departure</li>
+</ol>
+<p>由此我们可以总结出：</p>
+<ul>
+<li>departure也是 Bernoulli</li>
+<li><span>$n\delta$</span><!-- Has MathJax --> 时刻的状态 <span>$X_n$</span><!-- Has MathJax --> 与之前的departure没有关系。</li>
+</ul>
+<p>这被称为Burke’s theorem。Burke’s theorem并不需要 <span>$\mu$</span><!-- Has MathJax --> 对于所有的state保持一致，因此对于任何birth-death chain来说，只要arrival和当前的state无关(比如G/G/m queue)，就可以使用。</p>
+<p>#Branching process<br>Branching process是一种特殊的markov chain，其 <span>$X_{n+1},X_n$</span><!-- Has MathJax --> 的关系为：<br><span>$$\begin{equation}
+\label{eq:branch}
+X_{n+1} = \sum_{k=1}^{X_n} Y_{k,n}
+\end{equation}$$</span><!-- Has MathJax --><br>其中 <span>$Y_{k,n}$</span><!-- Has MathJax --> 为rv ， <span>$p_j = Pr\left\{Y_{k,n}= j\right\}$</span><!-- Has MathJax --> ， <span>$P_{ij} = Pr\left\{X_{n+1}= j|X_{n}= i\right\} = Pr\left\{\sum_{k=1}^iY(k,n) = j\right\}$</span><!-- Has MathJax --></p>
+<p>看上去很复杂，其实过程很简单。假设有一种生物只能活一年，每年可以自交(ˉ▽ˉ；)产生后代。我们在第一年养一只，然后每年统计种群的个数。在这个问题中，每个个体产生后代的数量就是 <span>$Y_{k,n}$</span><!-- Has MathJax --> ，<span>$k,\ n$</span><!-- Has MathJax -->分别表示个体的标号以及时间。 而我们最关注的问题就是这个种群会不会灭绝，也就是 <span>$X_n=0$</span><!-- Has MathJax --></p>
+<p>在前面我们将 <span>$F_{ij}(n)$</span><!-- Has MathJax --> 定义为 <span>$X_0=i$</span><!-- Has MathJax --> 在n时刻前访问state j的概率。因此我们的问题可以形式化为 <span>$F_{i0}(n)$</span><!-- Has MathJax --> 。每个个体时候产生后代是独立的，因此有 <span>$F_{i0}(n) = {F_{10}(n)}^i$</span><!-- Has MathJax --> 。所以显然，我们需要计算出 <span>$F_{10}(n)$</span><!-- Has MathJax --> 。<br><span>$F_{10}(n)= P_{10} + \sum_{k=1}^\infty P_{1k}[F_{10}(n-1)]^k = \sum_{k=0}^\infty P_{1k}[F_{10}(n-1)]^k$</span><!-- Has MathJax --><br>令 <span>$h(z) = \sum_k P_{1k}z^k$</span><!-- Has MathJax --> ，则 <span>$F_{10}(n) = h(F_{10}(n-1))$</span><!-- Has MathJax --> 。通过函数，我们可以找到 <span>$h(z)$</span><!-- Has MathJax --> 的一些性质：</p>
+<ul>
+<li><span>$h(z) = z$</span><!-- Has MathJax --> 必有解 <span>$z = 1$</span><!-- Has MathJax --></li>
+<li><span>$h&apos;(1) = \sum_k kP_{1k} = \bar{Y}$</span><!-- Has MathJax --></li>
+<li><span>$h&apos;&apos;(z) \ge 0 \text{ for } 0\le z\le 1$</span><!-- Has MathJax --></li>
+<li><span>$h(0) = P_{10} = p_0$</span><!-- Has MathJax -->
+</li>
+</ul>
+<p>通过上面的结论，可以发现 <span>$h(z)$</span><!-- Has MathJax --> 为凸函数，所以我们可以画出其图像：<br><img src="http://ww1.sinaimg.cn/large/9dec4451gw1f1vid68w0aj20pi0akjt0.jpg" alt=""><br>我们可以看到当 <span>$\bar{Y} &lt; 1$</span><!-- Has MathJax --> 时， <span>$F_{10}(\infty) = 1$</span><!-- Has MathJax --></p>
+<p>由 \ref{eq:branch} 可知：<br><span>$E[X_n] = \bar{Y}E[X_{n-1}] = {\bar{Y}}^nE[X_0]$</span><!-- Has MathJax --><br>通过期望，我们可以看到上面的结论。但是需要注意的是，通过这种方式并不能真实的反映出 <span>$E[X_n]$</span><!-- Has MathJax --> 。对于 <span>$\bar{Y} = 1, X_0=1$</span><!-- Has MathJax --> 来说， <span>$E[X_n]=1$</span><!-- Has MathJax --> 但是 <span>$h(\infty)$</span><!-- Has MathJax --> 是无限趋向于1的。在这种情况下，种群内个体数量极少的可能性极大，但是通过期望，我们看不到这一点。</p>
+<h1 id="Round-robin-and-process-sharing"><a href="#Round-robin-and-process-sharing" class="headerlink" title="Round-robin and process sharing"></a>Round-robin and process sharing</h1><p>在排队过程中，如果我们优先处理服务时间较短的客户，那么整体的delay(即renewald的 <span>$U(t)$</span><!-- Has MathJax --> )就会下降。实际场景往往不允许这种事情发生。计算机系统中也面临这种问题，而通常的处理方法是Round-robin，即处理A一会，然后处理B。。。轮流一圈之后继续处理A。而每个任务的处理时间 <span>$\delta$</span><!-- Has MathJax --> 都是一样的，即处理A <span>$\delta$</span><!-- Has MathJax --> 之后处理B。。。。</p>
+<p>process sharing也是一样的，不过其 <span>$\delta = 1/m$</span><!-- Has MathJax --> ，<span>$m$</span><!-- Has MathJax --> 为任务数量。</p>
+<p>下面我们证明通过Round-robin可以降低队伍的平均delay。令 <span>$W_i$</span><!-- Has MathJax --> 表示第 <span>$i$</span><!-- Has MathJax --> 个任务所需的服务时间， <span>$f(j) = Pr\left\{W_j = j\delta\right\}, \bar{F}(j)= Pr\left\{W_j &gt; j\delta\right\}$</span><!-- Has MathJax --> ，则用户在j次服务之后还需要一次服务的概率 <span>$g(j) = f(j+1)/\bar{F}(j)$</span><!-- Has MathJax --> 。</p>
+<p>这里还需要 state s。我们将s定义为 <span>$s = (m, z_1, z_2...z_m)$</span><!-- Has MathJax --> ，其中m为用户数， <span>$z_i\delta$</span><!-- Has MathJax --> 是第 <span>$i$</span><!-- Has MathJax --> 个用户的总服务时间。</p>
+<p>我们在已知state <span>$X_n$</span><!-- Has MathJax --> 的情况下，可能会发现下面几种情况：</p>
+<ol>
+<li>来了新用户(概率为 <span>$\lambda\delta$</span><!-- Has MathJax -->)，被首先处理</li>
+<li>队首用户接受服务，时长为 <span>$\delta$</span><!-- Has MathJax --></li>
+<li>该用户可能离开</li>
+<li>该用户不离开，转到队尾。</li>
+</ol>
+<p>总结一下，就是4种情况：</p>
+<ol>
+<li>没人来没人走， 概率记为 <span>$P_{s,r(s)}$</span><!-- Has MathJax --></li>
+<li>有人来没人走， 概率记为 <span>$P_{s,a(s)}$</span><!-- Has MathJax --></li>
+<li>没人来有人走， 概率记为 <span>$P_{s,d(s)}$</span><!-- Has MathJax --></li>
+<li>有人来了就走， 概率记为 <span>$P_{s,s}$</span><!-- Has MathJax --></li>
+</ol>
+<p>则有：<br><span>$$\begin{aligned}
+P_{s,r(s)} &amp;= (1-\lambda\delta)[1-g(z_1)] \quad r(s)=(m,z_2...z_m,z_1+1)\\
+P_{s,d(s)} &amp;= (1-\lambda\delta)g(z_1)\quad d(s)=(m-1, z_2...z_m,1)\\
+P_{s,a(s)} &amp;= \lambda\delta[1-f(1)]\quad a(s)=(m+1,z_1, z_2...z_m,1)\\
+P_{s,s} &amp;= \lambda\delta f(1)
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>现在我们通过backward chain找到steady-state的分布。backward的过程中，有几点需要注意：</p>
+<ul>
+<li>原来的队尾成了队首</li>
+<li><span>$z_i\delta$</span><!-- Has MathJax --> 是第 <span>$i$</span><!-- Has MathJax --> 个用户还需要的服务时间</li>
+</ul>
+<p>通过这种转换，我们可以求出<span>$P^*$</span><!-- Has MathJax --><br><span>$$P_{r(s),s}^* = 1-\lambda\delta \\
+P_{a(s),s}^* = 1-\lambda\delta \\
+P_{d(s),s}^* = \lambda\delta f(z_1+1) \\
+P_{s,s}^* = 1-\lambda\delta f(1) \\$$</span><!-- Has MathJax --><br>通过 <span>$\pi_iP_{ij} = \pi_j P^*_{ji}$</span><!-- Has MathJax --> ，带入上式( <span>$d(s)$</span><!-- Has MathJax --> 的式子 )，可以求出：<br><span>$\pi_s = \dfrac{\lambda\delta}{1-\lambda\delta} \bar{F}(z_1)\pi_{d(s)}$</span><!-- Has MathJax --><br>注意到我们可以通过 <span>$\pi_{d(s)}, \pi_{d(d(s))}$</span><!-- Has MathJax --> 的递推关系，得到：<br><span>$\pi_s = \Big(\dfrac{\lambda\delta}{1-\lambda\delta}\Big)^2 \bar{F}(z_1)\bar{F}(z_2)\pi_{d(d(s))} = ... =\Big(\dfrac{\lambda\delta}{1-\lambda\delta}\Big)^m \Big(\prod_{j=1}^m\bar{F}(z_j)\Big)\pi_{\emptyset}$</span><!-- Has MathJax --><br>当然，如果你不嫌麻烦，可以带到上面剩下的3个式子里面一一验证，应该是可以通过的。<br>我们定义 <span>$P_m = \sum_{z1, z_2...z_m}\pi(m, z_1, z_2,...,z_m)$</span><!-- Has MathJax --> 为系统中存在m个用户的概率。则<br><span>$P_m = \Big(\dfrac{\lambda\delta}{1-\lambda\delta}\Big)^m \Big(\prod_{j=1}^m\sum_{i=1}^\infty\bar{F}(i)\Big)\pi_{\emptyset}$</span><!-- Has MathJax --><br>又因为 <span>$\delta \sum_{i=1}^\infty\bar{F}(i) = E[W]-\delta$</span><!-- Has MathJax --> 故 <span>$P_m = \Big(\dfrac{\lambda}{1-\lambda\delta}\Big)^m \Big(E[W]-\delta\Big)^m\pi_{\emptyset}$</span><!-- Has MathJax --> 。令 <span>$\rho = \Big(\dfrac{\lambda}{1-\lambda\delta}\Big) \Big(E[W]-\delta\Big)$</span><!-- Has MathJax --> ，则 <span>$\pi_{\emptyset} = 1-\rho, P_m = \rho^m(1-\rho)$</span><!-- Has MathJax --><br>除了 <span>$\rho$</span><!-- Has MathJax --> 的值不一样外，这和 M/M/1 queue 是一样的，得证</p>
+<p>对于process sharing的过程来说，过程是一样的，只是 <span>$\delta\to\infty$</span><!-- Has MathJax --> 而已。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/stochastic-process/" rel="tag">#stochastic process</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/09/renewal-process/" rel="next" title="renewal process">
+                <i class="fa fa-chevron-left"></i> renewal process
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/14/markov-process/" rel="prev" title="markov process">
+                markov process <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/12/countable-state-markov-chain/"
+           data-title="countable-state markov chain" data-url="/2016/03/12/countable-state-markov-chain/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#还是从state说起"><span class="nav-number">1.</span> <span class="nav-text">还是从state说起</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Age-of-renewal-process"><span class="nav-number">1.1.</span> <span class="nav-text">Age of renewal process</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#birth-death-markov-chain"><span class="nav-number">2.</span> <span class="nav-text">birth-death markov chain</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reversible-markov-chain"><span class="nav-number">3.</span> <span class="nav-text">Reversible markov chain</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#M-M-1-queue"><span class="nav-number">4.</span> <span class="nav-text">M/M/1 queue</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Round-robin-and-process-sharing"><span class="nav-number">5.</span> <span class="nav-text">Round-robin and process sharing</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

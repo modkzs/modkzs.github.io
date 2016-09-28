@@ -1,0 +1,726 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="optimization," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Conjugate gradient method， 类似于坐标梯度下降，2次下降的方向不会相互干扰。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="conjugate gradient method">
+<meta property="og:url" content="/2016/06/06/conjugate-gradient-method/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="Conjugate gradient method， 类似于坐标梯度下降，2次下降的方向不会相互干扰。">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="conjugate gradient method">
+<meta name="twitter:description" content="Conjugate gradient method， 类似于坐标梯度下降，2次下降的方向不会相互干扰。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/06/06/conjugate-gradient-method/"/>
+
+  <title> conjugate gradient method | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                conjugate gradient method
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-06T20:01:48+08:00" content="Jun 6 2016">
+              Jun 6 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/06/conjugate-gradient-method/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/06/conjugate-gradient-method/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Conjugate gradient method， 类似于坐标梯度下降，2次下降的方向不会相互干扰。<br><a id="more"></a></p>
+<h1 id="线性函数"><a href="#线性函数" class="headerlink" title="线性函数"></a>线性函数</h1><p>线性函数的 conjugate gradient method 很容易理解，所以我们从线性函数开始讲起。假设我们的优化目标是<br><span>$\min\phi(x) = \frac{1}{2}x^TAx-b^Tx$</span><!-- Has MathJax --><br>那么我们必然需要求解 <span>$\nabla\phi(x)=Ax-b$</span><!-- Has MathJax --> 。令 <span>$r_k = Ax_k-b$</span><!-- Has MathJax --></p>
+<h2 id="先讲讲-conjugacy"><a href="#先讲讲-conjugacy" class="headerlink" title="先讲讲 conjugacy"></a>先讲讲 conjugacy</h2><p>要理解 conjugate gradient method，自然先得理解 conjugacy 是什么。对于一组向量来说，我们说其关于对称矩阵 <span>$A$</span><!-- Has MathJax --> conjugate 如果 <span>$p_i^TAp_j=0\quad i\neq j$</span><!-- Has MathJax --> 。很容易发现这些向量必然也是线性独立的。</p>
+<p>对于这样一组n维向量 <span>$\{p_1,p_2...p_n\}$</span><!-- Has MathJax --> ，如果我们令 <span>$x_{k+1}=x_k+\alpha_kp_k$</span><!-- Has MathJax -->，那么 <span>$x_n$</span><!-- Has MathJax --> 可以表征整个n维向量空间。</p>
+<p>令 <span>$\alpha_k=-\dfrac{r^T_kp_k}{p^T_kAp_k}$</span><!-- Has MathJax -->(就steepest descent中的步长) ，那么上面的方法在n步后必然可以收敛到最优解。</p>
+<h2 id="CG算法"><a href="#CG算法" class="headerlink" title="CG算法"></a>CG算法</h2><p>那么现在的问题是，我们如何构建出这样一套向量？我们介绍CG算法用于产生向量。CG算法如下：</p>
+<ol>
+<li>given <span>$x_0$</span><!-- Has MathJax -->, set <span>$r_0=Ax_0,p_0=-r_0$</span><!-- Has MathJax --></li>
+<li>while <span>$r_k\neq0$</span><!-- Has MathJax --><ul>
+<li><span>$\alpha_k=\dfrac{r_k^Tr_k}{p_k^TAp_k}$</span><!-- Has MathJax --></li>
+<li><span>$x_{k+1}=x_k+\alpha_kp_k$</span><!-- Has MathJax --></li>
+<li><span>$r_{k+1} = r_k+\alpha_kAp_k$</span><!-- Has MathJax --></li>
+<li><span>$\beta_{k+1}=\dfrac{r_{k+1}^Tr_{k+1}}{r_k^Tr_k}$</span><!-- Has MathJax --></li>
+<li><span>$p_{k+1}=-r_{k+1}+\beta_{k+1}p_k$</span><!-- Has MathJax -->
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="收敛速度"><a href="#收敛速度" class="headerlink" title="收敛速度"></a>收敛速度</h2><p>如果 <span>$A$</span><!-- Has MathJax --> 有r个独立的特征根，可以证明CG算法可以在r步内收敛。其收敛速度为 linear， 但是收敛速度仍然和 condition number 密切相关。</p>
+<h3 id="preconditioning"><a href="#preconditioning" class="headerlink" title="preconditioning"></a>preconditioning</h3><p>因为收敛速度和 condition number 密切相关，所以仍然可以通过 乘以 <span>$C$</span><!-- Has MathJax --> 去改变 condition number， numerical optimization中将这个过程称为 preconditioning</p>
+<h1 id="非线性函数"><a href="#非线性函数" class="headerlink" title="非线性函数"></a>非线性函数</h1><h2 id="Fletcher-Reeve-method"><a href="#Fletcher-Reeve-method" class="headerlink" title="Fletcher-Reeve method"></a>Fletcher-Reeve method</h2><ol>
+<li>given <span>$x_0$</span><!-- Has MathJax -->, <span>$f_0=f(x_0), \nabla f_0=\nabla f(x_0), p_0=-\nabla f_0$</span><!-- Has MathJax --></li>
+<li>while <span>$\nabla f_0\neq 0$</span><!-- Has MathJax --><ul>
+<li>compute <span>$\alpha_k$</span><!-- Has MathJax -->， <span>$x_{k+1}=x_k+\alpha_kp_k$</span><!-- Has MathJax --></li>
+<li><span>$\beta^{FR}_{k+1} = \dfrac{\nabla^T f_{k+1}\nabla f_{k+1}}{\nabla^T f_{k}\nabla f_{k}}$</span><!-- Has MathJax --></li>
+<li><span>$p_{k+1}=-\nabla f_{k+1}+\beta^{FR}_{k+1}p_k$</span><!-- Has MathJax -->
+</li>
+</ul>
+</li>
+</ol>
+<p>在这里，为了保证会产生下降的方向，<span>$\alpha$</span><!-- Has MathJax --> 必须满足 strict Wolfe condition ，即<br><span>$$f(x_k+\alpha p_k)\le f(x_k)+c_1\alpha\nabla f_k^Tp_k\\
+|\nabla f(x_k+\alpha_kp_k)^Tp_k|\le c_2|\nabla f_kp_k|$$</span><!-- Has MathJax --><br>不过 <span>$0&lt;c_1&lt;c_2&lt;\frac{1}{2}$</span><!-- Has MathJax --> 。</p>
+<h2 id="FR-method-的一些变化版本"><a href="#FR-method-的一些变化版本" class="headerlink" title="FR method 的一些变化版本"></a>FR method 的一些变化版本</h2><p>对于 FR 算法的修改大都集中于 <span>$\beta$</span><!-- Has MathJax --> 的计算上。需要注意的是，我们只要保证当 <span>$k&gt;2$</span><!-- Has MathJax --> 时， <span>$|\beta_k|&lt;\beta^{FR}_{k}$</span><!-- Has MathJax --> 就可以保证全局收敛</p>
+<h3 id="PR"><a href="#PR" class="headerlink" title="PR"></a>PR</h3><span>$\beta_{k+1}^{PR} = \dfrac{\nabla f_{k+1}^T(\nabla f_{k+1}-\nabla f_{k})}{\|\nabla f_k\|^2}$</span><!-- Has MathJax -->
+<p>经验表示 PR 似乎比 FR 更高效、健壮。但是对于PR来说， Wolfe condition 并不能保证每次迭代都处于下降方向。如果我们将 <span>$\beta$</span><!-- Has MathJax --> 的更新修改为<br><span>$\beta_{k+1}^+ = \max\{\beta_{k+1}^{PR}, 0\}$</span><!-- Has MathJax --><br>那么对  Wolfe condition 做些微小的修改就可以保证下降的方向。我们将该算法称为 PR+</p>
+<h3 id="HS"><a href="#HS" class="headerlink" title="HS"></a>HS</h3><span>$\beta^{HS} = \dfrac{\nabla f_{k+1}^T(\nabla f_{k+1}-\nabla f_{k})}{(\nabla f_{k+1}-\nabla f_{k})^Tp_k}$</span><!-- Has MathJax -->
+<h3 id="PR-FR"><a href="#PR-FR" class="headerlink" title="PR-FR"></a>PR-FR</h3><span>$$\beta_k=\begin{cases}
+    -\beta_k^{FR} &amp; \text{if } \beta_k^{PR}&lt;-\beta_k^{FR}\\
+    \beta_k^{PR} &amp; \text{if } |\beta_k^{PR}|\le\beta_k^{FR}\\
+    \beta_k^{FR} &amp; \text{if } \beta_k^{PR}&gt;\beta_k^{FR}
+    \end{cases}$$</span><!-- Has MathJax -->
+<h2 id="restart"><a href="#restart" class="headerlink" title="restart"></a>restart</h2><p>在处理非线性问题时，我们可以每n步就将 <span>$\beta$</span><!-- Has MathJax --> 设置为0。这被称为 restart ，相当于我们在当前步进行 steepest descent。这样的话，历史信息被抹去，相当于我们从当前开始重新做 conjugate gradient 。</p>
+<p>对于每个函数的极值点来说，必然存在一个小的邻域，函数在该邻域内类似于二次函数。如果我们踏入邻域之后抹去历史信息，那么必然可以获得更快的迭代速度。似乎可以证明restart的收敛速度为quadratic。</p>
+<p>当时实际过程中，如果用 restart ，那么 n 都会被设为一个相当大的值，基本不可能迭代那么多次。所以一般情况下不会为了收敛速度而进行 restart。当然，连续两次迭代的向量基本不正交的情况下可以进行 restart。 这可以通过 <span>$\dfrac{|\nabla f_k^T\nabla f_{k-1}|}{\|\nabla f_k\|^2} \ge v$</span><!-- Has MathJax --> 进行测试。v一般取0.1</p>
+<h2 id="收敛速度-1"><a href="#收敛速度-1" class="headerlink" title="收敛速度"></a>收敛速度</h2><p>对于 PR 来说，有下面不等式成立：<br><span>$-\dfrac{1}{1-c_2}\le\dfrac{|\nabla f_k^Tp_{k}|}{\|\nabla f_k\|^2}\le \dfrac{2c_2-1}{1-c_2}$</span><!-- Has MathJax --></p>
+<p>所以<br><span>$\cos\theta_k = \dfrac{\nabla f_k^Tp_{k}}{\|\nabla f_k\|\|p_{k}\|} \in(\dfrac{1- 2c_2}{1-c_2}\dfrac{\|\nabla f_k\|}{\|p_k\|},\dfrac{1}{1-c_2}\dfrac{\|\nabla f_k\|}{\|p_k\|})$</span><!-- Has MathJax --><br>如果 <span>$p_k$</span><!-- Has MathJax --> 和 <span>$\nabla f_k$</span><!-- Has MathJax --> 正交，那么我们必然无法获得好的下降方向。这种情况下， <span>$\cos\theta_k$</span><!-- Has MathJax --> 基本为0， 故 <span>$\|\nabla f_k\| \ll \|p_k\|，x_{k+1}\approx x_k，\nabla f_{k+1}\approx\nabla f_{k}$</span><!-- Has MathJax -->，因此 <span>$\beta_{k+1}^{FR} \approx 1, p_{k+1}\approx p_k$</span><!-- Has MathJax -->。这种情况下 FR 很难有改进；而PR，HS就要好得多。</p>
+<p>最后，书中对一些实际问题跑了 PR， FR， PR+，有些问题上，三者的差距并不明显。这里就不贴出来了，有兴趣的可以自己去看下</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/optimization/" rel="tag">#optimization</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/06/Trust-region-method/" rel="next" title="Trust-region method">
+                <i class="fa fa-chevron-left"></i> Trust-region method
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/07/Quasi-newton-method/" rel="prev" title="Quasi-newton method">
+                Quasi-newton method <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/06/conjugate-gradient-method/"
+           data-title="conjugate gradient method" data-url="/2016/06/06/conjugate-gradient-method/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线性函数"><span class="nav-number">1.</span> <span class="nav-text">线性函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#先讲讲-conjugacy"><span class="nav-number">1.1.</span> <span class="nav-text">先讲讲 conjugacy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CG算法"><span class="nav-number">1.2.</span> <span class="nav-text">CG算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收敛速度"><span class="nav-number">1.3.</span> <span class="nav-text">收敛速度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#preconditioning"><span class="nav-number">1.3.1.</span> <span class="nav-text">preconditioning</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#非线性函数"><span class="nav-number">2.</span> <span class="nav-text">非线性函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Fletcher-Reeve-method"><span class="nav-number">2.1.</span> <span class="nav-text">Fletcher-Reeve method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FR-method-的一些变化版本"><span class="nav-number">2.2.</span> <span class="nav-text">FR method 的一些变化版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PR"><span class="nav-number">2.2.1.</span> <span class="nav-text">PR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HS"><span class="nav-number">2.2.2.</span> <span class="nav-text">HS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PR-FR"><span class="nav-number">2.2.3.</span> <span class="nav-text">PR-FR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#restart"><span class="nav-number">2.3.</span> <span class="nav-text">restart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收敛速度-1"><span class="nav-number">2.4.</span> <span class="nav-text">收敛速度</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

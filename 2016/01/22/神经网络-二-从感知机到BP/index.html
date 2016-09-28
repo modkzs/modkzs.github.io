@@ -1,0 +1,735 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Neural Network," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="脑洞大开的机器学习江湖史——一代天才感知机不敌VC维，BP横空出世惜败梯度消失">
+<meta property="og:type" content="article">
+<meta property="og:title" content="神经网络 二 从感知机到BP">
+<meta property="og:url" content="/2016/01/22/神经网络-二-从感知机到BP/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="脑洞大开的机器学习江湖史——一代天才感知机不敌VC维，BP横空出世惜败梯度消失">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="神经网络 二 从感知机到BP">
+<meta name="twitter:description" content="脑洞大开的机器学习江湖史——一代天才感知机不敌VC维，BP横空出世惜败梯度消失">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/01/22/神经网络-二-从感知机到BP/"/>
+
+  <title> 神经网络 二 从感知机到BP | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                神经网络 二 从感知机到BP
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-22T12:42:30+08:00" content="Jan 22 2016">
+              Jan 22 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/ml/" itemprop="url" rel="index">
+                    <span itemprop="name">ml</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/22/神经网络-二-从感知机到BP/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/22/神经网络-二-从感知机到BP/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>脑洞大开的机器学习江湖史——一代天才感知机不敌VC维，BP横空出世惜败梯度消失<br><a id="more"></a></p>
+<p>#感知机模型<br>话说1943年神经网络横空出世，作为机器学习的小门小派，一直无人问津。直到57年一代天才感知机（(￣＂￣;)）拜入神经网络门下，此门派才突然名声大振。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>感知机本身的模型比较简单，分类函数为<br><span>$$f(x)=sign(wx+b)\\
+sign(x)=\begin{cases}
+  0&amp; \text{x&ge;0}\\
+  1&amp; \text{x&gt;0}
+  \end{cases}$$</span><!-- Has MathJax --></p>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>根据上面的损失函数，我们可以发现对于正确分类的样本来说<span>$y_i(wx_i+b)\ge0$</span><!-- Has MathJax -->对于错误分类样本来说，有<span>$y_i(wx_i+b)&lt;0$</span><!-- Has MathJax -->与SVM过程类似，可以将误分点到分类面的距离定义如下为 <span>$d_i=-\dfrac{y_i(wx_i+b)}{\|w\|}$</span><!-- Has MathJax --> 。我们的目标就是对所有的误分点进行优化，使得  <span>$\sum_{x \in M} d_i$</span><!-- Has MathJax --> 最小化。固定<span>$\|w\|$</span><!-- Has MathJax -->化简后的目标函数为<br><span>$l(w,b) = -\sum_{x \in M} y_i(wx_i+b)$</span><!-- Has MathJax --></p>
+<p>##更新规则<br>还是求不出闭式解的老一套：梯度下降。对<span>$w,b$</span><!-- Has MathJax -->分别求导，得：<br><span>$$\dfrac{\partial l(w,b)}{\partial w} = y_ix_i\\
+\dfrac{\partial l(w,b)}{\partial b} = y_i$$</span><!-- Has MathJax --><br>因此更新规则如下：<br><span>$$w = w + \alpha y_ix_i\\
+b = b + \alpha x_i$$</span><!-- Has MathJax --></p>
+<h2 id="收敛性证明"><a href="#收敛性证明" class="headerlink" title="收敛性证明"></a>收敛性证明</h2><p>唯一一个感觉能证出来收敛的梯度下降。。。。</p>
+<p>设存在参数<span>$w^*,\|w^*\|=1$</span><!-- Has MathJax -->，存在 <span>$\gamma &gt; 0$</span><!-- Has MathJax -->使得下式成立</p>
+<span>$$\begin{aligned}
+y_i(w^*x_i)\ge 0
+\end{aligned}$$</span><!-- Has MathJax -->
+<p>同时我们认为所有的样本均满足<span>$\|x\|\le R$</span><!-- Has MathJax -->。我们定义<span>$w^k$</span><!-- Has MathJax -->为第k轮迭代时<span>$w$</span><!-- Has MathJax -->的值，同时令<span>$w^1=0$</span><!-- Has MathJax --><br>对于第k轮的第i个样本，我们有下式成立：<br><span>$$\begin{aligned}
+w^{k+1}w^* &amp;= {(w^k+y_ix_i)}^Tw^*\\
+           &amp;= {w^k}^Tw^*+y_ix_i^Tw^*\\
+           &amp;\ge {w^k}^Tw^* + \gamma
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>所以我们通过k次迭代，我们可以得到<span>${w^{k+1}}^Tw^*\ge k \gamma$</span><!-- Has MathJax --> 。故有 <span>$\|w^{k+1}\|\|w^*\|\ge {w^{k+1}}^T w^* \ge k \gamma$</span><!-- Has MathJax -->，由前面的假设知<span>$\|w^*\|=1$</span><!-- Has MathJax -->故有<span>$\|w^{k+1}\|\ge k \gamma$</span><!-- Has MathJax --></p>
+<p>同时，对于错误分类的样本t，我们有下式成立：<br><span>$$\begin{aligned}
+{\|w^{k+1}\|}^2 &amp;= {\|w^k\|+y_tx_t}^2\\
+&amp;={\|w^k\|}^2 + {y_t}^2{\|x_t\|}^2 + 2y_tx_t^Tw^k\\
+&amp;\le {\|w^k\|}^2 + R^2 + 2y_tx_t^Tw^k\\
+&amp;\le {\|w^k\|}^2 + R^2
+\end{aligned}$$</span><!-- Has MathJax --><br>经过k轮迭代后，可知<span>${\|w^{k+1}\|}^2 \le kR^2$</span><!-- Has MathJax --><br>故我们有<br><span>$$\begin{aligned}
+  k^2\gamma^2 \le \|w^{k+1}\| \le k R^2
+\end{aligned}$$</span><!-- Has MathJax --><br>故 <span>$k \le \dfrac{R^2}{\gamma^2}$</span><!-- Has MathJax --></p>
+<p>##问题<br>作为在上个世纪60年代大红大紫的模型，当年好像有人已经用感知机做出了很简单的手写识别。但是感知机的主要问题是只能处理可以完全二分的样本，也就是其VC维是1。作为一个连异或都做不了的模型，要你何用！╭∩╮(︶︿︶）╭∩╮所以感知机就这么被甩了。。。。一代天骄惨死于VC维啊。。。。</p>
+<p>#BP神经网络<br>在感知机被VC维戳中死穴之后，作为小门小派后继无人，神经网络这一派迅速衰败。直到近20年后，乡土少年闰土，啊，不，BP拜入神经网络门下，该门派才再度兴起，又掀起了江湖的一番腥风血雨。。。。。。</p>
+<p>##一些基础定义<br>hexo放图太麻烦了，所以就不放图了，简单说一下= =</p>
+<ul>
+<li><p>神经元</p>
+<p>每个神经元都有多个输入和一个输出，输入为上一层的节点的输出，其使用激活函数根据输入计算输出</p>
+</li>
+<li><p>激活函数</p>
+<p>如上文所说，一个多维数据到一维数据的映射函数，但是需要满足导数在0-1之间。后面会说具体原因</p>
+</li>
+</ul>
+<h2 id="一些奇怪的符号"><a href="#一些奇怪的符号" class="headerlink" title="一些奇怪的符号"></a>一些奇怪的符号</h2><p>终于到了要定义符号的高度了٩(๑ᵒ̷͈᷄ᗨᵒ̷͈᷅)و</p>
+<ul>
+<li>$x,y,z$ 样本，神经网络的输出，label</li>
+<li>$w_{ih}$ 输入层到隐层的权重</li>
+<li>$w_{ho}$ 隐层到输出层的权重</li>
+<li>$x_h$ 隐层的输入</li>
+<li>$J$ 损失函数</li>
+<li>$f$ 激活函数</li>
+<li>$net$ 每个神经元激活函数的输入，即$net=w^Tx+b$</li>
+</ul>
+<p>##BP算法<br>BP就是个一说你就觉得这么SB的办法谁想不出来的东西= =虽然说是误差的反向传导，也就一个链式求导而已啊。。。。<br>简单写下链式求导法则吧<br><span>$$\begin{aligned}
+\frac{\partial J}{\partial w_{ho}} = \frac{\partial J}{\partial y} \frac{\partial y}{\partial f}\frac{\partial f}{\partial net_{ho}}\frac{\partial net_{ho}}{\partial w_{ho}}=J&apos;f&apos;x_h\\
+\frac{\partial J}{\partial w_{ih}} = \frac{\partial J}{\partial net_{ho}} \frac{\partial net_{ho}}{\partial x_h}\sum\frac{\partial x_h}{\partial net_{ih}}\frac{\partial net_{ih}}{\partial x}=J&apos;f&apos;\sum w_{ho}f&apos;x
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>求和存在的原因是隐层所有的 <span>$x_h$</span><!-- Has MathJax --> 都有对 <span>$w_{ih}$</span><!-- Has MathJax --> 的导数。对于不同的 <span>$J,f$</span><!-- Has MathJax --> ，直接套上去就好了。<br>我们可以看到层数越高，<span>$f&apos;$</span><!-- Has MathJax --> 指数越高。因此如果 <span>$f&apos;$</span><!-- Has MathJax --> 大于1，那么底层的指数就爆炸了，这个网络根本无法更新，所以只能在0到1之间。这样导致了梯度随层数指数级下降，导致了梯度消失的情况出现，使得神经网络难以训练。虽然是难以，总比无法好。所以后面针对于神经网络的训练问题，各种正常的，奇葩的东西开始纷纷出现。。。。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Neural-Network/" rel="tag">#Neural Network</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/22/神经网络一——综述/" rel="next" title="神经网络一——综述">
+                <i class="fa fa-chevron-left"></i> 神经网络一——综述
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/23/神经网络-ReLU，cross-entropy-and-softmax/" rel="prev" title="神经网络 ReLU，cross entropy and softmax">
+                神经网络 ReLU，cross entropy and softmax <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/01/22/神经网络-二-从感知机到BP/"
+           data-title="神经网络 二 从感知机到BP" data-url="/2016/01/22/神经网络-二-从感知机到BP/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数"><span class="nav-number">2.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收敛性证明"><span class="nav-number">3.</span> <span class="nav-text">收敛性证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些奇怪的符号"><span class="nav-number">4.</span> <span class="nav-text">一些奇怪的符号</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

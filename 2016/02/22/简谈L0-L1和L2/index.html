@@ -1,0 +1,747 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="math,ml," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="L1和L2是ml中常用的惩罚系数，虽然L0不是，但是既然有L1，L2了，也带上L0。我们在这里主要说一说L0，L1，L2的具体作用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简谈L0,L1和L2">
+<meta property="og:url" content="/2016/02/22/简谈L0-L1和L2/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="L1和L2是ml中常用的惩罚系数，虽然L0不是，但是既然有L1，L2了，也带上L0。我们在这里主要说一说L0，L1，L2的具体作用。">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简谈L0,L1和L2">
+<meta name="twitter:description" content="L1和L2是ml中常用的惩罚系数，虽然L0不是，但是既然有L1，L2了，也带上L0。我们在这里主要说一说L0，L1，L2的具体作用。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/02/22/简谈L0-L1和L2/"/>
+
+  <title> 简谈L0,L1和L2 | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                简谈L0,L1和L2
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-22T16:43:05+08:00" content="Feb 22 2016">
+              Feb 22 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/ml/" itemprop="url" rel="index">
+                    <span itemprop="name">ml</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/22/简谈L0-L1和L2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/22/简谈L0-L1和L2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>L1和L2是ml中常用的惩罚系数，虽然L0不是，但是既然有L1，L2了，也带上L0。我们在这里主要说一说L0，L1，L2的具体作用。<br><a id="more"></a></p>
+<h1 id="L0"><a href="#L0" class="headerlink" title="L0"></a>L0</h1><h2 id="形式"><a href="#形式" class="headerlink" title="形式"></a>形式</h2><p>n范数的可以用公式 ${|x|}_p = {(\sum_i x_i^p)}^{1/p}$ 定义。当然了，对于L0来说，这个定义就有些尴尬了。当然，万能的数学家自然不可能让这种拦住，所以他们对L0定义为x中非0元素的个数。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>我们可以看到L0这种范数天生适用于稀疏表示。但是它到现在默默无闻的原因就是因为太难求解了，据说是NP问题。反正以我的智商连暴力求解都不知道怎么求。。。。。</p>
+<h1 id="L1"><a href="#L1" class="headerlink" title="L1"></a>L1</h1><h2 id="形式-1"><a href="#形式-1" class="headerlink" title="形式"></a>形式</h2><p>上面已经说过n范数的定义了，放到L1这里就是绝对值。</p>
+<h2 id="稀疏表示"><a href="#稀疏表示" class="headerlink" title="稀疏表示"></a>稀疏表示</h2><p>L1范式可以做到参数的稀疏表示。在这里针对一种简单的情况进行数学证明（以下证明参考<a href="http://freemind.pluskid.org/machine-learning/sparsity-and-some-basics-of-l1-regularization/#86d03bd30d14d5172a9ff0865cea33353abe0a54" target="_blank" rel="external">博客</a>）。<br>我们对线性规划进行求解。也就是说损失函数为：<br>$$<br>J(w)=\frac{1}{n}|y-w^TX|^2<br>$$<br>加上L1惩罚系数后，目标函数为<br>$$<br>J_L(w)=\frac{1}{n}|y-w^TX|^2 + \lambda |w|<br>$$<br>在这里，X是正交矩阵，即 $\frac{1}{n} X^TX=I$<br>我们注意到上面的函数是凸函数，但是由于L1不连续，所以无法通过求导求解。因此在这里引入subgradient的概念</p>
+<blockquote>
+<p>对于在p维欧氏空间中的凸开子集U上定义的实值函数 $f:U \to \mathbb{R}$，一个p维向量v称为f在一点 $x_0 \in U$ 处的subgradient，如果对于任意 $x \in U$，满足 $f(x)-f(x_0)\ge v(x-x_0)$，由在点 $x_0$ 处的所有 subgradient 所组成的集合称为 $x_0$ 处的 subdifferential ，记为 $\partial f(x_0)$</p>
+</blockquote>
+<p>举个例子说明一下。例如当 $f(x)=|x|$，它在x=0处的subdifferential为[-1,1]。这是对传统gradient的一个推广。这种推广有一个很好的性质：当 $0 \in \partial f(x_0)$ 时， $x_0$ 是f的最小值。</p>
+<p>虽然无法对 $J_L(w)$ 求导得到解析解，但是我们仍然可以求导：<br>$$<br>\dfrac{\partial J_L(w)}{\partial w} = -\frac{2}{n}X(y-{w}^TX) + \lambda sign(w)=0<br>$$</p>
+<p>上式中的sign(w)可以认为是对w各个分量进行sign后得到的矩阵<br>同时我们可以求出原问题(即不加L1惩罚系数的函数)的解析解<br>$$<br>\hat{w}=\frac{1}{n}{(XX^T)}^{-1}X^Ty=X^Ty<br>$$</p>
+<p>令 $\bar{w}$ 为 $J_L(w)$ 最小值的解析解。则我们可以发现：<br>$$<br>\bar{w} = \hat{w}-\frac{\lambda}{2}sign(\bar{w})<br>$$</p>
+<p>上式可以发现 $\bar{w}$ 和 $\hat{w}$ 的每个分量符号相同，即   $sign(\bar{w}) = sign(\hat{w})$ 。故上式可化为：<br>$$<br>\bar{w}_j = \hat{w}_j-\frac{\lambda}{2}{sign(\hat{w})}_j={sign(\hat{w})}_j({|\hat{w}|}_j-\frac{\lambda}{2})<br>$$</p>
+<p>上式中j下表表示向量中第j个分量。公式两边同时乘以 ${sign(\hat{w})}_j$ ，可得：<br><span>$$\begin{aligned}
+{sign(\hat{w})}_j\bar{w}_j &amp;= {sign(\bar{w})}_j\bar{w}_j = {|\bar{w}|}_j\\
+&amp;={sign(\hat{w})}_j^2({|\hat{w}|}_j-\frac{\lambda}{2}) = {|\hat{w}|}_j-\frac{\lambda}{2}
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>即<br>$$<br>\begin{equation}<br>{|\bar{w}|}_j={|\hat{w}|}_j-\dfrac{\lambda}{2} \ge 0<br>\end{equation}<br>$$</p>
+<p>故上式可以表示为：<br><span>$$\bar{w}_j = {sign(\hat{w})}_j{\big({|\hat{w}|}_j-\frac{\lambda}{2}\big)}_+\\
+{(x)}_+ = max(x,0)$$</span><!-- Has MathJax --></p>
+<p>根据subgradient求最小值的性质，我们可以发现：<br><span>$$\begin{aligned}
+0&amp;=\bar{w}_j \in \left\{-\frac{2}{n}{(Xy-XX^Tw)}_j + \lambda e | e \in [-1, 1]\right\} \\ &amp;=\left\{2\bar{w}_j-2\hat{w}_j + \lambda e | e \in [-1, 1]\right\}
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>也就说存在 $e_0 \in [-1,1]$ ，使得<br>$$<br>0 = 2\bar{w}_j-2\hat{w}_j + \lambda e_0 = 2\bar{w}_j + \lambda e_0<br>$$</p>
+<p>由上式可得 $|\bar{w}_j| = \dfrac{\lambda}{2} |e_0| \le \dfrac{\lambda}{2}$。</p>
+<p>当然我们用前面的式子也可以表示( ${|\bar{w}|}_j={|\hat{w}|}_j-\dfrac{\lambda}{2} \ge 0$ 妈蛋为啥hexo-math不支持公式编号。。。。还得再打一遍)。</p>
+<p>在这种情况下我们可以发现L1其实是对原来解的一个截断。当然我们也可以求出L2惩罚系数的解：<br>$$<br>w^*= {(XX^T-2\lambda I)}^{-1}Xy=\frac{1}{1-2\lambda}\bar{w}<br>$$</p>
+<p>也就是说L2相当于对原来解的缩放</p>
+<h2 id="优化求解"><a href="#优化求解" class="headerlink" title="优化求解"></a>优化求解</h2><p>L0的求解是NP问题，L1相对来说就好的多。我们将L1的求导抽象为如下数学问题：<br>$$<br>\min_\theta(J(\theta)+\lambda|\theta|)<br>$$</p>
+<p>我们将不等式 $|ab| \le \dfrac{1}{2}(a^2 + b^2)$ 应用到 $\theta$ 的每个分量中：<br>$$<br>|\theta_j| \le \dfrac{1}{2}(\dfrac{\theta_j^2}{c_j}+c_j), c_j &gt; 0<br>$$</p>
+<p>则有：<br>$$<br>|\theta| \le \dfrac{1}{2}(\theta^TC^{-1}\theta+C)<br>$$</p>
+<p>其中 $C=diag(c)$，即C是对角值为 $c_j$的对角矩阵。当 $|\theta|=c$ 时，等号成立。<br>故我们可以通过最小化<br>$$<br>\tilde{F}(\theta,c)=J(\theta) + \dfrac{\lambda}{2}(\theta^TC^{-1}\theta+C)<br>$$</p>
+<p>来优化 $F(\theta)$ 。<br>不过由于只有当$|\theta|=c$时等号才严格成立，因此我们无法使用直接求导的方式求出解析解。但是这种场景很像混合高斯模型的情况，因此我们可以用EM去求解。具体求解算法如下：</p>
+<ol>
+<li>选择初始参数\theta^{(0)}</li>
+<li><p>对于第k次迭代，使用下式更新\theta：</p>
+<span>$\theta^{(k)} = arg \min_\theta \tilde{F}(\theta,|\theta^{(k-1)}|) = arg \min_\theta J(\theta) + \dfrac{\lambda}{2}(\theta^T|\theta^{(k-1)}|^\dagger\theta+C)$</span><!-- Has MathJax -->
+<p>其中 $|\theta^{(k-1)}|^\dagger$ 为 $|\theta^{(k-1)}|$ 的伪逆，是为了防止 $\theta^{(k-1)}$ 出现0元素导致秩低于矩阵维度因此不可逆。 伪逆的计算公式为： $X^\dagger = {(XX^T)}^{-1}X^T$ 。对于对角矩阵，可以简化为下式：</p>
+<span>$$X_j^\dagger =
+\begin{cases}
+  0 &amp; \text{x=0}\\
+  X_j^{-1}&amp; \text{x!=0}
+\end{cases}$$</span><!-- Has MathJax -->
+</li>
+</ol>
+<p>重复上述步骤直到收敛即可。</p>
+<p>由于有 $F(\theta^{(k-1)}) = \tilde{F}(\theta^{(k-1)},|\theta^{(k-1)}|) \ge \tilde{F}(\theta^{(k)},|\theta^{(k-1)}|) \ge F(\theta^{(k)})$，所以上面的函数单调递减，这样必然可以求出最优解（感觉和NMF的求解略相似）</p>
+<p>L1的部分就到此为止了，感觉基本应该都涵盖到了。以后如果还有，再补充吧</p>
+<h1 id="L2"><a href="#L2" class="headerlink" title="L2"></a>L2</h1><p>像L2这种不傲娇，还一身宝的东西有相当广泛的应用。目前好像还没有看到关于L2的负面评价</p>
+<h2 id="形式-2"><a href="#形式-2" class="headerlink" title="形式"></a>形式</h2><p>不多说了，2范式</p>
+<h2 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h2><p>L2的好处都有啥，谁说对了就给他</p>
+<h3 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h3><p>从ml的角度来看，主要是提高模型的泛化能力，降低过拟合</p>
+<h3 id="数值优化"><a href="#数值优化" class="headerlink" title="数值优化"></a>数值优化</h3><p>从数值优化的角度来看，L2可以处理condition number较高的情况。我们先来看看什么叫condition number</p>
+<p>在介绍condition number之前，我们先引入ill-conditioned的概念。<br>现在有一线性系统Ax=b，其中<br><span>$A=\begin{bmatrix}400&amp; -201\\-800&amp; 401\end{bmatrix},b=\begin{bmatrix}200\\-200\end{bmatrix}$</span><!-- Has MathJax --><br>我们可以得到解[-100,-200]。但是如果我们将A中的400变成401再求解，解就是[40000,79800]。也就是说x对A和b高度敏感。</p>
+<p>玩数学的当然不会止步于此。在ill-conditioned出现之后，就需要一种机制判断一个系统是否为ill-conditioned</p>
+<p>在这里我们引入矩阵范数进行处理。这里的矩阵范数必须满足一致性，即 $|A||B| \ge |AB|$<br>在此条件下，有下式成立：<br><span>$$\begin{aligned}
+&amp;A(x+\Delta x) = b + \Delta b\\
+\Rightarrow &amp;A\Delta x = \Delta b\\
+\Rightarrow &amp;\Delta x = A^{-1}\Delta b\\
+\Rightarrow &amp;\|\Delta x\| \le \|A^{-1}\|\|\Delta b\|
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>同时由于 $|A||x| \ge |b|$，我们可得：<br>$$<br>\begin{aligned}<br>&amp;\dfrac{|\Delta x|}{|A||x|} \le \dfrac{|A^{-1}||\Delta b|}{|x|}\<br>\Rightarrow &amp; \dfrac{|\Delta x|}{|x|} \le |A||A^{-1}|\dfrac{|\Delta b|}{|b|}<br>\end{aligned}<br>$$</p>
+<p>我们将 $|A||A^{-1}|$ 称为condition number。它表征了当A或b变化时，x变化的上界。所以如果condition number远远大于1，那么它就是ill-conditioned。</p>
+<p>当然上面只描述了线性系统，对于非线性系统来说，condition number可以用 $\dfrac{|J(x)|}{|f(x)|/|x|}$ 来计算，其中J(x)为雅各布矩阵，即f(x)的一阶偏导</p>
+<p>那么L2对于ill-conditioned问题的解决帮助在哪？首先我们在L1中给出了线性回归的解析解： $w=(XX^T)^{−1}X^Ty$ 。但是如果X的行数小于列数，那么 $XX^T$ 就不会满秩。这样会导致方程组有无穷多个解。如果你随便挑一个，那么八成你会过拟合。如果我们加上L2，解会变成 $w^*= {(XX^T-2\lambda I)}^{-1}Xy$ 。这样的情况下就不用担心不满秩的问题了。</p>
+<p>同时L2还可以加快迭代速度。这一点我们可以直观的从condition number的非线性定义中直观的看到。条件数越小，收敛速度越快。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/math/" rel="tag">#math</a>
+          
+            <a href="/tags/ml/" rel="tag">#ml</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/22/稀疏表示/" rel="next" title="稀疏表示">
+                <i class="fa fa-chevron-left"></i> 稀疏表示
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/28/漫谈大数定律/" rel="prev" title="漫谈大数定律">
+                漫谈大数定律 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/22/简谈L0-L1和L2/"
+           data-title="简谈L0,L1和L2" data-url="/2016/02/22/简谈L0-L1和L2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#L0"><span class="nav-number">1.</span> <span class="nav-text">L0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#形式"><span class="nav-number">1.1.</span> <span class="nav-text">形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.2.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#L1"><span class="nav-number">2.</span> <span class="nav-text">L1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#形式-1"><span class="nav-number">2.1.</span> <span class="nav-text">形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#稀疏表示"><span class="nav-number">2.2.</span> <span class="nav-text">稀疏表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化求解"><span class="nav-number">2.3.</span> <span class="nav-text">优化求解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#L2"><span class="nav-number">3.</span> <span class="nav-text">L2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#形式-2"><span class="nav-number">3.1.</span> <span class="nav-text">形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#好处"><span class="nav-number">3.2.</span> <span class="nav-text">好处</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#机器学习"><span class="nav-number">3.2.1.</span> <span class="nav-text">机器学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数值优化"><span class="nav-number">3.2.2.</span> <span class="nav-text">数值优化</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

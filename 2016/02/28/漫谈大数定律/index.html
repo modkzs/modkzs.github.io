@@ -1,0 +1,769 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="stochastic process," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="私以为大数定律是整个概率论中最重要也最核心的定律之一。它是整个概率论成立的基础。本章是对MIT的stochastic process第一章的整理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漫谈大数定律">
+<meta property="og:url" content="/2016/02/28/漫谈大数定律/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="私以为大数定律是整个概率论中最重要也最核心的定律之一。它是整个概率论成立的基础。本章是对MIT的stochastic process第一章的整理。">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/9dec4451jw1f1ew0tsg33j20p809kq45.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451gw1f1f47uvw8pj20u407gdgu.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/9dec4451gw1f1f5mszrxsj20pi088dgp.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/9dec4451gw1f1fa2hmfccj20ss0bomyb.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/9dec4451gw1f1fa2vfhmaj20ys08kdhw.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/9dec4451gw1f1fa4l5gxij20wq0ekwj3.jpg">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="漫谈大数定律">
+<meta name="twitter:description" content="私以为大数定律是整个概率论中最重要也最核心的定律之一。它是整个概率论成立的基础。本章是对MIT的stochastic process第一章的整理。">
+<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/9dec4451jw1f1ew0tsg33j20p809kq45.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/02/28/漫谈大数定律/"/>
+
+  <title> 漫谈大数定律 | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                漫谈大数定律
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-28T11:09:31+08:00" content="Feb 28 2016">
+              Feb 28 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/28/漫谈大数定律/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/28/漫谈大数定律/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>私以为大数定律是整个概率论中最重要也最核心的定律之一。它是整个概率论成立的基础。本章是对MIT的stochastic process第一章的整理。<br><a id="more"></a><br>在上stochastic process之前，以我对本科概率论的残存记忆来看，一直以为大数定律就是频率=概率。现在再看，比这个等式复杂了许多。</p>
+<h1 id="数学基础"><a href="#数学基础" class="headerlink" title="数学基础"></a>数学基础</h1><p>在说大数定律之前，我们首先需要了解概率论的一些基本知识。当然了，概率，期望，方差那些基本的就不说了。</p>
+<h2 id="期望的第二种算法"><a href="#期望的第二种算法" class="headerlink" title="期望的第二种算法"></a>期望的第二种算法</h2><p>对了，说到期望，期望还有一种计算方式(第一种就不说了吧)：<br><span>$$\begin{equation}
+E[X] = \int_{-\infty}^0 -F_X(x)dx + \int_0^\infty (1-F_X(x))dx
+\end{equation}$$</span><!-- Has MathJax --></p>
+<p>证明的话看下面这张图就行了：<br><img src="http://ww3.sinaimg.cn/large/9dec4451jw1f1ew0tsg33j20p809kq45.jpg" alt=""></p>
+<h2 id="Indicator-rv"><a href="#Indicator-rv" class="headerlink" title="Indicator rv"></a>Indicator rv</h2><p>对于任何一个时间A，它的Indicator rv <span>$$\mathbb{I}_A=\begin{cases}
+0&amp; w \in A\\
+1&amp; w \notin A
+\end{cases}$$</span><!-- Has MathJax --></p>
+<h2 id="Moment-generating-function-MGF"><a href="#Moment-generating-function-MGF" class="headerlink" title="Moment generating function(MGF)"></a>Moment generating function(MGF)</h2><p>一个随机变量的MGF定义为：<br><span>$g_X(r) = E[e^{rx}] = \int^\infty_{-\infty} e^{rx} dF_X(x)= \int^\infty_{0} e^{rx} dF_X(x) + \int^0_{-\infty} e^{rx} dF_X(x)$</span><!-- Has MathJax --></p>
+<p>显而易见， <span>$g_X(r)$</span><!-- Has MathJax --> 并不是对于所有的r都存在的。对于正数r来说，必存在一个最大值 <span>$r_+$</span><!-- Has MathJax --> 使得对于所有的 <span>$r \le r_+$</span><!-- Has MathJax --> ，第一个积分存在；同理，必存在一个最小值 <span>$r_-$</span><!-- Has MathJax --> 使得对于所有的 <span>$r \ge r_-$</span><!-- Has MathJax --> ，第二个积分存在。所以我们可以找到一个区间 <span>$I(x)=[r_-,r_+]$</span><!-- Has MathJax --> ，在此范围内 <span>$g_X(r)$</span><!-- Has MathJax --> 恒存在。</p>
+<p>我们对 <span>$g_X(r)$</span><!-- Has MathJax --> 求n阶导，可以发现：<br><span>$\dfrac{\partial^k}{\partial r^k} g_X(r) = \int^\infty_{-\infty} x^ke^{rx}dF_X(x)$</span><!-- Has MathJax --></p>
+<p>令r = 0，可以发现：<br><span>$\dfrac{\partial^k}{\partial r^k} g_X(r){\bigg|}_{r=0} = E[X^k]$</span><!-- Has MathJax --></p>
+<p>这就是它被称为moment generate function的原因。</p>
+<h1 id="一些基础的不等式"><a href="#一些基础的不等式" class="headerlink" title="一些基础的不等式"></a>一些基础的不等式</h1><h2 id="Markov-inequality"><a href="#Markov-inequality" class="headerlink" title="Markov inequality"></a>Markov inequality</h2><p>对于 非负的rv Y，有<br><span>$P\left\{Y \ge y\right\} \le \dfrac{E[Y]}{y}$</span><!-- Has MathJax --></p>
+<h3 id="Proof"><a href="#Proof" class="headerlink" title="Proof"></a>Proof</h3><ul>
+<li>下图给出了直观的证明：<br><img src="http://ww2.sinaimg.cn/large/9dec4451gw1f1f47uvw8pj20u407gdgu.jpg" alt=""></li>
+<li><p>或者可以采用Indicator rv证明：</p>
+<p>易知：</p>
+<span>$Y \ge y\mathbb{I}_{Y\ge y}$</span><!-- Has MathJax -->
+<p>对两边求期望（由于y是常数，所以右边是对indicator rv求期望），可得</p>
+<span>$E[Y] \ge yP\left\{Y\ge y\right\}$</span><!-- Has MathJax -->
+<p>除一下就可以得到markov inequality</p>
+<p>我们还可以得到 <span>$\lim_{y \to \infty} yP\left\{Y\ge y\right\} = 0$</span><!-- Has MathJax --></p>
+<h2 id="Chebyshev-inequality"><a href="#Chebyshev-inequality" class="headerlink" title="Chebyshev inequality"></a>Chebyshev inequality</h2><p>由markov inequality，我们可以得到：</p>
+<span>$P\left\{(Z-E[Z])^2 \ge y\right\} \le \dfrac{\delta_Z^2}{y}$</span><!-- Has MathJax -->
+<p>其中 <span>$\delta_Z^2$</span><!-- Has MathJax --> 表示Z的方差。<br>由上式，我们可以得到 Chebyshev inequality：</p>
+<span>$P\left\{|Z-E[Z]| \ge \epsilon \right\} \le \dfrac{\delta_Z^2}{\epsilon}$</span><!-- Has MathJax -->
+</li>
+</ul>
+<h3 id="与-Markov-inequality的区别："><a href="#与-Markov-inequality的区别：" class="headerlink" title="与 Markov inequality的区别："></a>与 Markov inequality的区别：</h3><ul>
+<li>markov inequality需要非负的rv，但是chebyshev inequality没有这个限制</li>
+<li><p>Chebyshev inequality使得rv 以平方的速度趋向均值而 markov inequality 是线性速度。</p>
+<p>Chebyshev inequality在处理多个rv相加是尤其有用。在证明WLLN时会用到Chebyshev inequality</p>
+</li>
+</ul>
+<h2 id="Chernoff-bounds"><a href="#Chernoff-bounds" class="headerlink" title="Chernoff bounds"></a>Chernoff bounds</h2><p>同样从markov inequality出发，我们可以得到：<br><span>$P\left\{exp(rZ) \ge y\right\} \le \dfrac{g_Z(r)}{y}$</span><!-- Has MathJax --></p>
+<p>其中 <span>$g_Z(r) = E[e^{rZ}], y &gt; 0$</span><!-- Has MathJax --> 。如果令 <span>$y = e^{rb}$</span><!-- Has MathJax --> ，我们可以得到：<br><span>$$P\left\{Z \ge b\right\} \le g_Z(r)exp(-rb)\quad 0&lt;r \in I(Z)\\
+P\left\{Z \le b\right\} \le g_Z(r)exp(-rb) \quad 0&gt;r \in I(Z)$$</span><!-- Has MathJax --></p>
+<p>之所以会出现两种情况是因为 <span>$e^{rZ} \ge e^{rb}$</span><!-- Has MathJax --> 根据r的符号不同会得到不同的结果。</p>
+<p>令 rv <span>$S_n = X_1 + X_2 + ... + X_n$</span><!-- Has MathJax --> 。则有：<br><span>$$P \left\{S_N\ge na\right\} \le {g_X(r)}^n exp(-rna) \quad 0&lt;r \in I(Z)\\
+P \left\{S_N\le na\right\} \le {g_X(r)}^n exp(-rna) \quad 0&gt;r \in I(Z)$$</span><!-- Has MathJax --></p>
+<p>令 <span>$\gamma_X(r)=ln g_X(r)$</span><!-- Has MathJax --> 。这货被称为semi-invariant MGF(取个ln名字就又高上大了好多╮(￣▽￣”)╭)。</p>
+<p>对 <span>$\gamma_X(r)$</span><!-- Has MathJax --> 在r=0处求导，可以发现 <span>$\gamma_X&apos;(0)=E[X], \gamma_X&apos;&apos;(0)=\delta_X^2$</span><!-- Has MathJax --> 。这是个典型的二次函数。如果X的期望大于0，那么我们可以画出 <span>$\gamma_X(r)$</span><!-- Has MathJax --> 的图像：<br><img src="http://ww4.sinaimg.cn/large/9dec4451gw1f1f5mszrxsj20pi088dgp.jpg" alt=""></p>
+<p>当然我们就可以把上面的不等式进一步化简：<br><span>$$P \left\{S_N\ge na\right\} \le exp[n(\gamma_X(r)-ra)] \quad 0&lt;r \in I(Z)\\
+
+P \left\{S_N\le na\right\} \le exp[n(\gamma_X(r)-ra)] \quad 0&gt;r \in I(Z)$$</span><!-- Has MathJax --></p>
+<p>如果我们想要找到tightest bound，就需要找到式子右边的最小值。对右边的式子求导，我们可以发现： <span>$\dfrac{\partial}{\partial r}(\gamma_X(r)-ra) = E[X]-a$</span><!-- Has MathJax --> 。所以我们可以发现，对于r&gt;0,a&gt;E[X] 或者 r<0,a<e[x] 来说，<span="">$\gamma_X(r)-ra &lt; 0$<!-- Has MathJax --> 。令 <span>$\mu_X(a) = \inf_r{\gamma_X(r)-ra}$</span><!-- Has MathJax --> ，则可以进一步简化上面的不等式：<br><span>$$P \left\{S_N\ge na\right\} \le exp[n\mu_X(a)] \quad \mu_X(a)&lt;0 , a &gt; E[x]\\
+
+P \left\{S_N\le na\right\} \le exp[n\mu_X(a)] \quad \mu_X(a)&lt;0 , a &lt; E[x]$$</span><!-- Has MathJax --></0,a<e[x]></p>
+<h1 id="laws-of-large-number"><a href="#laws-of-large-number" class="headerlink" title="laws of large number"></a>laws of large number</h1><h2 id="WLLN-with-finite-variance"><a href="#WLLN-with-finite-variance" class="headerlink" title="WLLN with finite variance"></a>WLLN with finite variance</h2><p>令 X 表示方差存在的rv， <span>$S_n = X_1+X_2+...X_n$</span><!-- Has MathJax --> ，其中所有的X为IID。有下式成立：<br><span>$\lim_{n \to \infty} Pr\left\{|\dfrac{S_n}{n}-\bar{X}| &gt; \epsilon\right\} = 0$</span><!-- Has MathJax --></p>
+<h2 id="central-limit-theorem"><a href="#central-limit-theorem" class="headerlink" title="central limit theorem"></a>central limit theorem</h2><span>$X_1, X_2,...,X_n$</span><!-- Has MathJax --> 是n个IID的rv，均值为 <span>$\bar{X}$</span><!-- Has MathJax --> ，方差为 <span>$\sigma^2$</span><!-- Has MathJax --> 。故对于每个实数 z，均有下式成立：<br><span>$\lim_{n \to \infty} Pr\left\{\dfrac{S_n-n\bar{X}}{\sigma\sqrt{n}} \le z\right\} = \Phi(z)$</span><!-- Has MathJax -->
+<p>其中 <span>$\Phi(z)$</span><!-- Has MathJax --> 为高斯分布</p>
+<h2 id="WLLN"><a href="#WLLN" class="headerlink" title="WLLN"></a>WLLN</h2><span>$S_n = X_1+X_2+...+X_n$</span><!-- Has MathJax --> ，其中 <span>$X_1, X_2,...,X_n$</span><!-- Has MathJax --> 为IID rv，满足 <span>$E[|X|] &lt; \infty$</span><!-- Has MathJax --> ，则<br><span>$\lim_{n\to\infty} Pr\left\{|\dfrac{S_n}{n} - E[X]| &gt; \epsilon\right\} = 0$</span><!-- Has MathJax -->
+<h3 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h3><p>我们基于原有的rv <span>$X_i$</span><!-- Has MathJax --> 定义截断(truncation)变量 <span>$\hat{X}_i$</span><!-- Has MathJax --> ：<br><span>$$\hat{X}_i=
+\begin{cases}
+X_i&amp;E[X]-b \le X_i \le E[x]+b\\
+E[X]+b &amp; X_i &gt; E[X]+b\\
+E[X]-b &amp; X_i &lt; E[X]+b
+\end{cases}$$</span><!-- Has MathJax --></p>
+<p>根Chebyshev inequality，有：<br><span>$Pr\left\{|\dfrac{\hat{S}_n}{n} -E[\hat{X}]|&gt; \dfrac{\epsilon}{2}\right\} \le \dfrac {4\sigma_{\hat{X}}}{n\epsilon^2}$</span><!-- Has MathJax --></p>
+<p>其中<br><span>$$\begin{aligned}
+\sigma_{\hat{X}} &amp;= E{[\hat{X}-E[\hat{X}]]}^2 \le E[|\hat{X}-\bar{X}|][|\hat{X}-\bar{X}|]\\
+&amp;\le E[|\hat{X}-\bar{X}|][|\hat{X}-X| + |X -\bar{X}||]\\
+&amp;=E[|\hat{X}-\bar{X}||\hat{X}-X|] + E[|\hat{X}-\bar{X}||X -\bar{X}|]\\
+&amp;\le bE[|\hat{X}-\bar{X}|]\\
+&amp;\le 2bE[|X|]
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>所以原不等式可化为：<br><span>$Pr\left\{|\dfrac{\hat{S}_n}{n} -E[\hat{X}]|&gt; \dfrac{\epsilon}{2}\right\} \le \dfrac{8bE[|X|]}{n\epsilon^2}$</span><!-- Has MathJax --></p>
+<p>又由E[X]的计算公式，可知：<br><span>$E[|\hat{X}-X|] = 2\int_{b}^{\infty} 1 - F_X(x) dx$</span><!-- Has MathJax --></p>
+<p>由于 <span>$E[|X|]$</span><!-- Has MathJax --> 存在，故 <span>$\int_{b}^{\infty} 1-F_X(x)$</span><!-- Has MathJax --> 趋向于0。故对于任何 <span>$\epsilon$</span><!-- Has MathJax --> ，必有b使得下式成立：<br><span>$E[\hat{X}-X] \le \dfrac{\epsilon}{2}$</span><!-- Has MathJax --></p>
+<p>故原不等式可以继续化简(hexo-math没有公式编号只能这样了。。。。。)为：<br><span>$Pr\left\{|\dfrac{\hat{S}_n}{n} -E[X]|&gt; \epsilon\right\} \le \dfrac{8bE[|X|]}{n\epsilon^2}$</span><!-- Has MathJax --></p>
+<p>所以有：<br><span>$Pr\left\{|\dfrac{S_n}{n} -E[X]|&gt; \epsilon\right\} \le Pr\left\{|\dfrac{\hat{S}_n}{n} -E[X]|&gt; \epsilon\right\} + Pr\left\{S_n\neq \hat{S}_n\right\}$</span><!-- Has MathJax --></p>
+<p>其中 <span>$Pr\left\{S_n\neq \hat{S}_n\right\} \le nPr\left\{|X_i-\bar{X}|&gt;b\right\}$</span><!-- Has MathJax --><br>带入原式，你就可以得到WLLN了</p>
+<h2 id="convergence-of-rv"><a href="#convergence-of-rv" class="headerlink" title="convergence of rv"></a>convergence of rv</h2><h3 id="convergence-in-distribution"><a href="#convergence-in-distribution" class="headerlink" title="convergence in distribution"></a>convergence in distribution</h3><span>$\lim_{n \to \infty} F_{Z_n}(z) = F_Z(z)$</span><!-- Has MathJax -->
+<p>CLT就是典型的例子</p>
+<h3 id="convergence-in-probability"><a href="#convergence-in-probability" class="headerlink" title="convergence in probability"></a>convergence in probability</h3><span>$\lim_{n \to \infty} Pr\left\{|Z_n-Z| &gt; \epsilon\right\} = 0$</span><!-- Has MathJax -->
+<h3 id="convergence-in-mean-square"><a href="#convergence-in-mean-square" class="headerlink" title="convergence in mean square"></a>convergence in mean square</h3><span>$\lim_{n \to \infty} E[(Z_n-Z)^2] = 0$</span><!-- Has MathJax -->
+<h3 id="convergence-with-probability-1"><a href="#convergence-with-probability-1" class="headerlink" title="convergence with probability 1"></a>convergence with probability 1</h3><span>$Pr\left\{w\in\Omega:\lim_{n\to\infty} Z_n(w) = Z(w)\right\}$</span><!-- Has MathJax -->
+<p>但是需要特别注意的是这里convergence的意思。这里的convergence是指下图的这种：<br><img src="http://ww3.sinaimg.cn/large/9dec4451gw1f1fa2hmfccj20ss0bomyb.jpg" alt=""></p>
+<p>对于下图的这种分布：<br><img src="http://ww4.sinaimg.cn/large/9dec4451gw1f1fa2vfhmaj20ys08kdhw.jpg" alt=""><br>这种分布是convergence in probability，而不是convergence with probability 1。这一点需要特别注意。</p>
+<h3 id="四者关系"><a href="#四者关系" class="headerlink" title="四者关系"></a>四者关系</h3><p><img src="http://ww3.sinaimg.cn/large/9dec4451gw1f1fa4l5gxij20wq0ekwj3.jpg" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/stochastic-process/" rel="tag">#stochastic process</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/22/简谈L0-L1和L2/" rel="next" title="简谈L0,L1和L2">
+                <i class="fa fa-chevron-left"></i> 简谈L0,L1和L2
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/01/possion-process/" rel="prev" title="possion process">
+                possion process <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/28/漫谈大数定律/"
+           data-title="漫谈大数定律" data-url="/2016/02/28/漫谈大数定律/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数学基础"><span class="nav-number">1.</span> <span class="nav-text">数学基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#期望的第二种算法"><span class="nav-number">1.1.</span> <span class="nav-text">期望的第二种算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Indicator-rv"><span class="nav-number">1.2.</span> <span class="nav-text">Indicator rv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Moment-generating-function-MGF"><span class="nav-number">1.3.</span> <span class="nav-text">Moment generating function(MGF)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些基础的不等式"><span class="nav-number">2.</span> <span class="nav-text">一些基础的不等式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Markov-inequality"><span class="nav-number">2.1.</span> <span class="nav-text">Markov inequality</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Proof"><span class="nav-number">2.1.1.</span> <span class="nav-text">Proof</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chebyshev-inequality"><span class="nav-number">2.2.</span> <span class="nav-text">Chebyshev inequality</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#与-Markov-inequality的区别："><span class="nav-number">2.2.1.</span> <span class="nav-text">与 Markov inequality的区别：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chernoff-bounds"><span class="nav-number">2.3.</span> <span class="nav-text">Chernoff bounds</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#laws-of-large-number"><span class="nav-number">3.</span> <span class="nav-text">laws of large number</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WLLN-with-finite-variance"><span class="nav-number">3.1.</span> <span class="nav-text">WLLN with finite variance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#central-limit-theorem"><span class="nav-number">3.2.</span> <span class="nav-text">central limit theorem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WLLN"><span class="nav-number">3.3.</span> <span class="nav-text">WLLN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#证明"><span class="nav-number">3.3.1.</span> <span class="nav-text">证明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#convergence-of-rv"><span class="nav-number">3.4.</span> <span class="nav-text">convergence of rv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#convergence-in-distribution"><span class="nav-number">3.4.1.</span> <span class="nav-text">convergence in distribution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#convergence-in-probability"><span class="nav-number">3.4.2.</span> <span class="nav-text">convergence in probability</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#convergence-in-mean-square"><span class="nav-number">3.4.3.</span> <span class="nav-text">convergence in mean square</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#convergence-with-probability-1"><span class="nav-number">3.4.4.</span> <span class="nav-text">convergence with probability 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四者关系"><span class="nav-number">3.4.5.</span> <span class="nav-text">四者关系</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

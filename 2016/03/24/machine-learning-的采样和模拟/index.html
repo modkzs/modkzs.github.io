@@ -1,0 +1,783 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="math,PGM," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="最开始接触到随机采样是在RBM里面求解的时候，不过都忘完了。最近的课上提到了随机采样，没去上课而那个SB老师又删了部分PPT，只好自己找paper看了，也算复习和补充。本文的算法都来自paper An Introduction to MCMC for Machine Learning。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="machine learning 的模拟和采样">
+<meta property="og:url" content="/2016/03/24/machine-learning-的采样和模拟/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="最开始接触到随机采样是在RBM里面求解的时候，不过都忘完了。最近的课上提到了随机采样，没去上课而那个SB老师又删了部分PPT，只好自己找paper看了，也算复习和补充。本文的算法都来自paper An Introduction to MCMC for Machine Learning。">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f280o9fg1xj20no07yq3l.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f280pcz96zj20oc0bi0tn.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/9dec4451jw1f28wy9nru9j20gs0b6q3k.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f28x00th2ej20qk0l476v.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/9dec4451jw1f29d9b3qw5j20qc0o8gne.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f2akmisg14j20ig0cswfh.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f2aksw8lzsj20qw0l0q53.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/9dec4451jw1f2alvxv3s0j20ki096aan.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f2am2ax89uj20m20hqdhy.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f2b6deijlhj20ju0c0ab0.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f2b6p1xh6hj20gk0e074q.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/9dec4451jw1f2b78r64wsj20ng0gsgnl.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451jw1f2b7rlyw2vj20k80gmabd.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/9dec4451jw1f2b8748q4dj20lu0660t3.jpg">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="machine learning 的模拟和采样">
+<meta name="twitter:description" content="最开始接触到随机采样是在RBM里面求解的时候，不过都忘完了。最近的课上提到了随机采样，没去上课而那个SB老师又删了部分PPT，只好自己找paper看了，也算复习和补充。本文的算法都来自paper An Introduction to MCMC for Machine Learning。">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f280o9fg1xj20no07yq3l.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/03/24/machine-learning-的采样和模拟/"/>
+
+  <title> machine learning 的模拟和采样 | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                machine learning 的模拟和采样
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-24T11:49:15+08:00" content="Mar 24 2016">
+              Mar 24 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/ml/" itemprop="url" rel="index">
+                    <span itemprop="name">ml</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/24/machine-learning-的采样和模拟/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/24/machine-learning-的采样和模拟/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最开始接触到随机采样是在RBM里面求解的时候，不过都忘完了。最近的课上提到了随机采样，没去上课而那个SB老师又删了部分PPT，只好自己找paper看了，也算复习和补充。本文的算法都来自paper An Introduction to MCMC for Machine Learning。<br><a id="more"></a></p>
+<h1 id="先看下这货能干啥"><a href="#先看下这货能干啥" class="headerlink" title="先看下这货能干啥"></a>先看下这货能干啥</h1><p>以前也看到过一些介绍随机模拟的文章，但是当时我的内心是机器不屑的，我可是学ml的，你们那些模拟XXX的，都一边去！后来发现还是too naive= =<br>在machine learning中，MCMC主要用于解决高维空间中的积分和优化问题。下面说一些简单的用处。</p>
+<h2 id="常见的高维积分场景"><a href="#常见的高维积分场景" class="headerlink" title="常见的高维积分场景"></a>常见的高维积分场景</h2><h3 id="bayesian-inference-and-learning"><a href="#bayesian-inference-and-learning" class="headerlink" title="bayesian inference and learning"></a>bayesian inference and learning</h3><p>当存在一些未知的 <span>$x\in\mathcal{X}, y\in\mathcal{Y}$</span><!-- Has MathJax --> ，积分就比较困难。关键是贝爷的东西基本都是要积分的，所以只能用模拟来做积分。贝爷的积分主要有下面几种：</p>
+<ol>
+<li>normalisation<span>$p(x|y) = \dfrac{p(y|x)p(x)}{\int_\mathcal{X}(y|x&apos;)p(x&apos;)dx&apos;}$</span><!-- Has MathJax --></li>
+<li>marginalisation<span>$p(x|y) = \int_\mathcal{Z}p(x,z|y)dz$</span><!-- Has MathJax --></li>
+<li>expectation<span>$\mathbb{E}_{p(x|y)}(f(x)) = \int_\mathcal{X}f(x)p(x|y)dx$</span><!-- Has MathJax -->
+</li>
+</ol>
+<h3 id="statistical-mechanics"><a href="#statistical-mechanics" class="headerlink" title="statistical mechanics"></a>statistical mechanics</h3><p>计算一个系统中的 partition function，如Boltzmann machine里面的 <span>$Z=\sum_s\exp\big[-\dfrac{E(s)}{kT}\big]$</span><!-- Has MathJax --> 。直接积分太困难，所以用模拟。</p>
+<h3 id="optimisation"><a href="#optimisation" class="headerlink" title="optimisation"></a>optimisation</h3><p>目标很明确，就是从可行解中找到最优解。在计算代价太高的情况下可以用一些模拟的方法</p>
+<h3 id="penalised-likelihood-model-selection"><a href="#penalised-likelihood-model-selection" class="headerlink" title="penalised likelihood model selection"></a>penalised likelihood model selection</h3><p>模型选择的方法。通常被分为2步，首先找到每个模型的最大似然，然后找到惩罚项(如MDL，AIC等等)选择模型。但是问题在于潜在的model太多，大部分都不是我们想要的。</p>
+<h2 id="Monte-Carlo-principle"><a href="#Monte-Carlo-principle" class="headerlink" title="Monte Carlo principle"></a>Monte Carlo principle</h2><p>好了，说完场景，那么高维积分这东西怎么搞呐？搞定这东西主要是靠Monte Carlo simulation 。而这个simulation就是我们要去采样的主要原因。不多说废话，先来看看 Monte Carlo simulation 到底是啥。</p>
+<p>首先我们拿到了某个分布产生的数据 <span>$\left\{x^{(i)}\right\}_{i=1}^N$</span><!-- Has MathJax --> ，现在我们想计算 <span>$p(x)$</span><!-- Has MathJax --> 。那么很简单的思路就是拿这批数据过来直接算下有多少个点在 <span>$x$</span><!-- Has MathJax --> 上么。抽象的表达就是：<br><span>$p_N(x) = \dfrac{1}{N}\sum_{i=1}^N \delta_{x^{(i)} }(x)$</span><!-- Has MathJax --><br>其中 <span>$\delta_{x^{(i)} }(x)$</span><!-- Has MathJax --> 叫做delta-Dirac mass。有兴趣的可以自行<a href="https://en.wikipedia.org/wiki/Dirac_delta_function" target="_blank" rel="external">Wikipedia</a> 反正上面的式子就是这个意思。那我们可以算出来概率，积分什么的不就轻轻松松了么！</p>
+<p>对于积分 <span>$I(f) = \inf_\mathcal{X}f(x)p(x)dx$</span><!-- Has MathJax --> 来说，我们可以用 <span>$I_N(f) = \dfrac{1}{N}\sum_{i=1}^Nf(x^{(i)})$</span><!-- Has MathJax --> 来模拟。SLLN保证了当 <span>$N$</span><!-- Has MathJax --> 趋向于无穷大时，它一定会收敛到积分。如果方差 <span>$\sigma_f^2 = \mathbb{E}_{p(x)}(f^2(x))-I^2(f) &lt; \infty$</span><!-- Has MathJax --> ，收敛速度服从高斯分布。这一块感兴趣的可以去看<a href="http://modkzs.github.io/2016/02/28/%E6%BC%AB%E8%B0%88%E5%A4%A7%E6%95%B0%E5%AE%9A%E5%BE%8B/" target="_blank" rel="external">大数定律</a></p>
+<p>对于前面说的优化问题，这种方法也是可以求解的：<br><span>$\hat{x} = {\arg\max}_{x^{(i)};i=1,2,...,N} p(x^{(i)})$</span><!-- Has MathJax --></p>
+<p>当然了，结果和真实结果之间当然是有误差的。理想不减肥，我有什么办法！找到解法之后，问题就简化为采样问题了。这就引出了我们今天的话题：已知分布，如何采样？</p>
+<h1 id="常见的采样"><a href="#常见的采样" class="headerlink" title="常见的采样"></a>常见的采样</h1><h2 id="rejection-sampling"><a href="#rejection-sampling" class="headerlink" title="rejection sampling"></a>rejection sampling</h2><p>假设我们要从分布 <span>$p(x)$</span><!-- Has MathJax --> 采样，但是 <span>$p(x)$</span><!-- Has MathJax --> 很难直接采样。我们找到一个易于采样的分布 <span>$q(x)$</span><!-- Has MathJax --> 满足 <span>$p(x)\le Mq(x),\ M&lt;\infty$</span><!-- Has MathJax --> 。在此基础上我们进行下面的accept/reject procedure：<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f280o9fg1xj20no07yq3l.jpg" alt=""><br>下图直观的描述了一次 accept/reject ：<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f280pcz96zj20oc0bi0tn.jpg" alt=""><br>方法很简单，但是随之而来的缺陷也很明显。首先是在整个样本空间上很难找到一个有效的 <span>$M$</span><!-- Has MathJax --> ；就算找到了，如果 <span>$M$</span><!-- Has MathJax --> 太大，那么acceptance的概率 <span>$Pr\left\{x\text{ accepted}\right\} = Pr\left\{u &lt; \dfrac{p(x)}{Mq(x)}\right\} = \dfrac{1}{M}$</span><!-- Has MathJax --> 就很小，在高维空间下就更小了，所以高维空间的话这货就很难吃得动。</p>
+<h2 id="importance-sampling"><a href="#importance-sampling" class="headerlink" title="importance sampling"></a>importance sampling</h2><p>和前面一样，我们还是引入一个实际进行采样的分布 <span>$q(x)$</span><!-- Has MathJax --> 。我们可以将前面的积分改写成：<br><span>$I(f) = \int f(x)w(x)q(x)dx$</span><!-- Has MathJax --><br>其中 <span>$w(x)= \frac{p(x)}{q(x)}$</span><!-- Has MathJax --> ，被称为importance weight。所以如果我们可以通过 <span>$q(x)$</span><!-- Has MathJax --> 采样出 <span>$\left\{x^{(i)}\right\}_{i=1}^N$</span><!-- Has MathJax --> 并且得到 <span>$w(x^{(i)})$</span><!-- Has MathJax --> ，就可以计算 <span>$I(f)$</span><!-- Has MathJax --> 了：<br><span>$\hat{I}_N(f) = \sum_{i=1}^N f(x^{(i)})w(x^{(i)})$</span><!-- Has MathJax --><br>换个角度，也可以这么理解：我们可以通过 importance weight 去计算 <span>$\hat{p}_N(x) = \sum_{i=1}^N w(x^{(i)})\delta_{x^{(i)} }(x)$</span><!-- Has MathJax --> ，<span>$f(x)$</span><!-- Has MathJax --> 对 <span>$\hat{p}_N(x)$</span><!-- Has MathJax --> 积分。</p>
+<p>在importance sampling中，有一些选择 <span>$q(x)$</span><!-- Has MathJax --> 的标准。很容易发现，我们选择的 <span>$q(x)$</span><!-- Has MathJax --> 应使得 <span>$\hat{I}_N(f)$</span><!-- Has MathJax --> 的方差尽可能小。 我们可以计算出 <span>$f(x)w(x)$</span><!-- Has MathJax --> 相对于 <span>$q(x)$</span><!-- Has MathJax --> 的方差：<br><span>$\text{var}_{q(x)}(f(x)w(x)) = \mathbb{E}_{q(x)}(f^2(x)w^2(x)) - I^2(f)$</span><!-- Has MathJax --><br>第二项不会随 <span>$q(x)$</span><!-- Has MathJax --> 的改变而改变。所以我们只需要考虑第一项的变化。由 Jensen不等式，可得：<br><span>$\mathbb{E}_{q(x)}(f^2(x)w^2(x)) \ge (\mathbb{E}_{q(x)}(|f(x)|w(x)))^2 = (\int|f(x)|p(x)dx)^2$</span><!-- Has MathJax --><br>当 <span>$q^* (x) = \dfrac{|f(x)|p(x)}{\int |f(x)|p(x)dx}$</span><!-- Has MathJax --> 时，等号成立。可惜这个结果一点用都没有(￣▽￣”) 本来 <span>$p(x)$</span><!-- Has MathJax --> 就不好采样，现在你在 <span>$q(x)$</span><!-- Has MathJax --> 里面插个 <span>$p(x)$</span><!-- Has MathJax --> ，要 <span>$q(x)$</span><!-- Has MathJax --> 有毛线用啊！</p>
+<p>嘛，话也不能这么说(虽然是实话)。这个结果暗示了 importance sampling 是非常高效(super-efficient)的，只要我们找到了 <span>$q(x)$</span><!-- Has MathJax --> ，而且通过 Monte Carlo method 找到这种 <span>$q(x)$</span><!-- Has MathJax --> 是有可能的。当然了，在某些特殊情况下，我们只关注概率分布的某一部分(比如长尾效应的采样)时，用这种方法进行建模就很好。</p>
+<h3 id="高维问题"><a href="#高维问题" class="headerlink" title="高维问题"></a>高维问题</h3><p>高维永远都是问题=。=这里的问题和上面的acceptance sampling一样，进入高维的世界之后，很难找到合适的 <span>$q(x)$</span><!-- Has MathJax --> 。不过这里发展出了Adaptive importance sampling 用于高维的采样。改进后方法的核心是计算下面的导数：<br><span>$D(\theta) = \mathbb{E}_{q(x,\theta)}(f^2(x)w(x,\theta)\dfrac{\partial w(x, \theta)}{\partial \theta})$</span><!-- Has MathJax --><br>然后用下面的规则更新 <span>$\theta$</span><!-- Has MathJax --><br><span>$\theta_{t+1} = \theta_t - \alpha\dfrac{1}{N}\sum_{i=1}^Nf^2(x^{(i)})w(x^{(i)},\theta_t)\dfrac{\partial w(x^{(i)}, \theta_t)}{\partial \theta_t}$</span><!-- Has MathJax --><br>其中 <span>$\alpha$</span><!-- Has MathJax --> 为学习率， <span>$x^{(i)}\sim q(x, \theta)$</span><!-- Has MathJax --> 。当然你用牛顿法什么的去解也是可以的。</p>
+<p>但是这样求出来的 <span>$p(x) = w(x)q(x)$</span><!-- Has MathJax --> 是没有做normalising的，也就是说对x积分可能不为1。因此重写 <span>$I(f)$</span><!-- Has MathJax --> ：<br><span>$I(f) = \dfrac{\int f(x)w(x)q(x)dx}{\int w(x)q(x)dx}$</span><!-- Has MathJax --></p>
+<p>对应到采样之后的计算，即为：<br><span>$\tilde{I}_N(f) = \dfrac{\frac{1}{N}\sum_{i=1}^N f(x^{(i)})w(x^{(i)})}{\frac{1}{N}\sum_{i=1}^N w(x^{(i)})} = \sum_{i=1}^N f(x^{(i)})\tilde{w}(x^{(i)})$</span><!-- Has MathJax --><br>我们可以将 <span>$\tilde{w}$</span><!-- Has MathJax --> 称为 normalised importance weight 。某些paper证明在平方损失下会有 <span>$\tilde{I}_N(f)$</span><!-- Has MathJax --> 效果好于 <span>$\hat{I}_N(f)$</span><!-- Has MathJax --></p>
+<p>如果需要得到 <span>$M$</span><!-- Has MathJax --> 个 IID 的样本，可以考虑sampling importance resampling(SIR)。</p>
+<p>你应该也能感受到，这种用概率分布区模拟采样的办法总是无法得到很好的效果(要不然优化来优化去优化个毛线啊！(╯‵□′)╯︵┻━┻)，所以我们才会在importance sampling当中费尽心机去取得较好的效果。因此下面我们介绍杀手级的随机采样方法——MCMC</p>
+<h1 id="MCMC"><a href="#MCMC" class="headerlink" title="MCMC"></a>MCMC</h1><p>MCMC是Markov chain Monte Carlo的缩写。所以 markov chain自然是基础。对于<a href="http://modkzs.github.io/2016/03/02/finite-state-markov-chain/" target="_blank" rel="external">markov chain</a> 和 <a href="http://modkzs.github.io/2016/03/14/markov-process/" target="_blank" rel="external">markov process</a>，我都有过介绍，有兴趣出门右转，这里不详细说明。这里只说下需要用到的性质，不做证明。</p>
+<h2 id="markov-chain的简单介绍"><a href="#markov-chain的简单介绍" class="headerlink" title="markov chain的简单介绍"></a>markov chain的简单介绍</h2><p>markov chain的核心就是<br><span>$p(x^{(i)}|x^{(i-1)}, x^{(i-2)},...,x^{(1)}) = p(x^{(i)}|x^{(i-1)})$</span><!-- Has MathJax --><br>在这里会延伸出2种情况： <span>$p(x^{(i)}|x^{(i-1)}) = p(x^{(1)}|x^{(0)}) = T(x^{(i)}|x^{(i-1)})$</span><!-- Has MathJax --> ，这被称为 homogeneous 。</p>
+<p>markov chain的收敛需要满足两个条件：</p>
+<ul>
+<li>Irreducibility 任何 state 访问其他 state 的概率都大于0</li>
+<li>Aperiodicity 每个 state 的访问周期为1。</li>
+</ul>
+<p>detailed balance，即 <span>$p(x^{(i)})T(x^{(i-1)}|x^{(i)}) = p(x^{(i-1)})T(x^{(i)}|x^{(i-1)})$</span><!-- Has MathJax -->， 也可以推导出markov chain的收敛，但是只是必要非充分条件。</p>
+<p>在MCMC算法当中，我们利用上面3个条件，就可以构造出满足要求的markov chain(即最后收敛的概率和我们所要采样的概率相同)。但是我们需要更快的收敛速度。从markov chain的条件我们知道，它的所有特征根均小于等于1。所以其收敛速度取决于最大的小于1的特征根。</p>
+<p>除了用特征根求解之外，还可以用 <span>$\sum_{x^{(i+1)} }p(x^{(i)})T(x^{(i+1)}|x^{(i)}) = p(x^{(i+1)})$</span><!-- Has MathJax --> 。在MCMC中，我们将上面的形式稍加改进，使用下面的方法：<br><span>$\int p(x^{(i)})K(x^{(i+1)}|x^{(i)})dx^{(i)} = p(x^{(i+1)})$</span><!-- Has MathJax --></p>
+<p>下面我们介绍以该思路为核心构建的一系列采样算法</p>
+<h2 id="Metropolis-Hastings-algorithm"><a href="#Metropolis-Hastings-algorithm" class="headerlink" title="Metropolis-Hastings algorithm"></a>Metropolis-Hastings algorithm</h2><p>Metropolis-Hasting(简写为MH)是目前最流行的MCMC算法。大部分实际使用的MCMC算法都可以被推导出是该算法的特殊情况或者扩展。</p>
+<p>MH算法需要 proposal 分布 <span>$q(x^* | x)$</span><!-- Has MathJax --> 。每次根据当前的 <span>$x$</span><!-- Has MathJax --> ，利用 <span>$q(x^* | x)$</span><!-- Has MathJax --> 采样出 <span>$x^* {}$</span><!-- Has MathJax --> ，然后按照 acceptance 概率进行移动。<br><span>$A(x, x^* ) = \min\left\{1, \frac{p(x^*)q(x|x^*)}{p(x)q(x^* |x)}\right\}$</span><!-- Has MathJax --><br>整个算法的思路可以表示为下面的伪代码：<br><img src="http://ww3.sinaimg.cn/large/9dec4451jw1f28wy9nru9j20gs0b6q3k.jpg" alt=""></p>
+<h3 id="到底是怎么来的？"><a href="#到底是怎么来的？" class="headerlink" title=" 到底是怎么来的？"></a><span>$\mathcal{A}$</span><!-- Has MathJax --> 到底是怎么来的？</h3><p>paper里面直接给出了公式，但是没有给出来历。</p>
+<p>我们还是从上面的detailed balance出发。将 <span>$q(x^{(i)}|x^{(j)})$</span><!-- Has MathJax --> 即为从state <span>$x^{(i)}$</span><!-- Has MathJax --> 转移到 state <span>$x^{(j)}$</span><!-- Has MathJax --> 的概率，那么一般情况下来说，detailed balance必然是不成立的(不废话么，成立还有什么好说的)。所以我们改造一下，引入 <span>$\alpha(x^{(i)},x^{(j)})$</span><!-- Has MathJax --> ，使得：<br><span>$p(x^{(i)})q(x^{(j)}|x^{(i)})\alpha(x^{(j)}|x^{(i)}) = p(x^{(j)})q(x^{(i)}|x^{(j)})\alpha(x^{(i)}|x^{(j)})$</span><!-- Has MathJax --><br>然后的任务就是解出 <span>$\alpha(x^{(j)}|x^{(i)})$</span><!-- Has MathJax --> 了。最SB的解法就是：<br><span>$\alpha(x^{(j)}|x^{(i)}) = p(x^{(j)})q(x^{(i)}|x^{(j)})$</span><!-- Has MathJax --><br>这样我们就有了一个最简单的保证收敛的markov chain。我们只要把上面伪代码里面的 <span>$\mathcal{A}(x^{(i)}, x^* )$</span><!-- Has MathJax --> 换成 <span>$\alpha (x^* |x^{(i)})$</span><!-- Has MathJax --> 。</p>
+<p>但是这样就带来了一个问题：要是 <span>$\alpha (x^* |x^{(i)})$</span><!-- Has MathJax --> 太小，那不就又跟 rejection sampling一样了么，还是没法用啊。观察detailed balance ，可以发现如果用 <span>$\hat{\alpha} (x^* |x^{(i)}) = k{\alpha} (x^* |x^{(i)})$</span><!-- Has MathJax --> ，原等式成立，也就是说原等式对数乘不敏感。所以我们就可以做缩放了٩(๑ᵒ̷͈᷄ᗨᵒ̷͈᷅)و 当然你缩放出来的结果大于1和1没啥区别啊，所以取个 <span>$\min$</span><!-- Has MathJax --> 做截断。这样就跑出来了那个 <span>$\mathcal{A}$</span><!-- Has MathJax --> 。至于分母，可能是拍脑袋？嘛，反正就是这样了Σ(⊙▽⊙”…</p>
+<p>paper中还给出了实验的效果，感觉还挺不错的。我们令 <span>$q(x^* | x)=\mathcal{N}(x^{(i)}, 100),p(x)\propto 0.3\exp(-0.2x^2)+0.7\exp(-0.2(x-10)^2)$</span><!-- Has MathJax --> ，采样的效果如下图所示：<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f28x00th2ej20qk0l476v.jpg" alt=""><br>方法很简单，但是 <span>$q(x^* |x)$</span><!-- Has MathJax --> 的构造比较麻烦。很多 MCMC的改进都是在这一块进行的。 MH的transition kernel 为<br><span>$$K_{MH}(x^{(i+1)}|x^{(i)}) = q(x^{(i+1)}|x^{(i)})\mathcal{A}(x^{(i)}, x^{(i+1)}) + \delta_{x^{(i)}}(x^{(i+1)})r(x^{(i)})\\
+r(x^{(i)}) = \int_\mathcal{X}q(x^* | x^{(i)})(1-\mathcal{A}(x^{(i)}, x^* ))dx^*$$</span><!-- Has MathJax --><br>你可以把这个式子带到 <span>$p(x^{(i)})K_{MH}(x^{(i+1)}|x^{(i)}) = p(x^{(i+1)})K_{MH}(x^{(i)}|x^{(i+1)})$</span><!-- Has MathJax --> 里面验证一下，两个式子是相等的。</p>
+<p>按照上面的式子进行采样，最后我们得到的就是上面的采样算法(上式的左边理解为选择 <span>$q(x^* |x)$</span><!-- Has MathJax --> 采样的概率，右边是不接受其采样，保持原有位置的概率)。</p>
+<p>对于这个算法，我们还剩下一项工作：证明在这种 transition kernel 下面有markov chain收敛。首先由于 rejection 的存在，因此整个系统必然是 aperiodic 的。其次是 irreducibility，感觉比较明显，但是并没有办法给出严谨的证明。原paper中也没有给出证明，不过提到了一些可以用来证明的东西：minorisation condition、Foster-Lyapunov drift condition(反正我都没听过= =)</p>
+<p>前面说过的importance sampling也可以看做MH(也不是完全一样)。我们令<br><span>$$q(x^* |x^{(i)}) = q(x^* )\\
+\mathcal{A}(x^{(i)}, x^* ) = \min\left\{1, \dfrac{p(x^*)q(x^{(i)})}{p(x^{(i)})q(x^*)}\right\} = \min \left\{1, \dfrac{w(x^* )}{w(x^{(i)})}\right\}$$</span><!-- Has MathJax --><br>当然了，里面是有一个比值的，所以其实不是完全一样。</p>
+<h3 id="最后说一点"><a href="#最后说一点" class="headerlink" title="最后说一点"></a>最后说一点</h3><p>在MH算法当中，有3点需要注意：首先，对于目标分布的normalising并不是必须的要求。这一点很容易看到，在 <span>$\mathcal{A}$</span><!-- Has MathJax --> 中其实只是求了一个比例而已；其二，我们前面的算法描述中只描述单个markov process，实际过程中可以多个并行，加速采样；最后就是 <span>$q(x^* |x)$</span><!-- Has MathJax --> 的选择至关重要。下图描述的仍然是我们上面说的那个例子，但是高斯的方差不同，我们可以看到最后的效果大相径庭<br><img src="http://ww3.sinaimg.cn/large/9dec4451jw1f29d9b3qw5j20qc0o8gne.jpg" alt=""></p>
+<h2 id="Simulated-annealing-for-global-optimization"><a href="#Simulated-annealing-for-global-optimization" class="headerlink" title="Simulated annealing for global optimization"></a>Simulated annealing for global optimization</h2><p>就像我们一开始说的，模拟采样除了用来模拟积分之外，还可以用来处理极值的情况。但是对于这种任务，很显然如果用上面的采样，我们会花费大量的时间在一些无用点的计算上。所以 simulated annealing(似乎是模拟退火？) 我们在上面用的 markov chain 都是 homogeneous 的，simulated annealing使用的是 non-homogeneous 。其概率分布为：<br><span>$p_i(x) \propto p^{1/T_i}(x)$</span><!-- Has MathJax --><br>其中 <span>$T_i$</span><!-- Has MathJax --> 是随 <span>$i$</span><!-- Has MathJax --> 递减的变量且 <span>$\lim_{i\to\infty}T_i = 0$</span><!-- Has MathJax --> 。在此情况下，我们就有下面的算法：<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f2akmisg14j20ig0cswfh.jpg" alt=""><br>我们可以看到在这种情况下，随着迭代次数的增加，初始概率越小的点下降速度越快，这样的情况下最高概率的点收敛速度最慢，最后概率会趋向于1。这一点在下图尤其清楚：<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f2aksw8lzsj20qw0l0q53.jpg" alt=""><br>对该算法的研究主要集中于对 <span>$q(x^* | x)$</span><!-- Has MathJax --> 以及cooling schedule的选择上。paper当中概述了一些其他人的结果，这里不详细说了。</p>
+<h2 id="mixtures-and-cycles-of-MCMC-kernels"><a href="#mixtures-and-cycles-of-MCMC-kernels" class="headerlink" title="mixtures and cycles of MCMC kernels"></a>mixtures and cycles of MCMC kernels</h2><p>MCMC最重要的特征之一就是其可以组合多个采样过程成为一个混合的采样过程。显而易见，当我们有 transition kernel <span>$K_1, K_2$</span><!-- Has MathJax --> 时， <span>$vK_1 + (1-v)K_2$</span><!-- Has MathJax --> 仍然是 transition kernel(叫做mixture hybrid kernel) ；我们还可以换着用2个 kernel (叫做cycle hybrid kernel)</p>
+<p>mixture 的方法当然不可能只有那一种。我们可以用 global proposal 去遍历状态空间的 regions ，同时用 local proposals 发现一些 finer 的细节。原文中给了大量的例子，然而貌似都不是machine learning 相关的((￣ ‘i ￣;)不知道为何论文标题会有ml)，所以并不理解这到底能干啥。这种 mixture 的算法如下：<br><img src="http://ww4.sinaimg.cn/large/9dec4451jw1f2alvxv3s0j20ki096aan.jpg" alt=""></p>
+<p>cycle的方法有一点很重要：允许我们对目标矩阵分块，每一块可以单独更新。而如果我们把高相关度的维度分在相同的块中，我们会得到更快的收敛速度。我们将 <span>$b_j$</span><!-- Has MathJax --> 记做第 <span>$j$</span><!-- Has MathJax --> 个块， <span>$n_b$</span><!-- Has MathJax --> 表示总的块数， <span>$x^{(i+1)}_{-[b_j]} = \{x^{(i+1)}_{-[b_1]}, x^{(i+1)}_{-[b_2]},...,x^{(i+1)}_{-[b_{n_b}]}\}$</span><!-- Has MathJax --> 。我们将 transition kernel 改造成如下的形式：<br><span>$K_{\text{MH-Cycle} }(X^{(i+1)}|X^{(i)}) = \prod_{j=1}^{n_b}K_{MH(j)} (x_{b_j}^{(i+1)}| x_{b_j}^{(i)}, x_{-[b_j]}^{(i+1)})$</span><!-- Has MathJax --><br>其中 <span>$K_{MH(j)}$</span><!-- Has MathJax --> 表示第 <span>$j$</span><!-- Has MathJax --> 次迭代使用的MH算法，也就是transition kernel 。该算法的伪代码表述如下：<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f2am2ax89uj20m20hqdhy.jpg" alt=""><br>在这里，对块大小的选择会有一些trade-off。如果你一次只更新一个维度的数据，那么你得花很长时间才能收敛，尤其是有很多维度相互之间高度相关的时候；如果你一次更新全部维度，那么 acceptance 概率又不高，还是得花很长时间。</p>
+<p>这种类型的算法当中最有名的莫过于下面的Gibbs sampler了，保证 acceptance 概率为1的强悍算法。</p>
+<h2 id="Gibbs-sampler"><a href="#Gibbs-sampler" class="headerlink" title="Gibbs sampler"></a>Gibbs sampler</h2><p>我们假设给定一个 <span>$n$</span><!-- Has MathJax --> 维向量 <span>$x$</span><!-- Has MathJax --> 并且已知 <span>$p(x_j | x_1,...,x_{j-1},x_{j+1},...,x_n)$</span><!-- Has MathJax --> 。如果我们令 proposal distribution 为：<br><span>$$q(x^* | x^{(i)}) =
+\begin{cases}
+  p(x_j^* | x^{(i)}_{-j})&amp; \text{If } x_{-j}^* = x^{(i)}_{-j}\\
+  0 &amp; \text{Otherwise}
+\end{cases}$$</span><!-- Has MathJax --><br>在此情况下，我们的 acceptance 概率就变成了<br><span>$$\begin{aligned}
+\mathcal{A}(x^{(i)},x^* ) &amp;= \min\left\{1, \dfrac{p(x^* )q(x^{(i)}|x^* )}{p(x^{(i)})p(x^* |x^{(i)} )}\right\}\\
+&amp;= \min\left\{1, \dfrac{p(x^* )q(x^{(i)}|x^{(i)}_{-j} )}{p(x^{(i)})p(x^* |x^{* }_{-j} )}\right\}\\
+&amp;= \min\left\{1, \dfrac{p(x^* )}{p(x^* |x^{* }_{-j} )}\dfrac{q(x^{(i)}|x^{(i)}_{-j} )}{p(x^{(i)})}\right\}\\
+&amp;= \min\left\{\dfrac{q(x^{* }_{-j} )}{q(x^{(i)}_{-j})}\right\} = 1
+\end{aligned}$$</span><!-- Has MathJax --><br>没有看错，就TM是1！！！所以Gibbs sampler的伪代码如下：<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f2b6deijlhj20ju0c0ab0.jpg" alt=""></p>
+<h3 id="补充一下来历"><a href="#补充一下来历" class="headerlink" title="补充一下来历"></a>补充一下来历</h3><p>关于如此狂拽炫酷吊炸天的 proposal 分布，我们当然要看看是怎么来的了！首先从一个基础的概率公式开始：<br><span>$$p(x_1, y_1) p(y_2|x_1) = p(y_1|x_1)p(x_1)p(y_2|x_1)\\
+p(x_1, y_2) p(y_1|x_1) = p(y_2|x_1)p(x_1)p(y_1|x_1)\\
+\Rightarrow p(x_1, y_1) p(y_2|x_1) = p(x_1, y_2) p(y_1|x_1)$$</span><!-- Has MathJax --><br>如果将 <span>$p(x,y)$</span><!-- Has MathJax --> 表示为在坐标点 <span>$(x,y)$</span><!-- Has MathJax --> 的概率，将 <span>$p(y|x)$</span><!-- Has MathJax --> 作为 transition 概率，则平行于坐标轴的转化 acceptance 的概率都为1=。=这也就是下面这个大名鼎鼎的图的来历:<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f2b6p1xh6hj20gk0e074q.jpg" alt=""></p>
+<p>这是二维的情况，如果扩展到多维，就是上面的算法，而且我们也证明了多维情况下 acceptance 的概率确实为1</p>
+<h2 id="Monte-Carlo-EM"><a href="#Monte-Carlo-EM" class="headerlink" title="Monte Carlo EM"></a>Monte Carlo EM</h2><p>EM算法可以用于处理隐藏变量存在的最大化问题。假设 <span>$\mathcal{X}$</span><!-- Has MathJax --> 包含一些隐藏以及可见状态 <span>$x=\{x_v,x_h\}$</span><!-- Has MathJax --> ，我们需要最大化 <span>$p(x_v|\theta)$</span><!-- Has MathJax --> ，不过 <span>$\theta$</span><!-- Has MathJax --> 为隐藏变量。通过不断迭代下面两步计算：</p>
+<ol>
+<li>E step 计算 <span>$Q(\theta^{(i)}) = \int_{\mathcal{X}_h} \log(p(x_h, x_v | \theta^{(i)}))p(x_h|x_v, \theta^{(i)}) dx_h$</span><!-- Has MathJax --></li>
+<li>M step 计算 <span>$\theta^{(i+1)} = \arg\max_{\theta^{(i)}}Q(\theta^{(i)})$</span><!-- Has MathJax --></li>
+</ol>
+<p>这当然不可能是MCMC了。MCMC主要用于计算 E step a中的积分问题。所以 Monte Carlo EM 算法的伪代码如下(其实就是EM之前套个MH)：<br><img src="http://ww4.sinaimg.cn/large/9dec4451jw1f2b78r64wsj20ng0gsgnl.jpg" alt=""></p>
+<h2 id="auxiliary-variable-samplers"><a href="#auxiliary-variable-samplers" class="headerlink" title="auxiliary variable samplers"></a>auxiliary variable samplers</h2><p>据说从 <span>$p(x,u)$</span><!-- Has MathJax --> 采样会比 <span>$p(x)$</span><!-- Has MathJax --> 采样简单(反正人家就是这么讲的，为什么嘛我也不知道) 。这样的话我们采出了 <span>$(x^{(i)}, u^{(i)})$</span><!-- Has MathJax --> 之后抹掉 <span>$u^{(i)}$</span><!-- Has MathJax --> 就好了。貌似这种方法在物理里面很常用(丝毫不明白这和ml有什么关系)。在这种思路下，有2个非常著名的算法：hybrid Monte Carlo 、 slice sampling.</p>
+<h3 id="hybrid-Monte-Carlo"><a href="#hybrid-Monte-Carlo" class="headerlink" title="hybrid Monte Carlo"></a>hybrid Monte Carlo</h3><p>这过程没啥好说的，直接上伪代码就行了：<br><img src="http://ww1.sinaimg.cn/large/9dec4451jw1f2b7rlyw2vj20k80gmabd.jpg" alt=""><br>其中 <span>$\Delta(x_0)$</span><!-- Has MathJax --> 就是 <span>$\log p(x)$</span><!-- Has MathJax --> 的导数，用的extended target distribution为：<br><span>$p(x,u) = p(x)\mathcal{N}(u;0,I_{n_x})$</span><!-- Has MathJax --><br>如果让 <span>$L=1$</span><!-- Has MathJax --> 这就是 Langevin 算法(虽然我也不知道这TM是啥)</p>
+<p>最后说一下 <span>$L, \rho$</span><!-- Has MathJax --> 的选择问题。 <span>$L$</span><!-- Has MathJax --> 很大的话，我们一次可以产生大量的候选集，但是计算量也很大； <span>$\rho$</span><!-- Has MathJax --> 很大会降低 acceptance 的概率，但是很小的话导致在两个 state 之间的移动会需要很多 leapfrog step(就是伪代码里面像sgd的那一段(￣▽￣”)不明白歪果仁的起名字的想法)</p>
+<h3 id="slice-sampling"><a href="#slice-sampling" class="headerlink" title="slice sampling"></a>slice sampling</h3><p>Gibbs sampler 的泛化版本(我觉得并不是泛化啊=。=)。首先说一下他的extended target distribution：<br><span>$$p^* (x,u)=
+\begin{cases}
+1 &amp;\text{if } 0\le u\le p(x)
+0 &amp;\text{otherwise}
+\end{cases}$$</span><!-- Has MathJax --></p>
+<p>然后采样过程是这样的：<br><span>$$p(u|x) = \mathcal{U}_{[0,p(x)]}(u)\\
+p(x|u) = \mathcal{U}_A(x) \quad A=\{x;p(x)\ge u\}$$</span><!-- Has MathJax --><br>如果我们可以计算 <span>$A(x)$</span><!-- Has MathJax --> ，那就没啥好说的了。不过 <span>$A(x)$</span><!-- Has MathJax --> 似乎很难定义。例如当 <span>$p(x) \propto \prod_{l=1}^L f_l(x)$</span><!-- Has MathJax --> 的时候，我们得积分才能算出来 <span>$p(x)$</span><!-- Has MathJax --> = =</p>
+<p>这时候引入extended target distribution(当然只是上面的例子而已)：<br><span>$p^* (x,u_1,...,u_L)\propto\prod_{l=1}^L\mathbb{I}_{[0,f_l(x)]}(u_l)$</span><!-- Has MathJax --><br>可以积分去check一下：<br><span>$\int p^* (x,u_1,...,u_L)du_1...du_L \propto \int \prod_{l=1}^L\mathbb{I}_{[0,f_l(x)]}(u_l)du_1...du_L = \prod_{l=1}^L f_l(x)$</span><!-- Has MathJax --></p>
+<p>所以我们就可以用下面的伪代码求解：<br><img src="http://ww1.sinaimg.cn/large/9dec4451jw1f2b8748q4dj20lu0660t3.jpg" alt=""></p>
+<h2 id="Reversible-jump-MCMC"><a href="#Reversible-jump-MCMC" class="headerlink" title="Reversible jump MCMC"></a>Reversible jump MCMC</h2><p>原paper最后提到了Reversible jump MCMC，该方法可用于model selection，也就是参数选择。但是说的不是很清楚(主要是我没看懂(￣▽￣”))感觉实际过程中可能也没有太大的用处。以后有时间在找原peper看看好了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/math/" rel="tag">#math</a>
+          
+            <a href="/tags/PGM/" rel="tag">#PGM</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/20/random-walk/" rel="next" title="random walk">
+                <i class="fa fa-chevron-left"></i> random walk
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/01/2016-3月总结/" rel="prev" title="2016 短暂的总结">
+                2016 短暂的总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/24/machine-learning-的采样和模拟/"
+           data-title="machine learning 的模拟和采样" data-url="/2016/03/24/machine-learning-的采样和模拟/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#先看下这货能干啥"><span class="nav-number">1.</span> <span class="nav-text">先看下这货能干啥</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的高维积分场景"><span class="nav-number">1.1.</span> <span class="nav-text">常见的高维积分场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bayesian-inference-and-learning"><span class="nav-number">1.1.1.</span> <span class="nav-text">bayesian inference and learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#statistical-mechanics"><span class="nav-number">1.1.2.</span> <span class="nav-text">statistical mechanics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#optimisation"><span class="nav-number">1.1.3.</span> <span class="nav-text">optimisation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#penalised-likelihood-model-selection"><span class="nav-number">1.1.4.</span> <span class="nav-text">penalised likelihood model selection</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Monte-Carlo-principle"><span class="nav-number">1.2.</span> <span class="nav-text">Monte Carlo principle</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常见的采样"><span class="nav-number">2.</span> <span class="nav-text">常见的采样</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rejection-sampling"><span class="nav-number">2.1.</span> <span class="nav-text">rejection sampling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#importance-sampling"><span class="nav-number">2.2.</span> <span class="nav-text">importance sampling</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高维问题"><span class="nav-number">2.2.1.</span> <span class="nav-text">高维问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MCMC"><span class="nav-number">3.</span> <span class="nav-text">MCMC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#markov-chain的简单介绍"><span class="nav-number">3.1.</span> <span class="nav-text">markov chain的简单介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Metropolis-Hastings-algorithm"><span class="nav-number">3.2.</span> <span class="nav-text">Metropolis-Hastings algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#到底是怎么来的？"><span class="nav-number">3.2.1.</span> <span class="nav-text">$\mathcal{A}$ 到底是怎么来的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后说一点"><span class="nav-number">3.2.2.</span> <span class="nav-text">最后说一点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Simulated-annealing-for-global-optimization"><span class="nav-number">3.3.</span> <span class="nav-text">Simulated annealing for global optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mixtures-and-cycles-of-MCMC-kernels"><span class="nav-number">3.4.</span> <span class="nav-text">mixtures and cycles of MCMC kernels</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gibbs-sampler"><span class="nav-number">3.5.</span> <span class="nav-text">Gibbs sampler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#补充一下来历"><span class="nav-number">3.5.1.</span> <span class="nav-text">补充一下来历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Monte-Carlo-EM"><span class="nav-number">3.6.</span> <span class="nav-text">Monte Carlo EM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#auxiliary-variable-samplers"><span class="nav-number">3.7.</span> <span class="nav-text">auxiliary variable samplers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hybrid-Monte-Carlo"><span class="nav-number">3.7.1.</span> <span class="nav-text">hybrid Monte Carlo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slice-sampling"><span class="nav-number">3.7.2.</span> <span class="nav-text">slice sampling</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reversible-jump-MCMC"><span class="nav-number">3.8.</span> <span class="nav-text">Reversible jump MCMC</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

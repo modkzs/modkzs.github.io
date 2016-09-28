@@ -1,0 +1,668 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="hbase," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Hbase 用法学习，参考书目：Hbase实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hbase学习">
+<meta property="og:url" content="/2015/09/19/Hbase学习/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="Hbase 用法学习，参考书目：Hbase实战">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hbase学习">
+<meta name="twitter:description" content="Hbase 用法学习，参考书目：Hbase实战">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2015/09/19/Hbase学习/"/>
+
+  <title> Hbase学习 | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Hbase学习
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-09-19T19:00:04+08:00" content="Sep 19 2015">
+              Sep 19 2015
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/distribution/" itemprop="url" rel="index">
+                    <span itemprop="name">distribution</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/09/19/Hbase学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/19/Hbase学习/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Hbase 用法学习，参考书目：Hbase实战<br><a id="more"></a></p>
+<h1 id="数据操作"><a href="#数据操作" class="headerlink" title="数据操作"></a>数据操作</h1><h2 id="数据写入"><a href="#数据写入" class="headerlink" title="数据写入"></a>数据写入</h2><p>Hbase的数据写入默认写入2个地方：预写入日志（WAL）和MemStore.</p>
+<ul>
+<li>Memstore<br>  Memstore为Hbase的写入缓冲区，Memstore填满后数据会被刷写到磁盘，生成HFile。HFile和列族相对应，每个列族有多个HFile，但是一个HFile只能存储一个列族的数据。<br>  为了防止Memstore没有刷写入磁盘服务器崩溃导致数据丢失，HBase会先写入WAL。</li>
+<li>WAL<br>  和上面的说法一样，WAL的存在是为了防止Memstore中的数据没有刷写入磁盘。<blockquote>
+<p>WAL存在的意义是什么？如果服务器在将数据写入WAL时宕机，仍然会导致数据丢失。</p>
+<h2 id="数据读取"><a href="#数据读取" class="headerlink" title="数据读取"></a>数据读取</h2><p>由于Memstore的存在，Hbase在读取数据时必须读取HFile和Memstore。在这种情况下，其使用LRU（最近最少使用算法）进行数据缓存。这种缓存也被称为BlockCache，和Memstore放在同一个JVM堆中。<br>BlockCache中的Block是Hbase从磁盘中完成一次读取的基本单位，建立索引的最小数据单元以及从硬盘中完成一次读取的最小数据单元。Block的默认大小是64K，可以根据不同的场景使用不同的大小。HFile的数据组织形式是Block序列及其索引。<br>如果需要进行随机查询，可能需要细粒度的Block索引，因此小一点的block会较好；如果经常执行顺序扫描，增大block的值意味着索引项变少，索引变小，可以节省内存。<br>一次数据读取的过程如下：</p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li>检查MemStore中等待修改的队列</li>
+<li>检查BlockCache中该Block是否被访问</li>
+<li>访问硬盘上对应的HFile<h2 id="数据删除"><a href="#数据删除" class="headerlink" title="数据删除"></a>数据删除</h2>Delete不会直接删除数据，会给删除数据打上删除标记（为该记录的删除写入一条“墓碑”）。由于HFile的文件不会轻易改变，因此直到执行一次major compaction时，这些墓碑记录才会被处理，删除空间的日志才会被释放。<h3 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h3>合并分为major compaction和minor compaction。它们都会对HFile中的数据进行整合。</li>
+</ol>
+<ul>
+<li>minor compaction<br>  将多个小HFile合并为一个大的HFile。因为数据读取会涉及到一至多个HFile，所以HFile的文件数量对于Hbase的读性能很重要。</li>
+<li>major compaction<br>  处理给定region的一个列族的所有HFile，将其合并为一个文件。<h2 id="数据扫描"><a href="#数据扫描" class="headerlink" title="数据扫描"></a>数据扫描</h2>每次scan都是一次RPC调用，会得到一批行数据。可以设置每次的道德行数据的缓存值。如果将其设为n，则每次RPC调用返回n行数据。设置合适的caching值可以很好地提高性能。<h2 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h2>Hbase提供了incrementColumnValue进行value的递增原子操作。也可以使用checkAndPut或checkAndDelete进行原子操作。<h1 id="分布式Hbase"><a href="#分布式Hbase" class="headerlink" title="分布式Hbase"></a>分布式Hbase</h1><h2 id="数据切分"><a href="#数据切分" class="headerlink" title="数据切分"></a>数据切分</h2><h3 id="region和RegionServer"><a href="#region和RegionServer" class="headerlink" title="region和RegionServer"></a>region和RegionServer</h3>由于Hbase中单个表的大小可能是PB甚至TB级别，因此在单个机器上存放所有的数据基本不可能。因此表会被切分为较小的数据单位，分配到多台机器上。这些较小的数据单元被称为region。管理region的server即为RegionServer。<h3 id="region查找"><a href="#region查找" class="headerlink" title="region查找"></a>region查找</h3>上文中描述的数据切分政策导致了数据读取必须找到对应的region才可以，因此引入的region的查找策略。<br>Base中有2个特殊表：-ROOT-和.META.，用于查找存储各行的region。-ROOT-表永远不会被切分到超过一个region上。—ROOT-表中记录存储.META.表的region，.META.表中记录了入口地址，客户端通过入口地址找到region。整个查找过程类似于3层的查找树。<h4 id="ROOT-表的查找"><a href="#ROOT-表的查找" class="headerlink" title="-ROOT-表的查找"></a>-ROOT-表的查找</h4>-ROOT-表的位置由zookeeper负责记录。<h4 id="region完整查找路径"><a href="#region完整查找路径" class="headerlink" title="region完整查找路径"></a>region完整查找路径</h4></li>
+</ul>
+<ol>
+<li>通过zookeeper找到-ROOT-表</li>
+<li>通过-ROOT-表找到存储查找行的.META.表的region</li>
+<li>到上一步的region中找到存储查找行的region</li>
+<li>到上一步的region中找到查找行数据</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hbase/" rel="tag">#hbase</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/01/python-descriptor/" rel="next" title="python descriptor">
+                <i class="fa fa-chevron-left"></i> python descriptor
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/10/信仰和人性/" rel="prev" title="信仰和人性">
+                信仰和人性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/09/19/Hbase学习/"
+           data-title="Hbase学习" data-url="/2015/09/19/Hbase学习/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据操作"><span class="nav-number">1.</span> <span class="nav-text">数据操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据写入"><span class="nav-number">1.1.</span> <span class="nav-text">数据写入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据读取"><span class="nav-number">1.2.</span> <span class="nav-text">数据读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据删除"><span class="nav-number">1.3.</span> <span class="nav-text">数据删除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#合并"><span class="nav-number">1.3.1.</span> <span class="nav-text">合并</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据扫描"><span class="nav-number">1.4.</span> <span class="nav-text">数据扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原子操作"><span class="nav-number">1.5.</span> <span class="nav-text">原子操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式Hbase"><span class="nav-number">2.</span> <span class="nav-text">分布式Hbase</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据切分"><span class="nav-number">2.1.</span> <span class="nav-text">数据切分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#region和RegionServer"><span class="nav-number">2.1.1.</span> <span class="nav-text">region和RegionServer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#region查找"><span class="nav-number">2.1.2.</span> <span class="nav-text">region查找</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ROOT-表的查找"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">-ROOT-表的查找</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#region完整查找路径"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">region完整查找路径</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

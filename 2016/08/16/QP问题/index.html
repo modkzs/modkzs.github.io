@@ -1,0 +1,829 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="optimization," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="QP问题，即带线性约束的二次方程最小化问题。QP问题的一般形式为：$$\label{origin}
+\min_x\ q(x) = \frac{1}{2}x^TGx+x^Tc\\
+s.t.\ a^T_ix = b_i,\quad i\in\mathcal{E}\\
+a^T_ix \ge b_i,\quad i\in\mathcal{I}$$对于 Hessian 矩阵 $G$ 来说，如果是半正定的，则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QP问题">
+<meta property="og:url" content="/2016/08/16/QP问题/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="QP问题，即带线性约束的二次方程最小化问题。QP问题的一般形式为：$$\label{origin}
+\min_x\ q(x) = \frac{1}{2}x^TGx+x^Tc\\
+s.t.\ a^T_ix = b_i,\quad i\in\mathcal{E}\\
+a^T_ix \ge b_i,\quad i\in\mathcal{I}$$对于 Hessian 矩阵 $G$ 来说，如果是半正定的，则">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QP问题">
+<meta name="twitter:description" content="QP问题，即带线性约束的二次方程最小化问题。QP问题的一般形式为：$$\label{origin}
+\min_x\ q(x) = \frac{1}{2}x^TGx+x^Tc\\
+s.t.\ a^T_ix = b_i,\quad i\in\mathcal{E}\\
+a^T_ix \ge b_i,\quad i\in\mathcal{I}$$对于 Hessian 矩阵 $G$ 来说，如果是半正定的，则">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/08/16/QP问题/"/>
+
+  <title> QP问题 | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                QP问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-16T08:43:53+08:00" content="Aug 16 2016">
+              Aug 16 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/16/QP问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/16/QP问题/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>QP问题，即带线性约束的二次方程最小化问题。QP问题的一般形式为：<br><span>$$\label{origin}
+\min_x\ q(x) = \frac{1}{2}x^TGx+x^Tc\\
+s.t.\ a^T_ix = b_i,\quad i\in\mathcal{E}\\
+a^T_ix \ge b_i,\quad i\in\mathcal{I}$$</span><!-- Has MathJax --><br>对于 Hessian 矩阵 <span>$G$</span><!-- Has MathJax --> 来说，如果是半正定的，则QP称为凸QP；否则称为非凸QP。显然，非凸QP问题更麻烦一些。不过我们这里只关注凸QP问题。<br><a id="more"></a></p>
+<h1 id="只有等式约束的QP问题"><a href="#只有等式约束的QP问题" class="headerlink" title="只有等式约束的QP问题"></a>只有等式约束的QP问题</h1><p>先从等式约束开始说起。等式约束的QP问题可以表示为：<br><span>$$\min_x\ q(x) = \frac{1}{2}x^TGx+x^Tc\\
+s.t.\ Ax = b$$</span><!-- Has MathJax --><br>先看A满秩的情况。根据 KKT 条件，方程的解需要满足下面的条件：<br><span>$\begin{bmatrix}G &amp; -A^T\\A&amp;0\end{bmatrix}\begin{bmatrix}x^* \\\lambda^* \end{bmatrix} = \begin{bmatrix}-c \\b \end{bmatrix}$</span><!-- Has MathJax --><br>我们令 <span>$x^* = x+p$</span><!-- Has MathJax -->，对上面的等式稍加变换，就可以得到<br><span>$$\label{KKT}
+\begin{bmatrix}G &amp; A^T\\A&amp;0\end{bmatrix}\begin{bmatrix}-p \\\lambda^* \end{bmatrix} = \begin{bmatrix}g \\h \end{bmatrix}\\
+h = Ax-b\\
+g = c+Gx\\
+p = x^* - x$$</span><!-- Has MathJax --><br>上面的矩阵被称为 KKT 矩阵。令 Z 为 A 的 null space(即 AZ = 0)，维数为 <span>$n\times(n-m)$</span><!-- Has MathJax --> 。如果 <span>$Z^TGZ$</span><!-- Has MathJax --> 正定，则 KKT 矩阵必然非奇异，也非正定。而满足 KKT 矩阵的解必然为 QP 的解。</p>
+<h2 id="KKT-系统求解"><a href="#KKT-系统求解" class="headerlink" title="KKT 系统求解"></a>KKT 系统求解</h2><p>所以现在的问题就是如何求解上面的 KKT 系统。我们先来看直接求解的方法。为了方便说明，将 KKT 矩阵记为 <span>$K$</span><!-- Has MathJax --></p>
+<h3 id="直接求解"><a href="#直接求解" class="headerlink" title="直接求解"></a>直接求解</h3><h4 id="schur-complement"><a href="#schur-complement" class="headerlink" title="schur-complement"></a>schur-complement</h4><p>直接用 schur-complement 暴力求解。利用 schur-complement 可以直接拿到 <span>$K$</span><!-- Has MathJax --> 的逆：<br><span>$$\begin{aligned}
+K^{-1} &amp;= \begin{bmatrix}C &amp; E\\E^T&amp;F\end{bmatrix}\\
+C &amp;= G^{-1}-G^{-1}A^T(AG^{-1}A^T)^{-1}AG^{-1}\\
+E &amp;= G^{-1}A^T(AG^{-1}A^T)^{-1}\\
+F &amp;= -(AG^{-1}A^T)^{-1}
+\end{aligned}$$</span><!-- Has MathJax --><br>当然了其实你用高斯消元是可以直接解出来的，和这么算的结果也太不太多。不过这么暴力真的好么= =</p>
+<h4 id="矩阵分解"><a href="#矩阵分解" class="headerlink" title="矩阵分解"></a>矩阵分解</h4><p>由于 KKT 矩阵非正定，无法使用 cholesky 分解，所以用 symmetric indefinite factorization。对于一个对称矩阵 <span>$K$</span><!-- Has MathJax -->， symmetric indefinite factorization 可以表示为<br><span>$P^TKP=LBL^T$</span><!-- Has MathJax --><br>其中 <span>$P$</span><!-- Has MathJax --> 为 permutation 矩阵， <span>$L$</span><!-- Has MathJax --> 为下三角矩阵，<span>$B$</span><!-- Has MathJax --> 为 block-diagonal 矩阵， block 的大小一般为 1*1 或者 2*2.这种情况下，可以将 \ref{KKT} 的解表示为：<br><span>$$Lz = P^T\begin{bmatrix}g \\h \end{bmatrix}\\
+B\hat{z} = z\\
+L^T \bar{z} = \hat{z}\\
+\begin{bmatrix}-p \\\lambda^* \end{bmatrix} = P\bar{z}\\$$</span><!-- Has MathJax --></p>
+<h4 id="null-space"><a href="#null-space" class="headerlink" title="null space"></a>null space</h4><p>\ref{KKT} 中的向量 <span>$p$</span><!-- Has MathJax --> 其实可以被分解为2个部分：<br><span>$p = Yp_Y + Zp_Z$</span><!-- Has MathJax --><br>其中 <span>$Z$</span><!-- Has MathJax --> 为 n<em>(n-m) 的矩阵，是 <span>$A$</span><!-- Has MathJax --> 的 null space。 Y 为 n</em>m 的矩阵，保证 [Y|Z] 非奇异。由于 <span>$AZ=0$</span><!-- Has MathJax -->，所以<br><span>$$(AY)p_Y = -h\\
+-GYp_Y-GZp_Z+A^T\lambda^* = g$$</span><!-- Has MathJax --><br>将后一个式子乘以 <span>$Z^T$</span><!-- Has MathJax --> 可以得到<br><span>$(Z^TGZ)p_z = -Z^TGYp_Y-Z^Tg$</span><!-- Has MathJax --><br><span>$Z^TGZ$</span><!-- Has MathJax --> 是对称正定的，所以可以用 cholesky 分解。所以我们可以通过解上面的等式得到 \ref{KKT} 的解。最后<br><span>$$p = Yp_Y+Zp_Z\\
+(AY)^T\lambda^* = Y^T(g+Gp)$$</span><!-- Has MathJax --><br>当然 Z 的维度越小，算法跑的越快。但是如果 <span>$AG^{-1}A^T$</span><!-- Has MathJax --> 很好算的话，还是 schur-complement 暴力硬上更快一些。</p>
+<h3 id="迭代式解法"><a href="#迭代式解法" class="headerlink" title="迭代式解法"></a>迭代式解法</h3><p>迭代式解法主要用的是 <a href="http://modkzs.github.io/2016/06/06/conjugate-gradient-method/" target="_blank" rel="external">CG</a>。 根据前面的说明，最优解 <span>$x^* = Yx_Y +Zx_Z$</span><!-- Has MathJax --><br>这样的话，根据 <span>$AYx_Y = b$</span><!-- Has MathJax -->，我们可以直接解出 <span>$x_Y$</span><!-- Has MathJax -->。不过这涉及到 Y 的选择问题。</p>
+<p>对于Y的选择，方法有很多。这里只简单列出两种：</p>
+<ul>
+<li>A为 m*n 维矩阵，如果 A 满秩，就会有 m 个线性无关组(假设 m &lt; n)。那么就可以找到一个 permutation 矩阵 <span>$P$</span><!-- Has MathJax --> 使得 <span>$AP = [B|N]$</span><!-- Has MathJax --> 其中 <span>$B$</span><!-- Has MathJax --> 为线性无关组所在的矩阵。我们可以令 <span>$Y = \begin{bmatrix}B^{-1}\\0\end{bmatrix}$</span><!-- Has MathJax --></li>
+<li>对 <span>$A$</span><!-- Has MathJax --> 做 QR 分解： <span>$A^T\Pi = \begin{bmatrix}Q_1&amp;Q_2\end{bmatrix} \begin{bmatrix}R\\0\end{bmatrix}$</span><!-- Has MathJax -->，令 <span>$Y=Q_1$</span><!-- Has MathJax --></li>
+</ul>
+<p>这种情况下，去掉只和 <span>$x_Y$</span><!-- Has MathJax --> 有关的部分，可以将原问题化简为<br><span>$$\min_{x_Z} \frac{1}{2}x_Z^TZ^TGZx_Z+x_Z^Tc_Z\\
+c_Z = Z^TGYx_y+Z^Tc$$</span><!-- Has MathJax --><br>上面的解很简单：<span>$Z^TGZx_Z=-c_Z$</span><!-- Has MathJax --> 所以我们只要用 CG 解这个方程就行了。CG的算法如下：</p>
+<ol>
+<li>choose initial point <span>$x_Z$</span><!-- Has MathJax --></li>
+<li>compute <span>$r_Z=Z^TGZx_Z,\ g_Z=W_{ZZ}^{-1}r_Z,\ d_Z=-g_Z$</span><!-- Has MathJax --></li>
+<li>repeat  <span>$$\begin{aligned}
+\alpha &amp;= r_Z^Tg_Z/d^T_ZZ^TGZd_Z\\
+x_Z &amp;= x_Z+\alpha d_Z\\
+r_Z^+ &amp;= r_Z+\alpha Z^TGZd_Z\\
+g_Z^+ &amp;= W_{ZZ}^{-1}r_Z^+\\
+\beta &amp;= (r_Z^+)^Tg_Z^+/r_Z^Tg_Z\\
+d_Z &amp;= -g_Z^+ + \beta d_Z\\
+g_Z &amp;= g_Z^+\\
+r_Z &amp;= r_Z^+
+\end{aligned}$$</span><!-- Has MathJax -->
+  until convergence</li>
+</ol>
+<p>和CG算法基本一致，不过进行了 precondition。 终止条件可以是 <span>$r_Z^TW_{ZZ}^{-1}r_Z$</span><!-- Has MathJax --> 足够小或者其他表示残差小的东西。至于 preconditioner <span>$W_{ZZ}$</span><!-- Has MathJax --> ，它本身的存在就是为了防止 <span>$Z^TGZ$</span><!-- Has MathJax --> 的条件数过高，所以取值方面自然是要降低条件数。最极限的做法自然是令 <span>$W_{ZZ} = Z^TGZ$</span><!-- Has MathJax -->， 一下给降到1。当然也可以用缓和点的取法，<span>$W_{ZZ} = Z^THZ$</span><!-- Has MathJax --> 其中 <span>$H$</span><!-- Has MathJax --> 是对称矩阵保证<span>$W_{ZZ}$</span><!-- Has MathJax --> 正定。 <span>$H$</span><!-- Has MathJax --> 可以取值为 <span>$diag(|G_{ii}|)$</span><!-- Has MathJax --> 或者 <span>$I$</span><!-- Has MathJax --> 。有时也可以取值为 <span>$G$</span><!-- Has MathJax --> 的 block diagonal submatrix.</p>
+<p>算法中其实没有对 <span>$Z$</span><!-- Has MathJax --> 单独做操作，所以只要能求出来 <span>$Z^TGZ$</span><!-- Has MathJax --> 或者它和其他向量的乘法计算就可以。</p>
+<p>但是算法上避免 <span>$Z$</span><!-- Has MathJax --> 的计算仍然是可能的。不过我们最后求出来的直接是 <span>$x$</span><!-- Has MathJax --> 不是 <span>$x_Z$</span><!-- Has MathJax --> 。不过介绍算法之前，需要引入几个记号：<br><span>$$\begin{aligned}
+Z^Tr&amp;=r_Z\\
+g&amp;=Zg_Z\\
+d&amp;=Zd_Z\\
+P&amp;=Z(Z^THZ)^{-1}Z^T
+\end{aligned}$$</span><!-- Has MathJax --><br>算法叫做 Projected CG：</p>
+<ol>
+<li>choose init point <span>$x$</span><!-- Has MathJax --> satisfied <span>$Ax=b$</span><!-- Has MathJax --></li>
+<li>compute <span>$r=Gx+c, g=Pr, d=-g$</span><!-- Has MathJax --></li>
+<li>repeat <span>$$\begin{aligned}
+  \alpha &amp;= r^Tg/d^TGd\\
+  x &amp;= x+\alpha d\\
+  r^+ &amp;= r + \alpha Gd\\
+  g^+ &amp;= Pr^+\\
+  \beta &amp;= (r^+)^Tg^+/r^Tg\\
+  d &amp;= -g^+ + \beta d\\
+  g &amp;= g^+\\
+  r &amp;= r^+
+\end{aligned}$$</span><!-- Has MathJax -->
+ until convergence</li>
+</ol>
+<p>终止条件是 <span>$r^Tg - r^TPr$</span><!-- Has MathJax --> 很小。当然了，这么搞其实和上面一样，因为 <span>$P$</span><!-- Has MathJax --> 的计算需要依靠 <span>$Z$</span><!-- Has MathJax --> 。但是，<span>$P$</span><!-- Has MathJax --> 其实可以用其他方法计算：<br><span>$P = H^{-1}(I-A^T(AH^{-1}A^T)^{-1}AH^{-1})$</span><!-- Has MathJax --><br>这种情况下 <span>$g^+ = Pr^+$</span><!-- Has MathJax --> 可以表示为：<br><span>$\begin{bmatrix}H &amp; A^T \\ A &amp; 0\end{bmatrix}\begin{bmatrix}g^+\\ v^+\end{bmatrix} = \begin{bmatrix}r^+\\ 0\end{bmatrix}$</span><!-- Has MathJax --><br>对于这个等式，可以直接用前面的矩阵分解来求。</p>
+<h1 id="不等式约束的情况"><a href="#不等式约束的情况" class="headerlink" title="不等式约束的情况"></a>不等式约束的情况</h1><p>讨论完了只有等式的部分，现在开始处理不等式的部分。我们令 <span>$\mathcal{A}(x^* )=\{i\in \mathcal{E}\cup\mathcal{I}|a_i^Tx^* = b_i\}$</span><!-- Has MathJax -->。 那么对于 \ref{origin} 来说，利用 KKT 条件可以得到最优解满足的条件：<br><span>$$\begin{aligned}
+Gx^* + c - \sum_{i \in \mathcal{A}(x^* )}\lambda_i^* a_i &amp;= 0\\
+a_i^Tx^* &amp;= b_i \quad \text{for all } i \in \mathcal{A}(x^* )\\
+a_i^Tx^* &amp;\ge b_i\quad \text{for all } i \in \mathcal{I}\backslash \mathcal{A}(x^* )\\
+\lambda_i^* &amp;\ge 0\quad \text{for all } i \in \mathcal{I}\cap \mathcal{A}(x^* )
+
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>当 <span>$G$</span><!-- Has MathJax --> 正定时，目标函数是凸函数，没有任何问题；但是如果不满足条件，就比较麻烦了，这时候会出现多个局部最优解。</p>
+<p>但是麻烦远不止这一个。有时候会出现 degeracy 的情况。这种情况一般分为两种：</p>
+<ol>
+<li><span>$a_i, i\in \mathcal{A}(x^* )$</span><!-- Has MathJax --> 线性相关</li>
+<li>一些 <span>$\lambda_i^* = 0, i\in \mathcal{A}(x^* )$</span><!-- Has MathJax --></li>
+</ol>
+<p>第一点的问题主要是不正定所带来的数值问题；而第二点的问题主要是无法判断哪些条件属于 active set(即 <span>$\mathcal{A}(x)$</span><!-- Has MathJax -->)</p>
+<p>下面给出3种解法。</p>
+<h2 id="active-set-method"><a href="#active-set-method" class="headerlink" title="active-set method"></a>active-set method</h2><p>active-set method 的思想和线性规划的 simplex method 很像，都需要找到最后的 active set。</p>
+<p>假设我们在第k步得到了 <span>$x_k$</span><!-- Has MathJax --> 和当前的 active set <span>$\mathcal{W}_k$</span><!-- Has MathJax --> 。首先要检查 <span>$x_k$</span><!-- Has MathJax --> 是否是当前条件下的最小值，如果不是，则需要计算 <span>$x$</span><!-- Has MathJax --> 的更新量 <span>$p$</span><!-- Has MathJax -->：<br><span>$$\label{p_min}
+\min_p \frac{1}{2}p^TGp + g_k^Tp\\
+s.t.\ a_i^Tp = 0\quad i\in\mathcal{W}_k$$</span><!-- Has MathJax --><br>如果更新后的 <span>$x_{k+1}$</span><!-- Has MathJax --> 满足所有的不等式约束，就可以直接更新，否则我们需要缩小更新量直到所有的约束都满足(所以是有可能一次更新的更新量为0)。对于每个不等式约束来说，都需要满足：<br><span>$a_i^T(x_k+\alpha_kp_k)\ge b_i$</span><!-- Has MathJax --><br>因此<br><span>$\alpha_k \le \dfrac{b_i-a_i^Tx_k}{a_i^Tp_k}$</span><!-- Has MathJax --><br>对于所有的不等式约束都算一遍，就能得到最后的更新率：<br><span>$\alpha_k = \min(1, \min_{i\notin\mathcal{W}_k,a_i^Tp_k&lt;0}\dfrac{b_i-a_i^Tx_k}{a_i^Tp_k})$</span><!-- Has MathJax --><br>所以很显然，当 <span>$\alpha_k$</span><!-- Has MathJax --> 小于1的时候，肯定会有不等书约束被 active 。这时我们需要更新 <span>$\mathcal{W}_k$</span><!-- Has MathJax -->, 加上刚刚 active 的约束。显然这样一直往下加，必然会结束。要不就是约束全部 active， 要不就是找到了最小值。这种情况下的 <span>$\hat{x}$</span><!-- Has MathJax --> 和 <span>$\hat{\lambda}$</span><!-- Has MathJax --> 是满足 KKT 条件的，所以我们可以计算出部分的 <span>$\hat{\lambda}$</span><!-- Has MathJax -->。如果计算的结果全部非负，那么找到最优解；如果有负值，说明负值对应的约束不在实际的 active set 中，需要去掉再进行计算。</p>
+<p>这样我们就得到了最后的 active-set method：</p>
+<ol>
+<li>get init point <span>$x_0$</span><!-- Has MathJax --> and get active set <span>$\mathcal{W}_0$</span><!-- Has MathJax --></li>
+<li>repeat<ul>
+<li>solve \ref{p_min} to get <span>$p_k$</span><!-- Has MathJax --></li>
+<li>if <span>$p_k$</span><!-- Has MathJax --> = 0<ul>
+<li>compute <span>$\hat{\lambda}$</span><!-- Has MathJax --></li>
+<li>if <span>$\hat{\lambda}_i&gt;0$</span><!-- Has MathJax --> for all <span>$i \in \mathcal{I}\cap \mathcal{W}_k$</span><!-- Has MathJax -->, stop</li>
+<li>else<span>$$j = \arg\min_{j\in\mathcal{I}\cap \mathcal{W}_k}\hat{\lambda}_j\\
+x_{k+1} = x_k\\
+\mathcal{W}_{k+1}=\mathcal{W}_{k}\backslash\{j\}$$</span><!-- Has MathJax --></li>
+</ul>
+</li>
+<li>else<ul>
+<li>compute <span>$\alpha_k$</span><!-- Has MathJax --></li>
+<li><span>$x_{k+1} = x_k+\alpha_kp_k$</span><!-- Has MathJax --></li>
+<li>if <span>$\alpha_k &lt; 1$</span><!-- Has MathJax -->, update <span>$\mathcal{W}_k$</span><!-- Has MathJax --></li>
+<li><span>$\mathcal{W}_{k+1}$</span><!-- Has MathJax --> = <span>$\mathcal{W}_k$</span><!-- Has MathJax -->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>和 simplex 不同的是，该算法不会出现 cycling 的情况，所以必然会在固定步数内结束。</p>
+<p>现在我们还剩下最后一步，初值。对于初值的获得，和 simplex method 一样，我们需要一个 Phase I。下面说一些 Phase I 的算法。</p>
+<h3 id="Phase-I"><a href="#Phase-I" class="headerlink" title="Phase I"></a>Phase I</h3><p>和 simplex method 一样， phase I 同样是最小化的过程。比如可以用<br><span>$$\min_{(x,z)} e^Tz\\
+s.t.\ a_i^Tx + \gamma_iz_i = b_i\quad i\in \mathcal{E}\\
+a_i^Tx + \gamma_iz_i \ge b_i\quad i\in \mathcal{I}\\
+z \ge 0$$</span><!-- Has MathJax --><br>其中 <span>$e=(1,1,...,1)^T,\gamma_i=\begin{cases}-\text{sign}(a^T_ix-b) &amp; i\in\mathcal{E}\\ 1 &amp; i\in\mathcal{I}\end{cases}$</span><!-- Has MathJax --></p>
+<p>或者可以用 penalty(or bigM) method:<br><span>$$\min_{(x, \eta)}\ \frac{1}{2}x^TGx+x^Tc+M\eta\\
+s.t. \ a_i^Tx-b_i\le\eta\quad i \in \mathcal{E}\\
+-(a_i^Tx-b_i)\le\eta\quad i \in \mathcal{E}\\
+b_i-a_i^Tx\le\eta\quad i \in \mathcal{I}\\
+0\le\eta\\$$</span><!-- Has MathJax --><br>当然这种情况下我们又面临 <span>$M$</span><!-- Has MathJax --> 的选择问题。当然这个就简单很多。我们的最终目的是让求解的 <span>$\eta = 0$</span><!-- Has MathJax --> 所以如果条件不满足，加大 <span>$M$</span><!-- Has MathJax --> 就可以了。</p>
+<p>与上面的方法类似，可以用 <span>$l_1$</span><!-- Has MathJax --> 作为惩罚项：<br><span>$$\min_{(x,s,t,v)} \ \frac{1}{2}x^TGx + x^Tc+Me^T_{\mathcal{E}}(s+t) + Me^T_{\mathcal{I}}v\\
+s.t.\ a_i^Tx-b_i+s_i-t_i = 0\quad i\in\mathcal{E}\\
+a_i^Tx-b_i+v_i \ge 0\quad i\in\mathcal{I}\\
+s\ge 0, t\ge 0, v\ge 0$$</span><!-- Has MathJax --><br><span>$e_{\mathcal{E}},e_{\mathcal{I}}$</span><!-- Has MathJax --> 都是全1向量</p>
+<h3 id="update-的问题"><a href="#update-的问题" class="headerlink" title="update 的问题"></a>update 的问题</h3><p>最后还有一个问题。在算法中，每次迭代我们都需要计算 <span>$p_k$</span><!-- Has MathJax --> ，但是其实每次更新的 <span>$\mathcal{W}_k$</span><!-- Has MathJax --> 都只是单个条件的加减而已。所以 <span>$p_k$</span><!-- Has MathJax --> 的计算其实是可以复用的。由于 <span>$p_k$</span><!-- Has MathJax --> 的计算也是带有等式约束的QP问题，所以可以用前面提到的方法去解。这里我们对 null space method 进行讨论。</p>
+<p>在 null space method 中。一旦 <span>$Y$</span><!-- Has MathJax --> 和 <span>$Z$</span><!-- Has MathJax --> 确定，<span>$p$</span><!-- Has MathJax --> 就可以确定。一种 <span>$Y$</span><!-- Has MathJax --> 和 <span>$Z$</span><!-- Has MathJax --> 的取法是对 <span>$A$</span><!-- Has MathJax --> 做QR分解：<br><span>$A^T\Pi = Q\begin{bmatrix}R\\0\end{bmatrix} = \begin{bmatrix}Q_1&amp;Q_2\end{bmatrix}\begin{bmatrix}R\\0\end{bmatrix}$</span><!-- Has MathJax --><br>其中 <span>$\Pi$</span><!-- Has MathJax --> 为 permutation 矩阵，<span>$Q$</span><!-- Has MathJax --> 为正交矩阵，<span>$R$</span><!-- Has MathJax --> 为非奇异的上三角矩阵。令 <span>$Y=Q_1,\ Z=Q_2$</span><!-- Has MathJax --> 我们的更新也从这里入手。<br>对于增加约束的情况，将约束增加后的矩阵记为 <span>$\bar{A}$</span><!-- Has MathJax -->, 则 <span>$\bar{A}^T = \begin{bmatrix}A^T&amp;a\end{bmatrix}$</span><!-- Has MathJax --> <span>$a$</span><!-- Has MathJax --> 为行向量，使 <span>$\bar{A}$</span><!-- Has MathJax --> 保持行满秩。则<br><span>$\bar{A}^T\begin{bmatrix}\Pi&amp;0\\0&amp;1\end{bmatrix} = \begin{bmatrix}A^T\Pi&amp;a\end{bmatrix} = Q\begin{bmatrix}R&amp;Q_1^Ta\\0&amp;Q_2^Ta\end{bmatrix}$</span><!-- Has MathJax --><br>现令正交矩阵 <span>$\hat{Q}$</span><!-- Has MathJax --> 满足：<br><span>$\hat{Q}(Q^T_2a) = \begin{bmatrix}\gamma\\0\end{bmatrix}$</span><!-- Has MathJax --><br>则<br><span>$\bar{A}^T\begin{bmatrix}\Pi&amp;0\\0&amp;1\end{bmatrix} = Q\begin{bmatrix}R&amp;0\\0&amp;\hat{Q}^T\begin{bmatrix}\gamma\\0\end{bmatrix}\end{bmatrix} = Q\begin{bmatrix}I&amp;0\\0&amp;\hat{Q}^T\end{bmatrix}\begin{bmatrix}R&amp;Q_1^Ta\\0&amp;\gamma\\0&amp;0\end{bmatrix}$</span><!-- Has MathJax --><br>所以<br><span>$$\bar{\Pi} = \begin{bmatrix}\Pi&amp;0\\0&amp;1\end{bmatrix}\\
+\bar{Q} = Q\begin{bmatrix}I&amp;0\\0&amp;\hat{Q}^T\end{bmatrix} = \begin{bmatrix}Q_1&amp;Q_2\hat{Q}^T\end{bmatrix}\\
+\bar{R} = \begin{bmatrix}R&amp;Q_1^Ta\\0&amp;\gamma\end{bmatrix}$$</span><!-- Has MathJax --><br>对于约束的删除来说，则是 <span>$R$</span><!-- Has MathJax --> 中的某一行被删除。这样的话 <span>$R$</span><!-- Has MathJax --> 直接就不是上三角矩阵了，所以我们需要一个 permutation 矩阵进行行变换以恢复 <span>$R$</span><!-- Has MathJax --> 的上三角特征。</p>
+<h2 id="gradient-projection-method"><a href="#gradient-projection-method" class="headerlink" title="gradient projection method"></a>gradient projection method</h2><p>active-set method 在大规模的约束情况下会收敛的很慢。毕竟每次只能增删一个约束，要是碰到个2千约束的，至少都要2000次迭代。gradient projection 就不一样。</p>
+<p>我们将 gradient projection 处理的问题描述为：<br><span>$$\min_x\ q(x) = \frac{1}{2}x^TGx+x^Tc\\
+s.t.\ l\le x \le u$$</span><!-- Has MathJax --><br>其中 <span>$G$</span><!-- Has MathJax --> 是对称的，但是不需要正定。</p>
+<p>gradient projection 的思路类似于 trust-region。算法被分为2个阶段：首先沿着导数方向进行更新，即 <span>$g=Gx+c$</span><!-- Has MathJax --> 。当 <span>$x$</span><!-- Has MathJax --> 到达边界时，我们将导数在约束空间内做投影。之后利用得到的约束进行再次计算。</p>
+<p>我们将 <span>$x$</span><!-- Has MathJax --> 在约束空间内的投影表示为<br><span>$P(x,l,u)=\begin{cases}l_i &amp; \text{if } x_i&lt;l_i\\x_i&amp; \text{if } x_i\in[l_i,u_i]\\u_i&amp; \text{if } x_i&gt;u_i\end{cases}$</span><!-- Has MathJax --><br>这种情况下我们得到的导数 <span>$x(t) = P(x-tg,l,u)$</span><!-- Has MathJax --> 对于每个约束，我们可以拿到的 <span>$t$</span><!-- Has MathJax --> 值为<br><span>$\bar{t}_i=\begin{cases}(x_i-u_i)/g_i&amp;\text{if } g_i&lt;0,u_i&lt;\infty \\(x_i-l_i)/g_i&amp;\text{if } g_i&gt;0,l_i&gt;-\infty\\\infty&amp;\text{otherwise }\end{cases}$</span><!-- Has MathJax --><br>为了确定t的值，我们首先要对 <span>$\bar{t}$</span><!-- Has MathJax --> 顺序排列，在每个间隔内进行搜索：<br><span>$$x(t) = x(t_{j-1}) + (\Delta t)p^{j-1}\\
+p^{j-1}_i=\begin{cases}-g_i&amp;\text{if } t_{j-1}&lt;\bar{t}_i\\0&amp;\text{else}\end{cases}$$</span><!-- Has MathJax --><br>搜索目标为最小化<br><span>$q(x(t)) = c^T(x(t))+\frac{1}{2}(x(t))^TG(x(t))$</span><!-- Has MathJax --><br>这样的情况下我们就可以得到一组 active-set。更新后的目标为：<br><span>$$\min_x \frac{1}{2}x^TGx + x^Tc\\
+s.t.\ x_i=x_i^c\quad i\in\mathcal{A}(x^c)\\
+      l_i\le x_i\le u_i\quad i\notin\mathcal{A}(x^c)$$</span><!-- Has MathJax --><br>不过得到这个问题的解的难度和原问题基本一样= =。当然，大数据量的情况下也不会要求精确解，所以粗略的用CG什么的解下就好了</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/optimization/" rel="tag">#optimization</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/02/nonlinear-equations/" rel="next" title="nonlinear equations">
+                <i class="fa fa-chevron-left"></i> nonlinear equations
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/28/paxos/" rel="prev" title="paxos">
+                paxos <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/16/QP问题/"
+           data-title="QP问题" data-url="/2016/08/16/QP问题/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#只有等式约束的QP问题"><span class="nav-number">1.</span> <span class="nav-text">只有等式约束的QP问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KKT-系统求解"><span class="nav-number">1.1.</span> <span class="nav-text">KKT 系统求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接求解"><span class="nav-number">1.1.1.</span> <span class="nav-text">直接求解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#schur-complement"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">schur-complement</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#矩阵分解"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">矩阵分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null-space"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">null space</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代式解法"><span class="nav-number">1.1.2.</span> <span class="nav-text">迭代式解法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不等式约束的情况"><span class="nav-number">2.</span> <span class="nav-text">不等式约束的情况</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#active-set-method"><span class="nav-number">2.1.</span> <span class="nav-text">active-set method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Phase-I"><span class="nav-number">2.1.1.</span> <span class="nav-text">Phase I</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update-的问题"><span class="nav-number">2.1.2.</span> <span class="nav-text">update 的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gradient-projection-method"><span class="nav-number">2.2.</span> <span class="nav-text">gradient projection method</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

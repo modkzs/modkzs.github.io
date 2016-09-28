@@ -1,0 +1,772 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="stochastic process," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="arrival process中重要的成员，泊松过程(虽然不知道英文发音是posong为啥汉语是bosong)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="possion process">
+<meta property="og:url" content="/2016/03/01/possion-process/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="arrival process中重要的成员，泊松过程(虽然不知道英文发音是posong为啥汉语是bosong)。">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f1hr9u473tj20r008uq3s.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/9dec4451gw1f1i9tyfveyj20o406uaaa.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/9dec4451gw1f1iv9gpjx4j20lw048t8s.jpg">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="possion process">
+<meta name="twitter:description" content="arrival process中重要的成员，泊松过程(虽然不知道英文发音是posong为啥汉语是bosong)。">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/9dec4451jw1f1hr9u473tj20r008uq3s.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/03/01/possion-process/"/>
+
+  <title> possion process | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                possion process
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-01T22:41:20+08:00" content="Mar 1 2016">
+              Mar 1 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/01/possion-process/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/01/possion-process/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>arrival process中重要的成员，泊松过程(虽然不知道英文发音是posong为啥汉语是bosong)。<br><a id="more"></a></p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><h2 id="arrival-process-三要素"><a href="#arrival-process-三要素" class="headerlink" title="arrival process 三要素"></a>arrival process 三要素</h2><p>一个arrival process最重要的元素是什么呢？窝们来看发工资的例子。假设公司每次发放的工资数量是固定的，那么我们就只能考虑三个问题：</p>
+<ul>
+<li>什么时候发工资？</li>
+<li>隔多久发一次？</li>
+<li>一个月能发几次？<br>当然了你会说这3问题有冗余啊！我只要2个就够了。当然了，不同的场景我们会需要不同的问题。而这三个问题就构成了一个arrival process的3个核心rv：<span>$S_n,X,N(t)$</span><!-- Has MathJax --></li>
+</ul>
+<span>$S_n$</span><!-- Has MathJax --> 表示第n个到达事件发生的时间(第n次发工资的时间)，被称为arrival epoch；<span>$X$</span><!-- Has MathJax --> 表示2个相邻到达事件的发生间隔； <span>$N(t)$</span><!-- Has MathJax --> 表示t个单位时间内到达事件发生的次数(t个月发了多少次工资)，被称为counting process<br><br>三者的关系可以用下图表示：<br><img src="http://ww2.sinaimg.cn/large/9dec4451jw1f1hr9u473tj20r008uq3s.jpg" alt=""><br><br>我们可以从定义中直观的推导出：<br><span>$$\begin{equation}
+\left\{N(t) \ge n\right\} = \left\{S_n \le t\right\}\\
+\left\{N(t) &lt; n\right\} = \left\{S_n &gt; t\right\}
+\label{eq:basic}
+\end{equation}$$</span><!-- Has MathJax -->
+<h2 id="poisson-process"><a href="#poisson-process" class="headerlink" title="poisson process"></a>poisson process</h2><p>poisson process是 <span>$X$</span><!-- Has MathJax --> 为IID且服从指数分布的arrival process，即 <span>$f_X(x)=\lambda \exp(-\lambda x)$</span><!-- Has MathJax --></p>
+<h1 id="poisson的一些性质"><a href="#poisson的一些性质" class="headerlink" title="poisson的一些性质"></a>poisson的一些性质</h1><h2 id="memoryless"><a href="#memoryless" class="headerlink" title="memoryless"></a>memoryless</h2><p>我们称rv <span>$X$</span><!-- Has MathJax --> 为memoryless当对于任何的 <span>$x&gt;0,t&gt;0$</span><!-- Has MathJax --> 都有 <span>$Pr\left\{X&gt;t+x\right\}=Pr\left\{X&gt;t\right\}Pr\left\{X&gt;x\right\}$</span><!-- Has MathJax --> 且 <span>$Pr\left\{X&gt;0\right\}=1$</span><!-- Has MathJax --></p>
+<p>从数学上可以证明，满足上面要求的rv必服从指数族分布（取ln然后证明对数为线性）。</p>
+<p>如果我们将当前时间与下一次到达事件发生时间的间隔定义为rv Z(简单的说就是从现在开始还有多久发工资)。用下图可以直观的说明Z到底是啥：<br><img src="http://ww4.sinaimg.cn/large/9dec4451gw1f1i9tyfveyj20o406uaaa.jpg" alt=""></p>
+<p>通过memoryless，我们可以证明：<span>$F_Z(z) = 1-e^{-\lambda z}$</span><!-- Has MathJax --> ：<br>首先证明上图，也就是 <span>$N(t)=0$</span><!-- Has MathJax --><br><span>$$\begin{aligned}
+Pr\left\{Z&gt;z|N(t)=0\right\} &amp;= Pr\left\{X_1&gt;z+t|N(t)=0\right\}\\
+&amp;=Pr\left\{X_1&gt;z+t|X_1&gt;t\right\}\\
+&amp;=Pr\left\{X_1&gt;z\right\} = e^{-\lambda z}
+\end{aligned}$$</span><!-- Has MathJax --><br>最后一步的推导用了memoryless进行分解后得到的。<br>然后证明在 <span>$N(t)=n,S_n=\tau$</span><!-- Has MathJax --> 的情况。可以发现，在这种情况下，必有 <span>$X_{n+1} &gt; t-\tau$</span><!-- Has MathJax --><br><span>$$\begin{aligned}
+Pr\left\{Z&gt;z|N(t)=n,S_n=\tau\right\} &amp;= Pr\left\{X_{n+1}&gt;z+t-\tau|N(t)=n,S_n=\tau\right\}\\
+&amp;=Pr\left\{X_{n+1}&gt;z+t-\tau|X_{n+1} &gt; t-\tau,S_n=\tau\right\}\\
+&amp;=Pr\left\{X_{n+1}&gt;z+t-\tau|X_{n+1} &gt; t-\tau\right\}\\
+&amp;=Pr\left\{X_{n+1}&gt;z\right\} = e^{-\lambda z}
+
+\end{aligned}$$</span><!-- Has MathJax --><br>上面不等式对于 <span>$S_1,S_2...S_{n-1}$</span><!-- Has MathJax --> 均成立。所以有 <span>$Pr\left\{Z&gt;z|\left\{N(\tau),0&lt;\tau\le t\right\}\right\} = e^{-\lambda z}$</span><!-- Has MathJax --></p>
+<h2 id="stationary-and-independent-increment"><a href="#stationary-and-independent-increment" class="headerlink" title="stationary and independent increment"></a>stationary and independent increment</h2><p>这两个性质都是针对counting process的</p>
+<h3 id="stationary-increment"><a href="#stationary-increment" class="headerlink" title="stationary increment"></a>stationary increment</h3><p>一个counting process满足stationary increment 当对任意 <span>$t&apos;&gt;t&gt;0$</span><!-- Has MathJax --> ，<span>$N(t&apos;-t)$</span><!-- Has MathJax --> 和 <span>$N(t&apos;)-N(t)$</span><!-- Has MathJax --> 同分布</p>
+<h3 id="independent-increment"><a href="#independent-increment" class="headerlink" title="independent increment"></a>independent increment</h3><p>一个counting process满足stationary increment 当对任意正整数 <span>$k$</span><!-- Has MathJax --> ，以及 <span>$k$</span><!-- Has MathJax --> 维的时间 <span>$0&lt;t_1&lt;t_2&lt;...&lt;t_k$</span><!-- Has MathJax --> ，都有 <span>$N(t_1), \tilde{N}(t_1, t_2),..., \tilde{N}(t_{k-1}, t_k)$</span><!-- Has MathJax --> 独立，其中 <span>$\tilde{N}(t_1, t_2) = N(t_2)-N(t_1)$</span><!-- Has MathJax --></p>
+<p>poisson process 同时具有上面两个性质</p>
+<h2 id="PDF-for"><a href="#PDF-for" class="headerlink" title="PDF for "></a>PDF for <span>$S_n$</span><!-- Has MathJax --></h2><span>$f_{S_n}(t) = \dfrac{\lambda^nt^{n-1}exp(-\lambda t)}{(n-1)!}$</span><!-- Has MathJax -->
+<h3 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h3><span>$$\begin{aligned}
+f_{X_1S_2}(x_1,s_2)&amp;=f_{X_1}(x_1)f_{X_2}(s_2-x_1)\\
+&amp;=\lambda^2\exp(-\lambda x_1)\exp(-\lambda(s_2-x_1))\\
+&amp;=\lambda^2\exp(-\lambda s_2)\\
+\end{aligned}$$</span><!-- Has MathJax -->
+<p>逐个递推，可得：<br><span>$f_{X_1...X_{n-1}S_n}(x_1,...x_{n-1},s_n) =\lambda^n\exp(-\lambda s_n)$</span><!-- Has MathJax --></p>
+<p>由于 <span>$x_1, x_2...x_{n-1}$</span><!-- Has MathJax --> 有 <span>$(n-1)!$</span><!-- Has MathJax --> 种排列方式，所以除一下就行了。</p>
+<h2 id="PMF-for"><a href="#PMF-for" class="headerlink" title="PMF for "></a>PMF for <span>$N(t)$</span><!-- Has MathJax --></h2><span>$$\begin{equation}
+p_{N(t)}(n) = \dfrac{(\lambda t)^n\exp(-\lambda t)}{n!}
+\label{eq:pmf}
+\end{equation}$$</span><!-- Has MathJax -->
+<h3 id="证明-1"><a href="#证明-1" class="headerlink" title="证明"></a>证明</h3><p>这有2种求法，这里先说第一种。</p>
+<p>如果要求<span>$Pr\left\{t&lt;S_{n+1}\le t+\sigma \right\}$</span><!-- Has MathJax -->，其中 <span>$\sigma$</span><!-- Has MathJax --> 无限趋向于0，可以有下面两种求法。<br><span>$$Pr\left\{t&lt;S_{n+1}\le t+\sigma \right\} = \int_t^{t+\sigma} f_{S_{n+1}}(\tau) d\tau = f_{S_{n+1}}(t)(\sigma+o(\sigma))\\
+Pr\left\{t&lt;S_{n+1}\le t+\sigma \right\} = p_{N(t)}(\lambda \sigma + o(\sigma))+o(\sigma)$$</span><!-- Has MathJax --><br>第一种就是根据上面 <span>$S_n$</span><!-- Has MathJax --> 的式子求。然后 <span>$t&lt;S_{n+1}\le t+\sigma$</span><!-- Has MathJax -->等价于在时间t来了n次，然后在t到 <span>$t+\sigma$</span><!-- Has MathJax --> 来了一次。<span>$p_{\tilde{N}(t, t+\sigma)}$</span><!-- Has MathJax --> 仍然可以用 <span>$S_n$</span><!-- Has MathJax --> 的PDF进行计算，即</p>
+<span>$p_{\tilde{N}(t, t+\sigma)} = p_{\tilde{N}(\sigma)} = \int_0^\sigma f_{S_1(t)} dt = \lambda \sigma + o(\sigma )$</span><!-- Has MathJax -->
+<p>联立两式，即可求得<span>$p_{N(t)}(n)$</span><!-- Has MathJax -->。</p>
+<p>第二种证明方法使用了前面说的基础不等式 \ref{eq:basic}</p>
+<p>计算两者的概率，可得： <span>$\sum_{i=n}^\infty p_{N(t)}(i) = \int_0^tf_{S_n}(\tau)d\tau$</span><!-- Has MathJax --></p>
+<p>我们将前面 <span>$p_{N(t)}(i)$</span><!-- Has MathJax --> 和 <span>$f_{S_n}(\tau)$</span><!-- Has MathJax --> 公式带入，两边同时对 <span>$t$</span><!-- Has MathJax --> 求导，可以发现两者相等，得证。</p>
+<h2 id="poisson-的另外2种定义"><a href="#poisson-的另外2种定义" class="headerlink" title="poisson 的另外2种定义"></a>poisson 的另外2种定义</h2><p>在最开始我们给出了poisson的基础定义。根据前面给出的性质，我们可以给出poisson的另外2个定义：</p>
+<h3 id="定义二"><a href="#定义二" class="headerlink" title="定义二"></a>定义二</h3><p>一个 poisson counting process 是一个有independent and stationary increment 且有poisson PMF(即\ref{eq:pmf}) 的counting process</p>
+<h3 id="定义三"><a href="#定义三" class="headerlink" title="定义三"></a>定义三</h3><p>一个 poisson counting process 是一个有independent and stationary increment 且满足下面等式的counting process<br><span>$$Pr\left\{\tilde{N}(t,t+\delta)=0\right\}=e^{-\lambda\delta}=1-\lambda\delta + o(\delta)\\
+Pr\left\{\tilde{N}(t,t+\delta)=1\right\}=\lambda \delta e^{-\lambda\delta}\approx\lambda \delta+o(\delta)\\
+Pr\left\{\tilde{N}(t,t+\delta)=2\right\}\approx o(\delta)\\$$</span><!-- Has MathJax --></p>
+<p>很容易证明，三个定义是等价的。</p>
+<h1 id="poisson的分裂和合并"><a href="#poisson的分裂和合并" class="headerlink" title="poisson的分裂和合并"></a>poisson的分裂和合并</h1><h2 id="分裂"><a href="#分裂" class="headerlink" title="分裂"></a>分裂</h2><p>假设我们将 <span>$N(t)$</span><!-- Has MathJax --> 分裂为2个随机过程 <span>$N_1(t), N_2(t)$</span><!-- Has MathJax --> 。我们将每次到达事件的发生视为一个二项分布：到达事件为第一个过程产生的概率为 <span>$p$</span><!-- Has MathJax --> ，为第二个过程产生的概率为 <span>$1-p$</span><!-- Has MathJax --> 。我们考虑一个很短的时间间隔 <span>$(t, t+\delta]$</span><!-- Has MathJax --> ，根据前面的说明，在这段时间内产生一个达到事件的概率为 <span>$\lambda \delta$</span><!-- Has MathJax --> 。则易知，到达事件为第一个过程产生的概率为 <span>$p\lambda \delta$</span><!-- Has MathJax --> ，为第二个过程产生的概率为 <span>$(1-p)\lambda \delta$</span><!-- Has MathJax --> 。现在我们需要证明 <span>$N_1(t), N_2(t)$</span><!-- Has MathJax --> 独立。<br><span>$$\begin{aligned}
+Pr\left\{N_1(t)=m,N_2(t)=k\right\} &amp;= Pr\left\{N_1(t)=m,N_2(t)=k|N(t)=m+k\right\}Pr\left\{N(t)=m+k\right\}\\
+&amp;=\dfrac{(m+k)!}{m!k!}p^m(1-p)^k\dfrac{(\lambda t)^{m+k}e^{-\lambda t}}{(m+k)!}\\
+&amp;=\dfrac{(p\lambda t)^me^{-p\lambda t}}{m!}\dfrac{[(1-p)\lambda  t]^ke^{-\lambda(1-p)t}}{k!}\\
+&amp;=Pr\left\{N_1(t)=m\right\}Pr\left\{N_2(t)=k\right\}
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>故<span>$N_1(t), N_2(t)$</span><!-- Has MathJax --> 独立，rate 分别为 <span>$p\lambda, (1-p)\lambda$</span><!-- Has MathJax --></p>
+<h2 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h2><span>$N_1(t), N_2(t)$</span><!-- Has MathJax --> 是两个独立的poisson process， rate分别为 <span>$\lambda_1, \lambda_2$</span><!-- Has MathJax --> 。如果我们将这两个到达视为一个过程 <span>$N(t)$</span><!-- Has MathJax --> ，通过定义三，我们可以得到新的poisson process的rate <span>$\lambda = \lambda_1 + \lambda_2$</span><!-- Has MathJax -->
+<h1 id="Non-homogeneous-poisson-process"><a href="#Non-homogeneous-poisson-process" class="headerlink" title="Non_homogeneous poisson process"></a>Non_homogeneous poisson process</h1><p>与正常poisson process不同的是，non_homogeneous poisson process的 <span>$\lambda$</span><!-- Has MathJax --> 是随时间变化的。也就是说non_homogeneous poisson process不再满足stationary increment。定义三中的等式也要换成下面的形式：<br><span>$$Pr\left\{\tilde{N}(t,t+\delta)=0\right\} = 1-\delta\lambda(t) + o(\delta)\\
+Pr\left\{\tilde{N}(t,t+\delta)=1\right\} = \delta\lambda(t) + o(\delta)\\
+Pr\left\{\tilde{N}(t,t+\delta)\ge2\right\} = o(\delta)$$</span><!-- Has MathJax --></p>
+<p>对于 non_homogeneous poisson process，<span>$\tilde{N}(t,t+\delta)$</span><!-- Has MathJax --> 的PMF<br><span>$Pr\left\{\tilde{N}(t,t+\delta)=n\right\} = \dfrac{[\tilde{m}(t, \tau)]^n\exp[\tilde{m}(t, \tau)]}{n!} \quad \tilde{m}(t, \tau)=\int_t^\tau \lambda(u)du$</span><!-- Has MathJax --></p>
+<h1 id="conditional-arrival"><a href="#conditional-arrival" class="headerlink" title="conditional arrival"></a>conditional arrival</h1><p>令 <span>$S^{(n)}=S_1,S_2,...,S_n;0&lt;S_1&lt;S_2&lt;...&lt;S_n&lt;t$</span><!-- Has MathJax --> ，则：<br><span>$f_{S^{(n)}|N(t)}(s^{(n)}|n) = \dfrac{n!}{t^n}$</span><!-- Has MathJax --></p>
+<h2 id="证明-2"><a href="#证明-2" class="headerlink" title="证明"></a>证明</h2><p>该概率同样存在2种证明方法。</p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p>首先用贝叶斯计算 <span>$S^{(n+1)}|N(t)$</span><!-- Has MathJax --> :<br><span>$f_{S^{(n+1)}|N(t)}(s^{(n+1)}|n)p_{N(t)}(n) = f_{N(t)|S^{(n+1)}}(n|s^{(n+1)})p_{S^{(n+1)}}(s^{(n+1)})$</span><!-- Has MathJax --></p>
+<p>由于 <span>$N(t)=n$</span><!-- Has MathJax --> 已经暗示了 <span>$S_n\le t, S_{n+1}\ge t$</span><!-- Has MathJax --> 。在此情况下， <span>$f_{N(t)|S^{(n+1)}}(n|s^{(n+1)})=1$</span><!-- Has MathJax --> 。这种情况下我们可以求得：<br><span>$$\begin{aligned}
+f_{S^{(n+1)}|N(t)}(s^{(n+1)}|n)&amp;=\dfrac{p_{S^{(n+1)}}(s^{(n+1)})}{p_{N(t)}(n)}\\
+&amp;=\dfrac{\lambda^{n+1}\exp(-\lambda s_{n+1})}{(\lambda t)^n\exp(-\lambda t)/n!}\\
+&amp;=\dfrac{n!\lambda \exp(-\lambda(s_{n+1}-t))}{t^n}
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>又由<br><span>$$f_{S^{(n+1)}|N(t)}(s^{(n+1)}|n)=f_{S^{(n)}|N(t)}(s^{(n)}|n)f_{S_{n+1}|N(t)}(s_{n+1}|s^{(n)},n)\\
+f_{S_{n+1}|N(t)}(s_{n+1}|s^{(n)},n) = \lambda \exp(-\lambda(s_{n+1}-t))$$</span><!-- Has MathJax --></p>
+<p>除一下就行了</p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>这种方法稍显复杂。它认为每次到达都发生在一个很短的时间间隔 <span>$\delta$</span><!-- Has MathJax --> 之内(如下图所示)。<br><img src="http://ww2.sinaimg.cn/large/9dec4451gw1f1iv9gpjx4j20lw048t8s.jpg" alt=""></p>
+<p>我们用 <span>$A(\delta)$</span><!-- Has MathJax --> 描绘这一过程。则：<br><span>$$\begin{aligned}
+Pr\left\{A(\delta)\right\}&amp;=p_{N(s_1)}(0)p_{\tilde{N}(s_1, s_1+\delta)}(1)p_{\tilde{N}( s_1+\delta, s_2)}(0)...p_{\tilde{N}( s_n+\delta, t)}(0)\\
+ &amp;= (\lambda \delta)^n\exp(-\lambda t) + \delta^{n-1}o(\delta)\\
+
+ f_{S^{(n)}|N(t)}(s^{(n)}|n) = \lim_{\delta\to 0}\dfrac{Pr\left\{A(\delta)\right\}}{\delta^np_{N(t)}(n)}
+\end{aligned}$$</span><!-- Has MathJax --></p>
+<p>最后系数中的 <span>$\delta^n$</span><!-- Has MathJax --> 可以认为是人工将在一个点的时间拉长到了 <span>$\delta$</span><!-- Has MathJax --> 。教授在课上的说法是需要get density.</p>
+<p>当然了，你可以将每一个到达的过程视为unit process。在这种情况下也可以推导出最后的公式。但是poisson process并没有暗示这一点。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/stochastic-process/" rel="tag">#stochastic process</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/28/漫谈大数定律/" rel="next" title="漫谈大数定律">
+                <i class="fa fa-chevron-left"></i> 漫谈大数定律
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/02/finite-state-markov-chain/" rel="prev" title="finite state markov chain">
+                finite state markov chain <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/01/possion-process/"
+           data-title="possion process" data-url="/2016/03/01/possion-process/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#arrival-process-三要素"><span class="nav-number">1.1.</span> <span class="nav-text">arrival process 三要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#poisson-process"><span class="nav-number">1.2.</span> <span class="nav-text">poisson process</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#poisson的一些性质"><span class="nav-number">2.</span> <span class="nav-text">poisson的一些性质</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#memoryless"><span class="nav-number">2.1.</span> <span class="nav-text">memoryless</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stationary-and-independent-increment"><span class="nav-number">2.2.</span> <span class="nav-text">stationary and independent increment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stationary-increment"><span class="nav-number">2.2.1.</span> <span class="nav-text">stationary increment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#independent-increment"><span class="nav-number">2.2.2.</span> <span class="nav-text">independent increment</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PDF-for"><span class="nav-number">2.3.</span> <span class="nav-text">PDF for $S_n$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#证明"><span class="nav-number">2.3.1.</span> <span class="nav-text">证明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PMF-for"><span class="nav-number">2.4.</span> <span class="nav-text">PMF for $N(t)$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#证明-1"><span class="nav-number">2.4.1.</span> <span class="nav-text">证明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#poisson-的另外2种定义"><span class="nav-number">2.5.</span> <span class="nav-text">poisson 的另外2种定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义二"><span class="nav-number">2.5.1.</span> <span class="nav-text">定义二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义三"><span class="nav-number">2.5.2.</span> <span class="nav-text">定义三</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#poisson的分裂和合并"><span class="nav-number">3.</span> <span class="nav-text">poisson的分裂和合并</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分裂"><span class="nav-number">3.1.</span> <span class="nav-text">分裂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并"><span class="nav-number">3.2.</span> <span class="nav-text">合并</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Non-homogeneous-poisson-process"><span class="nav-number">4.</span> <span class="nav-text">Non_homogeneous poisson process</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conditional-arrival"><span class="nav-number">5.</span> <span class="nav-text">conditional arrival</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#证明-2"><span class="nav-number">5.1.</span> <span class="nav-text">证明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法一"><span class="nav-number">5.1.1.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法二"><span class="nav-number">5.1.2.</span> <span class="nav-text">方法二</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>

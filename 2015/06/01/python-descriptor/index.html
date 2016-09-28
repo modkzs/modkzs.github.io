@@ -1,0 +1,684 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="没有看到过中文翻译，不知道对应的中文译名是什么。descriptor是指python中一个实现了__get__, __set__, __delete__方法的类.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python descriptor">
+<meta property="og:url" content="/2015/06/01/python-descriptor/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="没有看到过中文翻译，不知道对应的中文译名是什么。descriptor是指python中一个实现了__get__, __set__, __delete__方法的类.">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python descriptor">
+<meta name="twitter:description" content="没有看到过中文翻译，不知道对应的中文译名是什么。descriptor是指python中一个实现了__get__, __set__, __delete__方法的类.">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2015/06/01/python-descriptor/"/>
+
+  <title> python descriptor | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                python descriptor
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-06-01T19:23:03+08:00" content="Jun 1 2015">
+              Jun 1 2015
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/language/" itemprop="url" rel="index">
+                    <span itemprop="name">language</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/06/01/python-descriptor/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/01/python-descriptor/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>没有看到过中文翻译，不知道对应的中文译名是什么。descriptor是指python中一个实现了__get__, __set__, __delete__方法的类.<br><a id="more"></a></p>
+<h1 id="descriptor-protocol"><a href="#descriptor-protocol" class="headerlink" title="descriptor protocol"></a>descriptor protocol</h1><p>虽然不知道为什么这种东西还是protocol,但是官网就是这么给的.三个函数的原型如下:<br>    descr.<strong>get</strong>(self, obj, type=None) –&gt; value<br>    descr.<strong>set</strong>(self, obj, value) –&gt; None<br>    descr.<strong>delete</strong>(self, obj) –&gt; None<br>对于定义的__get__和__set__的类被称为data descriptor, 只定义了__get__的被称为non-data descriptor.这两种descriptor的主要区别在于查找变量时的优先度不同.关于优先度的问题,会在后面详细描述.<br>如果需要read-only data descriptor的话,定义__set__方法为抛出异常就好了.</p>
+<h1 id="查找链"><a href="#查找链" class="headerlink" title="查找链"></a>查找链</h1><h2 id="attr取值"><a href="#attr取值" class="headerlink" title="attr取值"></a>attr取值</h2><ol>
+<li>attr为python自动产生的,找到</li>
+<li>查找obj.__class__.__dict__.若attr存在而且是data descriptor,返回其__get__的结果;没有,就在obj.__class__的父类以及祖先类中寻找data descriptor</li>
+<li>在obj.__dict__中寻找.如果obj是一个普通实例,找到就返回.如果obj是一个类,则在obj,其父类以及祖先类的__dict__中查找,找到descriptor 返回其__get__的结果,找到普通attr则直接返回结果.</li>
+<li>在obj.__class__.__dict__中查找,找到了descriptor(必定是non-data descriptor),调用其__get__方法,返回结果.否则下一步</li>
+<li>抛出异常-_-|||<h2 id="attr-赋值"><a href="#attr-赋值" class="headerlink" title="attr 赋值"></a>attr 赋值</h2></li>
+<li>查找obj.__class__.__dict__.若attr存在而且是data descriptor,调用其__set__方法; 没有,就在obj.__class__的父类以及祖先类中寻找data descriptor</li>
+<li><p>直接在obj.__dict__中加入obj.__dict__[‘attr’]=value</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>在attr赋值的过程中,我们发现没有non-data descriptor的查找过程.也就是说如果我们对一个non-data descriptor赋值的话,会将其覆盖.</p>
+<h1 id="简单地例子"><a href="#简单地例子" class="headerlink" title="简单地例子"></a>简单地例子</h1><p> class RevealAccess(object):</p>
+<pre><code>&quot;&quot;&quot;A data descriptor that sets and returns values
+   normally and prints a message logging their access.
+&quot;&quot;&quot;
+
+def __init__(self, initval=None, name=&apos;var&apos;):
+    self.val = initval
+    self.name = name
+
+def __get__(self, obj, objtype):
+    print &apos;Retrieving&apos;, self.name
+    return self.val
+
+def __set__(self, obj, val):
+    print &apos;Updating&apos;, self.name
+    self.val = val
+</code></pre><p> class MyClass(object):</p>
+<pre><code>x = RevealAccess(10, &apos;var &quot;x&quot;&apos;)
+y = 5
+</code></pre><p> m = MyClass()<br> m.x<br> m.x = 20<br> m.y<br>在python终端执行上述代码,输出为<br>Retrieving var “x”<br>10<br>Updating var “x”<br>5</p>
+<h1 id="property"><a href="#property" class="headerlink" title="property"></a>property</h1><p>一种简单的实现descriptor的方法.property是python定义的函数,原型如下:<br> property(fget=None, fset=None, fdel=None, doc=None) -&gt; property attribute<br>利用该函数可以简单的定义一个descriptor</p>
+<h1 id="function-and-method"><a href="#function-and-method" class="headerlink" title="function and method"></a>function and method</h1><h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>function就是c中的function,在类的外面定义,可以被随时调用;method是一种特殊的function,和java中的method概念基本相同,是在类中定义的function.</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>在obj.__dict__中将method以function的形式进行存储.为了支持函数调用,所用的函数都实现了__get__方法.也就是说,所有的函数都是non-data descriptor<br>对于下面的例子<br> class D(object):</p>
+<pre><code>def f(self, x):
+     return x
+</code></pre><p> d = D()<br> d.<strong>dict</strong>[‘f’]<br> D.f<br> d.f<br>输出分别是:<br><function f="" at="" 0x00c45070=""><br><unbound method="" d.f=""><br><bound method="" d.f="" of="" <\_\_main\_\_.d="" object="" at="" 0x00b18c90="">&gt;</bound></unbound></function></p>
+</li>
+</ol>
+<h2 id="static-method-以及-class-method"><a href="#static-method-以及-class-method" class="headerlink" title="static method 以及 class method"></a>static method 以及 class method</h2><p>正如前文所说,method在class中是以descriptor的形式存在的.因此我们所定义的函数和其真正调用的形式是不一样的.<br>static method类似于java中的static方法,在调用时不会将类本身作为参数传入;而class method会将类本身作为参数传入()</p>
+<p> Transformation | Called from an Object | Called from a Class |<br> ———————————————| ———————————————-————— | ——————————————-———  |<br>  function      |    f(obj,*args)       |      f(*args)     |<br>  static method |    f(*args)       |      f(*args)     |<br>  static method |    f((type(obj))*args) |   f(klass,*args)  |</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag">#python</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/01/python新式类与旧式类/" rel="next" title="python新式类与旧式类">
+                <i class="fa fa-chevron-left"></i> python新式类与旧式类
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/19/Hbase学习/" rel="prev" title="Hbase学习">
+                Hbase学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/06/01/python-descriptor/"
+           data-title="python descriptor" data-url="/2015/06/01/python-descriptor/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#descriptor-protocol"><span class="nav-number">1.</span> <span class="nav-text">descriptor protocol</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查找链"><span class="nav-number">2.</span> <span class="nav-text">查找链</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#attr取值"><span class="nav-number">2.1.</span> <span class="nav-text">attr取值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#attr-赋值"><span class="nav-number">2.2.</span> <span class="nav-text">attr 赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">2.2.1.</span> <span class="nav-text">问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#简单地例子"><span class="nav-number">3.</span> <span class="nav-text">简单地例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#property"><span class="nav-number">4.</span> <span class="nav-text">property</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#function-and-method"><span class="nav-number">5.</span> <span class="nav-text">function and method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#区别"><span class="nav-number">5.1.</span> <span class="nav-text">区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">5.2.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#static-method-以及-class-method"><span class="nav-number">5.3.</span> <span class="nav-text">static method 以及 class method</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

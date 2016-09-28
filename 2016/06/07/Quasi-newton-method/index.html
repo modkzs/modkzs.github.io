@@ -1,0 +1,720 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="optimization," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Quasi-newton method 是为了避免 newton method 中二阶导的大量计算而引入的方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Quasi-newton method">
+<meta property="og:url" content="/2016/06/07/Quasi-newton-method/index.html">
+<meta property="og:site_name" content="modkzs">
+<meta property="og:description" content="Quasi-newton method 是为了避免 newton method 中二阶导的大量计算而引入的方法。">
+<meta property="og:updated_time" content="2016-09-28T04:56:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Quasi-newton method">
+<meta name="twitter:description" content="Quasi-newton method 是为了避免 newton method 中二阶导的大量计算而引入的方法。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="/2016/06/07/Quasi-newton-method/"/>
+
+  <title> Quasi-newton method | modkzs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">modkzs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">集天地正气，法古今完人</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Quasi-newton method
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-07T18:07:51+08:00" content="Jun 7 2016">
+              Jun 7 2016
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/math/" itemprop="url" rel="index">
+                    <span itemprop="name">math</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/07/Quasi-newton-method/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/07/Quasi-newton-method/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Quasi-newton method 是为了避免 newton method 中二阶导的大量计算而引入的方法。<br><a id="more"></a></p>
+<h1 id="newton-method"><a href="#newton-method" class="headerlink" title="newton method"></a>newton method</h1><p>正如上面所言，Quasi-newton method 是基于对 newton method 的改进，所以在介绍 Quasi-newton method 之前，有必要对 newton method 进行一下简单的介绍。</p>
+<p>假设我们的单次迭代的优化目标为<br><span>$\min f(x_k+p_k)$</span><!-- Has MathJax --><br>那么根据 Taylor theorm， <span>$f(x_k+p_k) \approx f(x_k)+\nabla f(x_k)^Tp_k+p^T_k\nabla^2 f(x_k)p$</span><!-- Has MathJax --> 。这种情况下我们将其当做二次函数处理，最小值为 <span>$\nabla^2 f(x_k)^{-1}\nabla f(x_k)$</span><!-- Has MathJax --> 。</p>
+<p>newton method 对于条件数较高的情况也能很好的处理，但是函数二阶导的计算需要大量的计算量，所以实际过程中并不常用。为了避免这种问题，我们需要对 <span>$\nabla^2 f(x_k)$</span><!-- Has MathJax --> 进行近似。这就是 Quasi-newton method 的思想。</p>
+<h1 id="Quasi-newton-method"><a href="#Quasi-newton-method" class="headerlink" title="Quasi-newton method"></a>Quasi-newton method</h1><p>在这里，我们介绍3种近似算法及其变体。我们将近似的 Hessian 矩阵记为 <span>$B$</span><!-- Has MathJax --> 。根据我们前面的描述，令<br><span>$m_k(p)=f(x_k)+\nabla f_k^Tp_k+p^T_kB_kp_k$</span><!-- Has MathJax --><br>则<br><span>$\nabla m_{k+1}(-\alpha_kp_k) = \nabla f_{k+1}-\alpha_kB_{k+1}p_k=\nabla f_{k}$</span><!-- Has MathJax --><br>我们令 <span>$s_k = x_{k+1}-x_k=\alpha_kp_k,\ y_k=\nabla f_{k+1}-\nabla f_{k}$</span><!-- Has MathJax --> 整理一下，就可以得到<br><span>$B_{k+1}s_k=y_k$</span><!-- Has MathJax --><br>我们将其称为 secant equation。如果<span>$B_k$</span><!-- Has MathJax --> 正定，所以从这个条件很容易推出<br><span>$s_k^Ty_k &gt; 0$</span><!-- Has MathJax --><br>该条件被称为 curvature condition。不过这只对凸函数成立。当我们需要处理非凸函数时，就无法处理这种问题。不过如果利用 Wolfe condition 的话，那么可以推出上面的函数是必然会满足的。</p>
+<p>在这种情况下我们可以专注于 <span>$B_k$</span><!-- Has MathJax --> 的求解了。显然我们无法直接通过上面的等式算出 <span>$B_{k+1}$</span><!-- Has MathJax --> ，所以我们将问题转化为下面的问题：<br><span>$\min_B \|B-B_k\| \quad s.t. B=B^T,\ Bs_k=y_k$</span><!-- Has MathJax --><br>不同的范数的使用往往会导致不同的算法。</p>
+<h2 id="BFGS-method"><a href="#BFGS-method" class="headerlink" title="BFGS method"></a>BFGS method</h2><p>BFGS中，我们将使用的范式定义为 <span>$\|A\|_ W=\|W^{1/2}AW^{1/2}\|_ F$</span><!-- Has MathJax -->，而 <span>$\|C\|_ F = \sum_{i=1}^n\sum_{j=1}^nc_{ij}^2$</span><!-- Has MathJax --> 。在这里我们使用 average Hessian 矩阵<br><span>$\bar{G}_k=\int_0^1\nabla^2f(x_k+\tau\alpha_kp_k)d\tau$</span><!-- Has MathJax --><br>作为矩阵 <span>$W$</span><!-- Has MathJax -->。这样情况下我们可以解出<br><span>$B_{k+1}=(I-\rho_ky_ks_k^T)B_k(I-\rho_ky_ks_k^T)+\rho_ky_ky_k^T$</span><!-- Has MathJax --><br>其中 <span>$\rho_k = \dfrac{1}{y^T_ks_k}$</span><!-- Has MathJax --> (其实我也不知道这是怎么解出来的。。。。。)利用 Sherman-Morrison-Woodbury formula，可以推出<br><span>$H_{k+1} = B_{k+1}^{-1} = H_k-\dfrac{H_ky_ky_k^TH_k^T}{y_k^TH_ky_k}+\dfrac{s_ks_k^T}{s_k^Ty_k}$</span><!-- Has MathJax --><br>上面的更新规则被称为DFP。相对于DFP来说，BFGS更进一步，直接对 <span>$H_k$</span><!-- Has MathJax --> 进行求解：<br><span>$\min_H \|H-H_k\|\quad s.t.H=H^T,\ Hy_k=s_k$</span><!-- Has MathJax --><br>解出 <span>$H_{k+1}=(I-\rho_ky_ks_k^T)H_k(I-\rho_ky_ks_k^T)+\rho_ks_ks_k^T$</span><!-- Has MathJax --> 其中 <span>$\rho_k$</span><!-- Has MathJax --> 的定义没有产生变化。显然BFGS的计算量小于DFP。</p>
+<p>那么现在我们就差一个初值了！可惜没有什么适用于各个情况的选择方案。一般可以选择 Hessian 矩阵的逆或者直接用单位矩阵作为初值。</p>
+<p>现在我们可以给出BFGS的过程了：</p>
+<ol>
+<li>compute <span>$H_0$</span><!-- Has MathJax --></li>
+<li><p>repeat</p>
+<ul>
+<li><span>$p_k = -H_k\nabla f_k$</span><!-- Has MathJax --></li>
+<li>compute <span>$\alpha_k$</span><!-- Has MathJax --> to satisfy Wolfe condition</li>
+<li><span>$s_k=x_{k+1}-x_k,\ y_k=\nabla f_{k+1}-\nabla f_{k}$</span><!-- Has MathJax --></li>
+<li><p>compute <span>$H_{k+1}$</span><!-- Has MathJax --></p>
+<p>until convergence</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="一些其他的讨论"><a href="#一些其他的讨论" class="headerlink" title="一些其他的讨论"></a>一些其他的讨论</h3><h4 id="一个奇怪的变种"><a href="#一个奇怪的变种" class="headerlink" title="一个奇怪的变种"></a>一个奇怪的变种</h4><p>通过Sherman-Morrison-Woodbury formula， 我们同样可以计算出<br><span>$B_{k+1}=B_k-\dfrac{B_ks_ks_k^TB_k^T}{s_k^TBs_k}+\dfrac{y_ky_k^T}{y_k^Ts_k}$</span><!-- Has MathJax --><br>然后通过求解 <span>$B_kp_k =-\nabla f_k$</span><!-- Has MathJax --> 得到 <span>$p_k$</span><!-- Has MathJax --> 。但是这种方法需要更大的计算量。实际使用中，一般对 <span>$B_k$</span><!-- Has MathJax --> 进行 Cholesky factorization，即 <span>$B_k = L_kD_kL_k$</span><!-- Has MathJax -->。和上面的算法相比，两者的计算量相差不大，但是我们可以修改 <span>$D_k$</span><!-- Has MathJax --> 增加整体的稳定性。不过书中还是建议使用原始的BFGS算法。</p>
+<p>当然，上面的算法存在基础是BFGS给出的 <span>$H_k$</span><!-- Has MathJax --> 是正定的。在BFGS中，我们没有用到这一点，不过可以证明 <span>$H_k$</span><!-- Has MathJax --> 是正定的。</p>
+<h4 id="稳定性问题"><a href="#稳定性问题" class="headerlink" title="稳定性问题"></a>稳定性问题</h4><p>对于算法的稳定性，还是有一些问题。例如当 <span>$y_k^Ts_k$</span><!-- Has MathJax --> 很小时，<span>$H_k$</span><!-- Has MathJax --> 的元素很大；或者一些其他情况下， <span>$H_k$</span><!-- Has MathJax --> 的近似效果较差时，算法是否仍然可以保持较高的收敛速度？对于 BFGS 来说，答案是肯定的。在 <span>$B_k$</span><!-- Has MathJax --> 的模拟效果较差时，BFGS似乎可以在几步内恢复到较高的水平，但是 DFP 相对来说就要差一些。</p>
+<h4 id="初值的选择"><a href="#初值的选择" class="headerlink" title="初值的选择"></a>初值的选择</h4><p>前面提到，对于 <span>$H_0$</span><!-- Has MathJax --> 的选择，是没有什么普适的方法的。前面也提到过可以设为单位矩阵。其实可以设为单位矩阵的整数倍：<br><span>$H_0 = \dfrac{y_k^Ts_k}{y_k^Ty_k} I$</span><!-- Has MathJax --><br>这可以视为对 <span>$\nabla^2 f^{-1}$</span><!-- Has MathJax --> 的一种粗略近似。</p>
+<p>对于 <span>$\alpha$</span><!-- Has MathJax --> 来说，可以将初值设为1，因为对于 newton method 来说，<span>$\alpha=1$</span><!-- Has MathJax --> 基本是可以接受的。</p>
+<h4 id="收敛速度"><a href="#收敛速度" class="headerlink" title="收敛速度"></a>收敛速度</h4><p>BFGS 的收敛速度为 superlinear</p>
+<h2 id="SR1-method"><a href="#SR1-method" class="headerlink" title="SR1 method"></a>SR1 method</h2><p>BFGS和DFP的更新矩阵都是秩为2的矩阵，不过 SR1 更简单，其更新矩阵是一个秩1矩阵(所以叫做 Symmetric-Rank-1 method)。这样的话，我们可以将其更新规则表示为<br><span>$B_{k+1}=B_k+\sigma vv^T$</span><!-- Has MathJax --><br>根据上文可知， <span>$B_{k+1}$</span><!-- Has MathJax --> 也要满足 <span>$B_{k+1}s_k=y_k$</span><!-- Has MathJax --> 的规定。在这种情况下，我们可以推出：<br><span>$y_k = B_ks_k+\sigma vv^Ts_k = B_ks_k+(\sigma v^Ts_k)v$</span><!-- Has MathJax --><br>可以假设 <span>$|\sigma|=1$</span><!-- Has MathJax --> 。由上式可知，<span>$v$</span><!-- Has MathJax --> 必和 <span>$y_k-B_ks_k$</span><!-- Has MathJax --> 同向。假设 <span>$v = \delta(y_k-B_ks_k)$</span><!-- Has MathJax --> ，则上式可化为<br><span>$(y_k-B_ks_k) = \sigma\delta^2[s^T(y_k-B_ks_k)](y_k-B_ks_k)$</span><!-- Has MathJax --><br>这样我们可以推出更新的公式：<br><span>$B_{k+1} = B_k + \dfrac{(y_k-B_ks_k)(y_k-B_ks_k)^T}{(y_k-B_ks_k)^Ts_k}$</span><!-- Has MathJax --><br>同样求出 <span>$H_{k+1}$</span><!-- Has MathJax --> :<br><span>$H_{k+1} = H_k + \dfrac{(s_k-B_ky_k)(s_k-B_ky_k)^T}{(s_k-B_ky_k)^Ty_k}$</span><!-- Has MathJax --></p>
+<p>对于BFGS来说，我们可以证明如果 <span>$H_k$</span><!-- Has MathJax --> 正定，必有 <span>$H_{k+1}$</span><!-- Has MathJax --> 正定。但是对于 SR1 来说，这个性质不再满足。不过书中说这个缺点在 Trust-region 中似乎很有用，但是没有发现哪里有用了。</p>
+<p>矩阵不可逆不是 SR1 的主要问题。毕竟 quasi-newton 中基本没有用到逆。但是有一个情况就比较麻烦了： <span>$(s_k-B_ky_k)^Ty_k = 0$</span><!-- Has MathJax --> 即使是凸函数，这种情况似乎也不可避免。所以我们需要讨论这种情况的处理。 <span>$(s_k-B_ky_k)^Ty_k = 0$</span><!-- Has MathJax --> 可以被分成2种情况：</p>
+<ol>
+<li><span>$s_k-B_ky_k=0$</span><!-- Has MathJax --> 这倒是没什么问题，直接让 <span>$B_{k+1}=B_k$</span><!-- Has MathJax --></li>
+<li><span>$s_k-B_ky_k\neq0,\ (s_k-B_ky_k)^Ty_k = 0$</span><!-- Has MathJax --> 。这种情况就很尴尬了，只能退出。</li>
+</ol>
+<p>当然了，对于SR1来说，<br><span>$|s_k^T(y_k-B_ks_k)|\ge r\|s_k\|\|y_k-B_ks_k\|$</span><!-- Has MathJax --><br><span>$r\in(0,1)$</span><!-- Has MathJax --> ，一般取 <span>$10^{-8}$</span><!-- Has MathJax --> 可以防止大多数上面这种尴尬的情况。</p>
+<p>当然了，SR1本身有很多的优点。它本身是对 Hessian 的一种很好的近似，通常比 BFGS 的结果好很多；而某些问题中 BFGS 的要求(curvature condition) 似乎不会满足，所以 BFGS 并不是我们的第一选择。</p>
+<h2 id="Broyden-method"><a href="#Broyden-method" class="headerlink" title="Broyden method"></a>Broyden method</h2><p>Broyden method 的更新规则如下：<br><span>$$\begin{aligned}
+B_{k+1} &amp;= B_k - \dfrac{B_ky_ky_k^TB_k^T}{y_k^TB_ky_k}+\dfrac{y_ky_k^T}{y_k^Ts_k} + \phi_k(s^T_kB_ks_k)v_kv_k^T\\
+v &amp;= \dfrac{y_k}{y_k^Ts_k}-\dfrac{B_ks_k}{s_k^TB_ks_k}
+\end{aligned}$$</span><!-- Has MathJax --><br>如果我们令 <span>$\phi_k=0$</span><!-- Has MathJax -->，这就是BFGS；<span>$\phi_k=1$</span><!-- Has MathJax -->，这就是DFP。如果 <span>$\phi_k\in[0,1]$</span><!-- Has MathJax --> ，这就叫 restricted Broyden method。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/optimization/" rel="tag">#optimization</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/06/conjugate-gradient-method/" rel="next" title="conjugate gradient method">
+                <i class="fa fa-chevron-left"></i> conjugate gradient method
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/10/large-scale-unconstrained-optimization/" rel="prev" title="large-scale unconstrained optimization">
+                large-scale unconstrained optimization <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/07/Quasi-newton-method/"
+           data-title="Quasi-newton method" data-url="/2016/06/07/Quasi-newton-method/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/author.png"
+               alt="modkzs" />
+          <p class="site-author-name" itemprop="name">modkzs</p>
+          <p class="site-description motion-element" itemprop="description">集天地正气，法古今完人</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#newton-method"><span class="nav-number">1.</span> <span class="nav-text">newton method</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Quasi-newton-method"><span class="nav-number">2.</span> <span class="nav-text">Quasi-newton method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BFGS-method"><span class="nav-number">2.1.</span> <span class="nav-text">BFGS method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一些其他的讨论"><span class="nav-number">2.1.1.</span> <span class="nav-text">一些其他的讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一个奇怪的变种"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">一个奇怪的变种</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#稳定性问题"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">稳定性问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初值的选择"><span class="nav-number">2.1.1.3.</span> <span class="nav-text">初值的选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#收敛速度"><span class="nav-number">2.1.1.4.</span> <span class="nav-text">收敛速度</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SR1-method"><span class="nav-number">2.2.</span> <span class="nav-text">SR1 method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Broyden-method"><span class="nav-number">2.3.</span> <span class="nav-text">Broyden method</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">modkzs</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"modkzs"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+
+<!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+</body>
+</html>
